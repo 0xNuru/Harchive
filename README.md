@@ -1,2 +1,2 @@
 # tech-mavericks
-GDSC project code
+GDSC project backend code
