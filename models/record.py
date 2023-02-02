@@ -1,15 +1,13 @@
 #!/usr/bin/python3
 """
-Hospital module
-
+Record module
 """
 from models.base_model import BaseModel, Base
 from sqlalchemy import Column, ForeignKey, Integer, String, Float
 
-class Hospital(BaseModel, Base):
+class Record(BaseModel, Base):
     """
-        hospital details
+        Record details
     """
-    __tablename__ = "hospital"
-    
+    __tablename__ = "record"
     pass
