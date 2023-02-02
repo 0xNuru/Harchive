@@ -6,3 +6,5 @@ GDSC project backend code
 
 ![imagedb](https://imgur.com/XQKa5UQ.png)
 
+## Models:
+    * 

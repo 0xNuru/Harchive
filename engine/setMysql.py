@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 
 """
-A little script to setup the mysql server details to current working envionment
+A setup script for setting mysql server details to current working envionment
 all details inputed are set to the environment variables
 
 """
@@ -27,7 +27,7 @@ try:
     os.environ["MYSQL_PWD"]   = passwd
     os.environ["MYSQL_DB"]    = db
     os.environ["MYSQL_HOST"]  = host
-    
+
     print("mysql connected successfully !!")
 
 except Exception as e:

@@ -5,12 +5,12 @@ Class for sqlAlchemy that handles session connections
 
 contains:
     - instance:
-        - all
-        - new
-        - save
-        - delete
-        - reload
-        - close
+        - all: query objects from db
+        - new: add objects to db
+        - save: commit session
+        - delete: remove session from db
+        - reload: reload the current session
+        - close: end session
 
     - attributes:
         - __engine
@@ -43,9 +43,8 @@ class DBStorage:
         passwd = getenv("MYSQL_PWD") 
         db     = getenv("MYSQL_DB")  
         host   = getenv("MYSQL_HOST") 
- 
         connection_str = "mysql+mysqldb://{}:{}@{}/{}".format(user, passwd, host, db)
-        __engine = create_engine(connection_str, pool_pre_ping=True)
+        self.__engine = create_engine(connection_str, pool_pre_ping=True)
 
 
 
@@ -73,3 +72,42 @@ class DBStorage:
                     key = "{}.{}".format(type(elem).__name__, elem.id)
                     dic[key] = elem
         return (dic)
+
+    def new(self, obj):
+        """
+            Desc:
+                adds a new object in the table
+        """
+        self.__session.add(obj)
+
+    def save(self):
+        """
+            Desc:
+                commit changes
+        """
+        self.__session.commit()
+
+    def delete(self, obj=None):
+        """
+            Desc:
+                delete an element from the table
+        """
+        if obj:
+            self.session.delete(obj)
+
+    def reload(self):
+        """
+            Desc:
+                 reload current connection
+        """
+        Base.metadata.create_all(self.__engine)
+        sec = sessionmaker(bind=self.__engine, expire_on_commit=False)
+        Session = scoped_session(sec)
+        self.__session = Session()
+
+    def close(self):
+        """ 
+            Desc:
+                closes the session
+        """
+        self.__session.close()
