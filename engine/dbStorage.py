@@ -17,14 +17,17 @@ contains:
         - __session
         - dic
 """
-
+import sys
+sys.path.insert(0, '..')
+from models.base_model import Base
 from os import getenv
 from pydantic import env_settings
 from sqlalchemy.orm import sessionmaker, scoped_session 
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
-from models.base_model import Base
 
+# calling the setMysql to set env
+__import__('setMysql').login()
 
 class DBStorage:
     """
@@ -39,13 +42,13 @@ class DBStorage:
         Desc:
             connects to the sql database with the params stored in env
         """
+
         user   = getenv("MYSQL_USER")
         passwd = getenv("MYSQL_PWD") 
         db     = getenv("MYSQL_DB")  
         host   = getenv("MYSQL_HOST") 
-        connection_str = "mysql+mysqldb://{}:{}@{}/{}".format(user, passwd, host, db)
+        connection_str = "postgresql+pyscopg2://{}:{}@{}/{}".format(user, passwd, host, db)
         self.__engine = create_engine(connection_str, pool_pre_ping=True)
-
 
 
     def all(self, cls=None):

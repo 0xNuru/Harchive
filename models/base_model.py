@@ -14,6 +14,8 @@ contains:
         - created_at attribute
         - updated_at attribute
 """
+import sys
+sys.path.insert(0, '..')
 
 from sqlalchemy.ext.declarative import declarative_base
 import uuid, models
@@ -32,7 +34,7 @@ class BaseModel:
 
     id = Column(String(60), unique=True, nullable=False, primary_key=True)
     created_at = Column(DateTime, nullable=False, default=(datetime.utcnow()))
-    updated_at = Column(DateTime, nullable=False, default=(DateTime.utcnow()))
+    updated_at = Column(DateTime, nullable=False, default=(datetime.utcnow()))
 
     def __init__(self, *args, **kwargs):
         """

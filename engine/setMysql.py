@@ -10,25 +10,29 @@ import os
 import sqlalchemy
 
 
-user     =  input("ENTER THE SQL USERNAME : ")
-passwd   =  input("ENTER THE MYSQL PASSWORD :")
-db   =  input("ENTER THE MYSQL Database Name :")
-host =  input("ENTER THE MYSQL HOST NAME :")
+def login():
+    user     =  input("ENTER THE SQL USERNAME : ")
+    passwd   =  input("ENTER THE MYSQL PASSWORD :")
+    db   =  input("ENTER THE MYSQL Database Name :")
+    host =  input("ENTER THE MYSQL HOST NAME :")
+    
+    connection_str = "postgresql+psycopg2://{}:{}@{}/{}".format(user, passwd, host, db)
+    engine = sqlalchemy.create_engine(connection_str, pool_pre_ping=True)
+    
+    
+    try:
+        conn = engine.connect()
+        conn.close()
+    
+        os.environ["MYSQL_USER"]  = user
+        os.environ["MYSQL_PWD"]   = passwd
+        os.environ["MYSQL_DB"]    = db
+        os.environ["MYSQL_HOST"]  = host
+    
+        print("mysql connected successfully !!")
+    
+    except Exception as e:
+        
+        print(f"This {e} occured !!! ")
 
-connection_str = "mysql+mysqldb://{}:{}@{}/{}".format(user, passwd, host, db)
-engine = sqlalchemy.create_engine(connection_str, pool_pre_ping=True)
-
-
-try:
-    conn = engine.connect()
-    conn.close()
-
-    os.environ["MYSQL_USER"]  = user
-    os.environ["MYSQL_PWD"]   = passwd
-    os.environ["MYSQL_DB"]    = db
-    os.environ["MYSQL_HOST"]  = host
-
-    print("mysql connected successfully !!")
-
-except Exception as e:
-    print(f"This {e} occured !!! ")
+login()
