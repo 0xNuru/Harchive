@@ -1,7 +1,10 @@
 from fastapi import FastAPI
 import models
-from database import engine
+from engine.dbStorage import DBStorage
 from routers import person
+
+get_db = DBStorage.reload()
+engine = get_db.__engine
 
 app = FastAPI()
 

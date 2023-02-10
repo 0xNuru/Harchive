@@ -2,21 +2,19 @@
 """
 Record module
 """
-import sys
-from xmlrpc.client import Boolean
-
-from django.template import base
-sys.path.insert(0, '..')
-from models.base_model import BaseModel, Base
-from sqlalchemy import ARRAY, Column, ForeignKey, Integer, String, Float, DateTime, BOOLEAN, VARCHAR
 from sqlalchemy.orm import relationship
+from sqlalchemy import ARRAY, Column, ForeignKey, Integer, String, Float, DateTime, BOOLEAN, VARCHAR
+from models.base_model import BaseModel, Base
+import sys
+sys.path.insert(0, '..')
+
 
 class Record(BaseModel, Base):
     """
         Record details
     """
     __tablename__ = "record"
-    id   = Column(Integer, primary_key=True, unique=True, nullabe=False)
+    id = Column(Integer, primary_key=True, unique=True, nullabe=False)
     persons = relationship('Person', backref='record')
     DOB = Column(DateTime,    nullabe=False)
     Gender = Column(BOOLEAN, nullabe=False)
@@ -29,7 +27,6 @@ class Record(BaseModel, Base):
     Immunization = Column(ARRAY, nullabe=False)
     Medication = Column(ARRAY, nullabe=False)
     transactions = relationship('Transactions', backref='record')
-    
 
 
 class Transactions(BaseModel, Base):
@@ -39,7 +36,7 @@ class Transactions(BaseModel, Base):
         contains:
             - Drugs : list of drugs and costs
             - 
-        
+
 
     """
     __tablename__ = "transactions"
@@ -57,7 +54,6 @@ class Drugs(BaseModel, Base):
             - amount : cost
     """
     __tablename__ = "drugs"
-    id   = Column(Integer, primary_key=True, unique=True, nullable=False)
+    id = Column(Integer, primary_key=True, unique=True, nullable=False)
     drug = Column(String(128), unique=True, nullable=False)
     amount = Column(Float, nullable=False)
-
