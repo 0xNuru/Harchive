@@ -2,10 +2,13 @@
 """
 user module
 """
+from sqlalchemy import Column, Integer, String
+from models.base_model import BaseModel, Base
+from sqlalchemy.orm import relationship
+
 import sys
 sys.path.insert(0, '..')
-from models.base_model import BaseModel, Base
-from sqlalchemy import Column, ForeignKey, Integer, String, Float
+
 
 class user(BaseModel, Base):
     """
