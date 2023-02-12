@@ -1,8 +1,8 @@
-from person import Person
+from User import User
 from datetime import date
 
 
-class Patient(Person):
+class Patient(User):
     dob: date
     gender: enumerate
     address: str

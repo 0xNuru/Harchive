@@ -10,17 +10,17 @@ import sys
 sys.path.insert(0, '..')
 
 
-class user(BaseModel, Base):
+class Users(BaseModel, Base):
     """
         user details
     """
     __tablename__ = "user"
-    id        = Column(Integer, primary_key=True, unique=True, nullabe=False)
-    name      = Column(String(128), unique=True, nullabe=False)
-    phone     = Column(Integer,  unique=True, nullabe=False)
-    email     = Column(String(128),unique=True, nullabe=False)
-    userID    = Column(String(128), unique=True, nullabe=False)
-    Address   = Column(String(128), unique=True, nullabe=False)
-    password  = Column(String(128), unique=True, nullabe=False)
+    id        = Column(Integer, primary_key=True,nullable=False)
+    name      = Column(String(128), unique=True, nullable=False)
+    phone     = Column(Integer,  unique=True, nullable=False)
+    email     = Column(String(128),unique=True, nullable=False)
+    userID    = Column(String(128), unique=True, nullable=False)
+    Address   = Column(String(128), unique=True, nullable=False)
+    password  = Column(String(128), unique=True, nullable=False)
     
     

@@ -1,13 +1,18 @@
 from fastapi import FastAPI
-import models
+import models.base_model 
 from engine.dbStorage import DBStorage
-from routers import person
+from routers import user
+import sys
 
-get_db = DBStorage.reload()
-engine = get_db.__engine
+sys.path.insert(0, '..')
+
+get_db = DBStorage()
+get_db.reload()
+# print(get_db)
+engine = get_db.engine
 
 app = FastAPI()
 
-models.Base.metadata.create_all(engine)
+models.base_model.Base.metadata.create_all(engine)
 
-app.include_router(person.router)
+app.include_router(user.router)

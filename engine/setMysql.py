@@ -29,8 +29,12 @@ def login():
         os.environ["MYSQL_DB"] = db
         os.environ["MYSQL_HOST"] = host
 
-        print("mysql connected successfully !!")
+        print("connected successfully !!")
 
     except Exception as e:
 
         print(f"This {e} occured !!! ")
+
+if __name__ == "__main__":
+    login()
+    print(os.getenv("MYSQL_USER"))

@@ -1,7 +1,7 @@
-from person import Person
+from User import User
 
 
-class HealthWorker(Person):
+class HealthWorker(User):
     hospitalID: str
 
     class Config():

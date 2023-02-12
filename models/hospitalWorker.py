@@ -3,19 +3,19 @@
 hospitalWorker module
 """
 from sqlalchemy import Column, ForeignKey, Integer, String, Date, Enum
-from models.person import Person
+from models.user import user
 from sqlalchemy.orm import relationship
 import sys
 sys.path.insert(0, '..')
 
 
-class HospitalWorker(Person):
+class HospitalWorker(user):
     """
         hospitalWorker details
     """
     __tablename__ = "hospitalWorkers"
-    id = Column(Integer, ForeignKey("person.id"), nullable=False)
+    id = Column(Integer, ForeignKey("user.id"), nullable=False)
     hospitalID = Column(String, ForeignKey("hospitals.id"), nullable=False)
 
-    person = relationship("Person", back_populates="hospitalWorkers")
+    user = relationship("user", back_populates="hospitalWorkers")
     hospitals = relationship("Hospital", back_populates="hospitalWorkers")

@@ -15,8 +15,8 @@ class Hospital(BaseModel, Base):
         hospital details
     """
     __tablename__ = "hospitals"
-    id = Column(Integer, primary_key=True, unique=True, nullabe=False)
-    name = Column(String(128), nullabe=False)
+    id = Column(Integer, primary_key=True, unique=True, nullable=False)
+    name = Column(String(128), nullable=False)
     address = Column(String(128), nullable=False)
     hospitalID = Column(String(128), nullable=False)
 
