@@ -3,9 +3,6 @@
 Record module
 """
 import sys
-from xmlrpc.client import Boolean
-
-from django.template import base
 sys.path.insert(0, '..')
 from models.base_model import BaseModel, Base
 from sqlalchemy import ARRAY, Column, ForeignKey, Integer, String, Float, DateTime, BOOLEAN, VARCHAR

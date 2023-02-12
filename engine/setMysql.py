@@ -16,7 +16,7 @@ def login():
     db   =  input("ENTER THE MYSQL Database Name :")
     host =  input("ENTER THE MYSQL HOST NAME :")
     
-    connection_str = "postgresql+psycopg2://{}:{}@{}/{}".format(user, passwd, host, db)
+    connection_str = "postgresql://{}:{}@{}/{}".format(user, passwd, host, db)
     engine = sqlalchemy.create_engine(connection_str, pool_pre_ping=True)
     
     
