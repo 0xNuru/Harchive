@@ -14,17 +14,19 @@ contains:
         - created_at attribute
         - updated_at attribute
 """
+import models
+import uuid
+from sqlalchemy import Column, Integer, String, DateTime
+from datetime import datetime
+from sqlalchemy.ext.declarative import declarative_base
 import sys
 sys.path.insert(0, '..')
 
-from sqlalchemy.ext.declarative import declarative_base
-import uuid, models
-from datetime import datetime
-from sqlalchemy import Column, Integer, String, DateTime
 
-#declaring the declarative base
+# declaring the declarative base
 
 Base = declarative_base()
+
 
 class BaseModel:
     """
@@ -39,11 +41,11 @@ class BaseModel:
     def __init__(self, *args, **kwargs):
         """
             Initialization of base model class
-            
+
             Args:
                 args: Not used
                 Kwargs: constructor for the basemodel
-            
+
             Attributes:
                 id: unique id generated
                 created_at: creation date
@@ -55,7 +57,7 @@ class BaseModel:
 
         if kwargs:
             for key, value in kwargs.items():
-                if key == "created_at" |  key == "updated_at":
+                if key == "created_at" or key == "updated_at":
                     value = datetime.strptime(value, "%Y-%m-%dT%H:%M:%S.%f")
                 if key != "__class__":
                     setattr(self, key, value)
@@ -78,7 +80,6 @@ class BaseModel:
         """
         return f"[{type(self).__name__}] ({self.id}) {self.__dict__}"
 
-
     def __repr__(self):
         """
             Return:
@@ -86,7 +87,6 @@ class BaseModel:
 
         """
         return self.__str__()
-
 
     def save(self):
         """
@@ -100,11 +100,10 @@ class BaseModel:
         models.storage.new(self)
         models.storage.save()
 
-
     def to_dict(self):
         """
             This instance creates a dictionary representation of the classs
-            
+
             Return:
                 returns a dict rep of the class containing the
         """

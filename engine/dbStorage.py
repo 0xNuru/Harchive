@@ -17,18 +17,17 @@ contains:
         - session
         - dic
 """
+from sqlalchemy.orm import sessionmaker, scoped_session
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy import create_engine
+from pydantic import env_settings
+from dotenv import load_dotenv
+import psycopg2
+import os
+from os import getenv
+from models.base_model import Base
 import sys
 sys.path.insert(0, '..')
-
-from models.base_model import Base
-from os import getenv
-import os
-import psycopg2
-from dotenv import load_dotenv
-from pydantic import env_settings
-from sqlalchemy.orm import sessionmaker, scoped_session 
-from sqlalchemy import create_engine
-from sqlalchemy.ext.declarative import declarative_base
 
 
 load_dotenv()
@@ -53,6 +52,7 @@ def login():
         os.environ["dbDB"] = db
         os.environ["dbHOST"] = host
 
+        # psql
         print("mysql connected successfully !!")
 
     except Exception as e:
@@ -60,10 +60,9 @@ def login():
         print(f"This {e} occured !!! ")
 
 
-
-
-if  not os.getenv("dbUSER"):
+if not os.getenv("dbUSER"):
     login()
+
 
 class DBStorage:
     """
@@ -79,13 +78,13 @@ class DBStorage:
             connects to the sql database with the params stored in env
         """
 
-        user   = getenv("dbUSER")
-        passwd = getenv("dbPWD") 
-        db     = getenv("dbDB")  
-        host   = getenv("dbHOST") 
-        connection_str = "postgresql+psycopg2://{}:{}@{}/{}".format(user, passwd, host, db)
+        user = getenv("dbUSER")
+        passwd = getenv("dbPWD")
+        db = getenv("dbDB")
+        host = getenv("dbHOST")
+        connection_str = "postgresql+psycopg2://{}:{}@{}/{}".format(
+            user, passwd, host, db)
         self.engine = create_engine(connection_str, pool_pre_ping=True)
-
 
     def all(self, cls=None):
         """ 
@@ -150,6 +149,7 @@ class DBStorage:
                 closes the session
         """
         self.session.close()
+
 
 p = DBStorage()
 print(p.reload())
