@@ -1,20 +1,20 @@
 #!/usr/bin/python3
 
 """
-Class for sqlAlchemy that handles session connections
+Class for sqlAlchemy that handles __session connections
 
 contains:
     - instance:
         - all: query objects from db
         - new: add objects to db
-        - save: commit session
-        - delete: remove session from db
-        - reload: reload the current session
-        - close: end session
+        - save: commit __session
+        - delete: remove __session from db
+        - reload: reload the current __session
+        - close: end __session
 
     - attributes:
         - engine
-        - session
+        - __session
         - dic
 """
 from sqlalchemy.orm import sessionmaker, scoped_session
@@ -70,7 +70,7 @@ class DBStorage:
         Creates tables in the database
     """
     engine = None
-    session = None
+    __session = None
 
     def __init__(self):
         """
@@ -85,6 +85,7 @@ class DBStorage:
         connection_str = "postgresql+psycopg2://{}:{}@{}/{}".format(
             user, passwd, host, db)
         self.engine = create_engine(connection_str, pool_pre_ping=True)
+        self.__session = None
 
     def all(self, cls=None):
         """ 
@@ -98,14 +99,14 @@ class DBStorage:
         if cls:
             if type(cls) is str:
                 cls = eval(cls)
-            query = self.session.query(cls)
+            query = self.__session.query(cls)
             for elem in query:
                 key = "{}.{}".format(type(elem).__name__, elem.id)
                 dic[key] = elem
         else:
             lists = []
             for attr in lists:
-                query = self.session.query(attr)
+                query = self.__session.query(attr)
                 for elem in query:
                     key = "{}.{}".format(type(elem).__name__, elem.id)
                     dic[key] = elem
@@ -116,14 +117,15 @@ class DBStorage:
             Desc:
                 adds a new object in the table
         """
-        self.session.add(obj)
+        print(self.__session)
+        self.__session.add(obj)
 
     def save(self):
         """
             Desc:
                 commit changes
         """
-        self.session.commit()
+        self.__session.commit()
 
     def delete(self, obj=None):
         """
@@ -131,7 +133,7 @@ class DBStorage:
                 delete an element from the table
         """
         if obj:
-            self.session.delete(obj)
+            self.__session.delete(obj)
 
     def reload(self):
         """
@@ -141,14 +143,14 @@ class DBStorage:
         Base.metadata.create_all(self.engine)
         sec = sessionmaker(bind=self.engine, expire_on_commit=False)
         Session = scoped_session(sec)
-        self.session = Session()
-        return self.session
+        self.__session = Session()
+
 
     def close(self):
         """ 
             Desc:
-                closes the session
+                closes the __session
         """
-        self.session.close()
+        self.__session.close()
 
 

@@ -16,7 +16,7 @@ contains:
 """
 import models
 import uuid
-from sqlalchemy import Column, Integer, String, DateTime
+from sqlalchemy import Column, Integer, String, DateTime, VARCHAR
 from datetime import datetime
 from sqlalchemy.ext.declarative import declarative_base
 import sys
@@ -34,7 +34,7 @@ class BaseModel:
         for other class that would inherit it.
     """
 
-    id = Column(String(60), unique=True, nullable=False, primary_key=True)
+    id = Column(String(200), unique=True, nullable=False, primary_key=True)
     created_at = Column(DateTime, nullable=False, default=(datetime.utcnow()))
     updated_at = Column(DateTime, nullable=False, default=(datetime.utcnow()))
 
