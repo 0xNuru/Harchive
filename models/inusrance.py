@@ -18,3 +18,4 @@ class Insurance(BaseModel, Base):
     insuranceID = Column(String(128), nullable=False, unique=True)
     name = Column(String(128), nullable=False)
     address = Column(String(128), nullable=False)
+

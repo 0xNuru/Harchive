@@ -20,4 +20,4 @@ class Patient(User):
     address = Column(String, nullable=False)
     insuranceID = Column(String, nullable=False)
 
-    user = relationship("User", back_populates="patients")
+    patient_record = relationship("records", back_populates="patients")

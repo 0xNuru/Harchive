@@ -2,6 +2,7 @@
 """
 Record module
 """
+from graphene import Int
 from sqlalchemy.orm import relationship
 from sqlalchemy import ARRAY, Column, ForeignKey, Integer, String, Float, DateTime, BOOLEAN, VARCHAR
 from models.base_model import BaseModel, Base
@@ -40,11 +41,14 @@ class Transactions(BaseModel, Base):
 
     """
     __tablename__ = "transactions"
-    id = Column(Integer, primary_key=True, unique=True, nullable=False)
-    Drugs = relationship('Drugs', backref='transactions')
+    hospital_record_id = Column(String, ForeignKey('record.id'))
+    Doctor = relationship('Doctor', backref='doctor.id')
+    Receipt = None
 
 
-class Drugs(BaseModel, Base):
+
+
+class Medication(BaseModel, Base):
     """
         Desc:
             contains drug and cost
@@ -55,5 +59,32 @@ class Drugs(BaseModel, Base):
     """
     __tablename__ = "drugs"
     id = Column(Integer, primary_key=True, unique=True, nullable=False)
-    drug = Column(String(128), unique=True, nullable=False)
+    medication_name = Column(String(128), unique=True, nullable=False)
     amount = Column(Float, nullable=False)
+    hospital_record_id = Column(String, ForeignKey('record.id'))
+
+
+
+class Test(BaseModel, Base):
+    """
+        Desc:
+            contains tests
+        
+    """
+    id = Column(Integer, primary_key=True, unique=True)
+    test_name = Column(String, unique=True, nullable=False)
+    scanned_test = None
+    Doctor = relationship('Doctor', ForeignKey('doctor.id'))
+    hospital_record_id = Column(String, ForeignKey('record.id'))
+
+    
+
+
+class Allergy(BaseModel, Base):
+    """
+        Desc:
+            contains user allergy
+    """
+    id = Column(Integer, primary_key=True, unique=True)
+    allergies = Column(String, unique=True, nullable=False)
+    hospital_record_id = Column(String, ForeignKey('record.id'))
