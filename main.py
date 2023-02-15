@@ -8,7 +8,7 @@ sys.path.insert(0, '..')
 
 get_db = DBStorage()
 get_db.reload()
-# print(get_db)
+
 engine = get_db.engine
 
 app = FastAPI()

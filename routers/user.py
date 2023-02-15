@@ -10,12 +10,13 @@ router = APIRouter(
     tags=["user"]
 )
 get_db = DBStorage()
-get_db.reload()
+o = get_db.reload()
+
 
 
 @router.post("/user", response_model=showUser.ShowUser,
              status_code=status.HTTP_201_CREATED)
-def create_user(request: userSchema.User, db: Session = Depends(DBStorage)):
+def create_user(request: userSchema.User, db: Session = Depends(o)):
     new_user = userModel.Users(name=request.name, email=request.email,
                                phone=request.phone, password=request.password)
     db.new(new_user)

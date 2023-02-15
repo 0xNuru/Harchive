@@ -142,6 +142,7 @@ class DBStorage:
         sec = sessionmaker(bind=self.engine, expire_on_commit=False)
         Session = scoped_session(sec)
         self.session = Session()
+        return self.session
 
     def close(self):
         """ 
@@ -151,5 +152,3 @@ class DBStorage:
         self.session.close()
 
 
-p = DBStorage()
-print(p.reload())
