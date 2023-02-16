@@ -2,7 +2,7 @@
 """
 Record module
 """
-from graphene import Int
+# from graphene import Int
 from sqlalchemy.orm import relationship
 from sqlalchemy import ARRAY, Column, ForeignKey, Integer, String, Float, DateTime, BOOLEAN, VARCHAR
 from models.base_model import BaseModel, Base
@@ -46,8 +46,6 @@ class Transactions(BaseModel, Base):
     Receipt = None
 
 
-
-
 class Medication(BaseModel, Base):
     """
         Desc:
@@ -64,20 +62,17 @@ class Medication(BaseModel, Base):
     hospital_record_id = Column(String, ForeignKey('record.id'))
 
 
-
 class Test(BaseModel, Base):
     """
         Desc:
             contains tests
-        
+
     """
     id = Column(Integer, primary_key=True, unique=True)
     test_name = Column(String, unique=True, nullable=False)
     scanned_test = None
     Doctor = relationship('Doctor', ForeignKey('doctor.id'))
     hospital_record_id = Column(String, ForeignKey('record.id'))
-
-    
 
 
 class Allergy(BaseModel, Base):
