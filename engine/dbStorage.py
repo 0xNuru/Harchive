@@ -1,40 +1,75 @@
 #!/usr/bin/python3
 
 """
-Class for sqlAlchemy that handles session connections
+Class for sqlAlchemy that handles __session connections
 
 contains:
     - instance:
         - all: query objects from db
         - new: add objects to db
-        - save: commit session
-        - delete: remove session from db
-        - reload: reload the current session
-        - close: end session
+        - save: commit __session
+        - delete: remove __session from db
+        - reload: reload the current __session
+        - close: end __session
 
     - attributes:
-        - __engine
+        - engine
         - __session
         - dic
 """
+from sqlalchemy.orm import sessionmaker, scoped_session
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy import create_engine
+from pydantic import env_settings
+from dotenv import load_dotenv
+import psycopg2
+import os
+from os import getenv
+from models.base_model import Base
 import sys
 sys.path.insert(0, '..')
-from models.base_model import Base
-from os import getenv
-from pydantic import env_settings
-from sqlalchemy.orm import sessionmaker, scoped_session 
-from sqlalchemy import create_engine
-from sqlalchemy.ext.declarative import declarative_base
 
-# calling the setMysql to set env
-__import__('setMysql').login()
+
+load_dotenv()
+
+
+def login():
+    user = input("ENTER THE SQL USERNAME : ")
+    passwd = input("ENTER THE MYSQL PASSWORD :")
+    db = input("ENTER THE MYSQL Database Name :")
+    host = input("ENTER THE MYSQL HOST NAME :")
+
+    connection_str = "postgresql+psycopg2://{}:{}@{}/{}".format(
+        user, passwd, host, db)
+    engine = create_engine(connection_str, pool_pre_ping=True)
+
+    try:
+        conn = engine.connect()
+        conn.close()
+
+        os.environ["dbUSER"] = user
+        os.environ["dbPWD"] = passwd
+        os.environ["dbDB"] = db
+        os.environ["dbHOST"] = host
+
+        # psql
+        print("mysql connected successfully !!")
+
+    except Exception as e:
+
+        print(f"This {e} occured !!! ")
+
+
+if not os.getenv("dbUSER"):
+    login()
+
 
 class DBStorage:
     """
     Desc:
         Creates tables in the database
     """
-    __engine = None
+    engine = None
     __session = None
 
     def __init__(self):
@@ -43,13 +78,14 @@ class DBStorage:
             connects to the sql database with the params stored in env
         """
 
-        user   = getenv("MYSQL_USER")
-        passwd = getenv("MYSQL_PWD") 
-        db     = getenv("MYSQL_DB")  
-        host   = getenv("MYSQL_HOST") 
-        connection_str = "postgresql+pyscopg2://{}:{}@{}/{}".format(user, passwd, host, db)
-        self.__engine = create_engine(connection_str, pool_pre_ping=True)
-
+        user = getenv("dbUSER")
+        passwd = getenv("dbPWD")
+        db = getenv("dbDB")
+        host = getenv("dbHOST")
+        connection_str = "postgresql+psycopg2://{}:{}@{}/{}".format(
+            user, passwd, host, db)
+        self.engine = create_engine(connection_str, pool_pre_ping=True)
+        self.__session = None
 
     def all(self, cls=None):
         """ 
@@ -81,6 +117,7 @@ class DBStorage:
             Desc:
                 adds a new object in the table
         """
+        print(self.__session)
         self.__session.add(obj)
 
     def save(self):
@@ -96,21 +133,24 @@ class DBStorage:
                 delete an element from the table
         """
         if obj:
-            self.session.delete(obj)
+            self.__session.delete(obj)
 
     def reload(self):
         """
             Desc:
                  reload current connection
         """
-        Base.metadata.create_all(self.__engine)
-        sec = sessionmaker(bind=self.__engine, expire_on_commit=False)
+        Base.metadata.create_all(self.engine)
+        sec = sessionmaker(bind=self.engine, expire_on_commit=False)
         Session = scoped_session(sec)
         self.__session = Session()
+
 
     def close(self):
         """ 
             Desc:
-                closes the session
+                closes the __session
         """
         self.__session.close()
+
+

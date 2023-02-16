@@ -13,3 +13,7 @@ psycopg2
 
 #for loading environment variables  
 python-dotenv
+
+
+#postgresql
+

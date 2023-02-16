@@ -2,34 +2,32 @@
 """
 Record module
 """
-import sys
-from xmlrpc.client import Boolean
-
-from django.template import base
-sys.path.insert(0, '..')
-from models.base_model import BaseModel, Base
-from sqlalchemy import ARRAY, Column, ForeignKey, Integer, String, Float, DateTime, BOOLEAN, VARCHAR
+# from graphene import Int
 from sqlalchemy.orm import relationship
+from sqlalchemy import ARRAY, Column, ForeignKey, Integer, String, Float, DateTime, BOOLEAN, VARCHAR
+from models.base_model import BaseModel, Base
+import sys
+sys.path.insert(0, '..')
+
 
 class Record(BaseModel, Base):
     """
         Record details
     """
     __tablename__ = "record"
-    id   = Column(Integer, primary_key=True, unique=True, nullabe=False)
-    persons = relationship('Person', backref='record')
-    DOB = Column(DateTime,    nullabe=False)
-    Gender = Column(BOOLEAN, nullabe=False)
-    BloodType = Column(VARCHAR(5), nullabe=False)
-    Height = Column(Float, nullabe=False)
-    weight = Column(Float, nullabe=False)
-    BMI = Column(Float, nullabe=False)
-    Allegies = Column(ARRAY, nullabe=False)
-    Tests = Column(ARRAY, nullabe=False)
-    Immunization = Column(ARRAY, nullabe=False)
-    Medication = Column(ARRAY, nullabe=False)
+    id = Column(Integer, primary_key=True, unique=True, nullable=False)
+    user = relationship('User', backref='record')
+    DOB = Column(DateTime,    nullable=False)
+    Gender = Column(BOOLEAN, nullable=False)
+    BloodType = Column(VARCHAR(5), nullable=False)
+    Height = Column(Float, nullable=False)
+    weight = Column(Float, nullable=False)
+    BMI = Column(Float, nullable=False)
+    Allegies = Column(ARRAY, nullable=False)
+    Tests = Column(ARRAY, nullable=False)
+    Immunization = Column(ARRAY, nullable=False)
+    Medication = Column(ARRAY, nullable=False)
     transactions = relationship('Transactions', backref='record')
-    
 
 
 class Transactions(BaseModel, Base):
@@ -39,15 +37,16 @@ class Transactions(BaseModel, Base):
         contains:
             - Drugs : list of drugs and costs
             - 
-        
+
 
     """
     __tablename__ = "transactions"
-    id = Column(Integer, primary_key=True, unique=True, nullable=False)
-    Drugs = relationship('Drugs', backref='transactions')
+    hospital_record_id = Column(String, ForeignKey('record.id'))
+    Doctor = relationship('Doctor', backref='doctor.id')
+    Receipt = None
 
 
-class Drugs(BaseModel, Base):
+class Medication(BaseModel, Base):
     """
         Desc:
             contains drug and cost
@@ -57,7 +56,30 @@ class Drugs(BaseModel, Base):
             - amount : cost
     """
     __tablename__ = "drugs"
-    id   = Column(Integer, primary_key=True, unique=True, nullable=False)
-    drug = Column(String(128), unique=True, nullable=False)
+    id = Column(Integer, primary_key=True, unique=True, nullable=False)
+    medication_name = Column(String(128), unique=True, nullable=False)
     amount = Column(Float, nullable=False)
+    hospital_record_id = Column(String, ForeignKey('record.id'))
 
+
+class Test(BaseModel, Base):
+    """
+        Desc:
+            contains tests
+
+    """
+    id = Column(Integer, primary_key=True, unique=True)
+    test_name = Column(String, unique=True, nullable=False)
+    scanned_test = None
+    Doctor = relationship('Doctor', ForeignKey('doctor.id'))
+    hospital_record_id = Column(String, ForeignKey('record.id'))
+
+
+class Allergy(BaseModel, Base):
+    """
+        Desc:
+            contains user allergy
+    """
+    id = Column(Integer, primary_key=True, unique=True)
+    allergies = Column(String, unique=True, nullable=False)
+    hospital_record_id = Column(String, ForeignKey('record.id'))
