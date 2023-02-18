@@ -1,4 +1,4 @@
-from user import User
+from schema.user import User
 
 
 class HealthWorker(User):

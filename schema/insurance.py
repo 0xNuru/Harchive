@@ -1,15 +1,14 @@
 from pydantic import BaseModel
 from typing import List
-from patient import Patient
-from hospital import Hospital
+from schema.patient import Patient
 
 
-class InsuranceCompany(BaseModel):
+class Insurance(BaseModel):
     name: str
     address: str
+    phone: str
     insuranceID: str
     patients: List[Patient] = []
-    memberHospital: List[Hospital] = []
 
     class Config():
         orm_mode = True
