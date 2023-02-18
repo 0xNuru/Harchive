@@ -10,7 +10,11 @@ def load():
         Desc:
             initialize the db
     """
-    
+
     get_db = DBStorage()
     get_db.reload()
-    yield get_db
+    try:
+        yield get_db
+
+    finally:
+        get_db.close()

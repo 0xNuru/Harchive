@@ -14,8 +14,7 @@ class Insurance(BaseModel, Base):
         insurance details
     """
     __tablename__ = "insurance"
-    id = Column(Integer, primary_key=True, unique=True, nullable=False)
     insuranceID = Column(String(128), nullable=False, unique=True)
     name = Column(String(128), nullable=False)
     address = Column(String(128), nullable=False)
-
+    phone = Column(String(60), unique=True, nullable=False)

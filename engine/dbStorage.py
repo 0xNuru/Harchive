@@ -112,6 +112,13 @@ class DBStorage:
                     dic[key] = elem
         return (dic)
 
+    def query_eng(self, cls=None):
+        """
+            Desc:
+                returns query object
+        """
+        return self.__session.query(cls)
+
     def new(self, obj):
         """
             Desc:
@@ -145,12 +152,9 @@ class DBStorage:
         Session = scoped_session(sec)
         self.__session = Session()
 
-
     def close(self):
         """ 
             Desc:
                 closes the __session
         """
         self.__session.close()
-
-
