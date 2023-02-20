@@ -14,7 +14,7 @@ contains:
         - created_at attribute
         - updated_at attribute
 """
-import models
+
 import uuid
 from sqlalchemy import Column, Integer, String, DateTime, VARCHAR
 from datetime import datetime
@@ -23,10 +23,10 @@ import sys
 sys.path.insert(0, '..')
 
 
+
 # declaring the declarative base
 
 Base = declarative_base()
-
 
 class BaseModel:
     """
@@ -97,8 +97,6 @@ class BaseModel:
                 None
         """
         self.updated_at = datetime.now()
-        models.storage.new(self)
-        models.storage.save()
 
     def to_dict(self):
         """
@@ -115,10 +113,10 @@ class BaseModel:
 
         return base_dict
 
-    def delete(self):
-        """
-            This instance deletes the class
-            Returns:
-                None
-        """
-        models.storage.delete(self)
+    # def delete(self):
+    #     """
+    #         This instance deletes the class
+    #         Returns:
+    #             None
+    #     """
+    #     storage.delete(self)

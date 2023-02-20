@@ -2,7 +2,7 @@
 
 """Initializes the storage engine"""
 
-from engine.dbStorage import DBStorage
+from .dbStorage import DBStorage
 
 
 def load():
