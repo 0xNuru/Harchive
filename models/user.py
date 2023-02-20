@@ -2,7 +2,7 @@
 """
 user module
 """
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, Integer, String, Enum
 from models.base_model import BaseModel, Base
 from sqlalchemy.orm import relationship
 
@@ -20,3 +20,9 @@ class Users(BaseModel, Base):
     email = Column(String(128), unique=True, nullable=False)
     address = Column(String(128), unique=True, nullable=False)
     password = Column(String(128), nullable=False)
+    role = Column(Enum('patient', 'doctor', 'admin', name='user_roles'))
+
+    __mapper_args__ = {
+        'polymorphic_on': role,
+        'polymorphic_identity': 'user'
+    }
