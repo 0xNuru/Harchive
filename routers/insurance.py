@@ -23,10 +23,10 @@ def create_insurance(request: insuranceSchema.Insurance, db: Session = Depends(l
 
     if checkPhone:
         raise HTTPException(status_code=status.HTTP_409_CONFLICT,
-                            detail=f"user with phone: {phone} exists")
+                            detail=f"company with phone: {phone} exists")
     if checkInsuranceID:
         raise HTTPException(status_code=status.HTTP_409_CONFLICT,
-                            detail=f"user with Insurance ID: {insuranceID} exists")
+                            detail=f"company with Insurance ID: {insuranceID} exists")
 
     new_insurance = insuranceModel.Insurance(
         name=request.name, phone=request.phone, address=request.address, insuranceID=request.insuranceID)
@@ -35,7 +35,7 @@ def create_insurance(request: insuranceSchema.Insurance, db: Session = Depends(l
     return new_insurance
 
 
-@router.get("/incurance/all", response_model=List[showInsurance.ShowInsurance], status_code=status.HTTP_200_OK)
+@router.get("/insurance/all", response_model=List[showInsurance.ShowInsurance], status_code=status.HTTP_200_OK)
 def all(db: Session = Depends(load)):
     companies = db.query_eng(insuranceModel.Insurance).all()
     return companies

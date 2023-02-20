@@ -1,23 +1,19 @@
 from pydantic import BaseModel
+from schema.user import User
+from datetime import date
+from enum import Enum
 
 
-class Patient(BaseModel):
-    name: str
-    email: str
-    phone: str
+class GenderEnum(str, Enum):
+    MALE = 'male'
+    FEMALE = 'female'
+
+
+class Patient(User):
+    dob: date
+    gender: Enum
     address: str
-    password: str
+    # insuranceID: str
 
-
-# from schema.user import User
-# from datetime import date
-
-
-# class Patient(User):
-#     dob: date
-#     gender: enumerate
-#     address: str
-#     insuranceID: str
-
-#     class Config():
-#         orm_mode = True
+    class Config():
+        orm_mode = True
