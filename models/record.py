@@ -6,6 +6,7 @@ Record module
 from sqlalchemy.orm import relationship
 from sqlalchemy import ARRAY, Column, ForeignKey, Integer, String, Float, DateTime, BOOLEAN, VARCHAR
 from models.base_model import BaseModel, Base
+from datetime import datetime
 import sys
 sys.path.insert(0, '..')
 
@@ -23,11 +24,11 @@ class Record(BaseModel, Base):
     Height = Column(Float, nullable=False)
     weight = Column(Float, nullable=False)
     BMI = Column(Float, nullable=False)
-    Allegies = Column(ARRAY, nullable=False)
-    Tests = Column(ARRAY, nullable=False)
-    Immunization = Column(ARRAY, nullable=False)
-    Medication = Column(ARRAY, nullable=False)
-    transactions = relationship('Transactions', backref='record')
+    Allegies = relationship('Allergy', back_populates='record')
+    Tests = relationship('Test', back_populates='record')
+    Immunization = relationship('Immunization', back_populates='record')
+    Medication = relationship('Medication', back_populates='record')
+    Transactions = relationship('Transactions', back_populates='record')
 
 
 class Transactions(BaseModel, Base):
@@ -43,7 +44,12 @@ class Transactions(BaseModel, Base):
     __tablename__ = "transactions"
     hospital_record_id = Column(String, ForeignKey('record.id'))
     Doctor = relationship('Doctor', backref='doctor.id')
-    Receipt = None
+    drug_name = Column(VARCHAR(255), nullable=False, unique=True)
+    quantity = Column(VARCHAR(255), nullable=False, unique=True)
+    transaction_amount = Column(VARCHAR(255), nullable=False, unique=True)
+    transaction_type = Column(VARCHAR(255), nullable=False, unique=True)
+    vendor_name = Column(VARCHAR(255), nullable=False, unique=True)
+    transaction_date = Column(DateTime, nullable=False, default=(datetime.utcnow()))
 
 
 class Medication(BaseModel, Base):
@@ -58,8 +64,8 @@ class Medication(BaseModel, Base):
     __tablename__ = "drugs"
     id = Column(Integer, primary_key=True, unique=True, nullable=False)
     medication_name = Column(String(128), unique=True, nullable=False)
-    amount = Column(Float, nullable=False)
     hospital_record_id = Column(String, ForeignKey('record.id'))
+    Doctor = relationship('Doctor', backref='doctor.id')
 
 
 class Test(BaseModel, Base):
@@ -82,4 +88,15 @@ class Allergy(BaseModel, Base):
     """
     id = Column(Integer, primary_key=True, unique=True)
     allergies = Column(String, unique=True, nullable=False)
+    hospital_record_id = Column(String, ForeignKey('record.id'))
+
+class Immunization(BaseModel, Base):
+    """
+        Desc:
+            contains immunization detail history
+    """
+    id = Column(Integer, primary_key=True, unique=True)
+    immunziation_name = Column(VARCHAR(255), nullable=False, unique=True)
+    immunization_date = Column(DateTime, nullable=False, unique=True)
+    immunization_location = Column(VARCHAR(255), nullable=False, unique=True)
     hospital_record_id = Column(String, ForeignKey('record.id'))

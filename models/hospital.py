@@ -19,6 +19,6 @@ class Hospital(BaseModel, Base):
     name = Column(String(128), nullable=False)
     address = Column(String(128), nullable=False)
     hospitalID = Column(String(128), nullable=False)
-    phone = Column(String(60), unique=True, nullable=False)
+    admin = relationship('user', back_populates='hospitals')
+    hospitalWorkers = relationship("hospitalWorkers", back_populates="hospitals")
 
-    # hospitalWorker = relationship("hospitalWorker", back_populates="hospitals")

@@ -25,10 +25,9 @@ from dotenv import load_dotenv
 import psycopg2
 import os
 from os import getenv
-from models.base_model import Base
 import sys
 sys.path.insert(0, '..')
-
+from models.base_model import Base, BaseModel
 
 load_dotenv()
 
@@ -132,6 +131,7 @@ class DBStorage:
             Desc:
                 commit changes
         """
+        BaseModel.save()
         self.__session.commit()
 
     def delete(self, obj=None):
