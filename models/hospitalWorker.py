@@ -27,6 +27,10 @@ class Doctor(user):
     """
     __tablename__ = "doctor"
     id = Column(Integer, ForeignKey("user.id"),primary_key=True, nullable=False)
+    speciality = Column(String, nullable=False)
     hospitalID = Column(String, ForeignKey("hospitals.id"), nullable=False)
     hospitalworkers = relationship("hospitalworkers", back_populates="doctor")
+    __mapper_args__ = {
+        'polymorphic_identity': 'doctor'
+    }
 
