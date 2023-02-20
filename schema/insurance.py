@@ -8,7 +8,6 @@ class Insurance(BaseModel):
     address: str
     phone: str
     insuranceID: str
-    patients: List[Patient] = []
 
     class Config():
         orm_mode = True
