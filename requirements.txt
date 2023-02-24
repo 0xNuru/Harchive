@@ -17,3 +17,10 @@ python-dotenv
 
 #postgresql
 
+#jwt Authentication modules
+
+python-jose[cryptography]
+
+passlib[bcrypt] 
+
+python-multipart

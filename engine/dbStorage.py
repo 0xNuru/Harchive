@@ -18,7 +18,6 @@ contains:
         - dic
 """
 from sqlalchemy.orm import sessionmaker, scoped_session
-from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import create_engine
 from pydantic import env_settings
 from dotenv import load_dotenv
@@ -131,7 +130,6 @@ class DBStorage:
             Desc:
                 commit changes
         """
-        BaseModel.save()
         self.__session.commit()
 
     def delete(self, obj=None):
