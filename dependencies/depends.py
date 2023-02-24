@@ -10,7 +10,6 @@ from utils.oauth1 import AuthJWT
 from engine.loadb import load
 from models import user as userModel
 
-db = load()
 
 class NotVerified(Exception):
     pass
@@ -20,7 +19,7 @@ class UserNotFound(Exception):
     pass
 
 
-def get_current_user(Authorize: AuthJWT = Depends()):
+def get_current_user(Authorize: AuthJWT = Depends(), db = Depends(load)):
 
     try:
         Authorize.jwt_required()

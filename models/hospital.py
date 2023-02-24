@@ -13,7 +13,8 @@ sys.path.insert(0, '..')
 
 class Hospital(BaseModel, Base):
     """
-        hospital details
+        Desc:
+            hospital details
     """
     __tablename__ = "hospital"
     name = Column(String(128), nullable=False)
@@ -25,12 +26,12 @@ class Hospital(BaseModel, Base):
 
 class HospitalWorker(BaseModel, Base):
     """
-        hospitalWorker details
+        Desc:
+            hospitalWorker details
     """
     __tablename__ = "hospitalWorkers"
     id = Column(String,primary_key=True, nullable=False)
     hospitalID = Column(String, ForeignKey("hospital.id",  ondelete="CASCADE"), nullable=False)
-
     doctors = relationship("Doctor", back_populates="worker")
     admin = relationship("Admin", back_populates="worker")
     hospital = relationship("Hospital", back_populates="workers")
@@ -39,12 +40,14 @@ class HospitalWorker(BaseModel, Base):
 
 class Doctor(Users):
     """
-        Doctor details
+        Desc:
+            Doctor details
     """
     __tablename__ = "doctors"
     id = Column(String, ForeignKey("user.id",  ondelete="CASCADE"),primary_key=True, nullable=False)
     speciality = Column(String, nullable=False)
     hospitalID = Column(String, ForeignKey("hospitalWorkers.id"), nullable=False)
+    role = Column(String(50), nullable=False, default='doctor')
     worker = relationship("HospitalWorker", back_populates="doctors")
     transactions = relationship('Transactions', back_populates='Doctor',\
     primaryjoin='Doctor.id == Transactions.doctor_id')
@@ -58,12 +61,14 @@ class Doctor(Users):
     }
 
 class Admin(Users):
-    """
-        Doctor details
+    """ 
+        Desc:
+            admin details
     """
     __tablename__ = "admin"
     id = Column(String, ForeignKey("user.id",  ondelete="CASCADE"),primary_key=True, nullable=False)
     hospitalID = Column(String, ForeignKey("hospitalWorkers.id",  ondelete="CASCADE"), nullable=False)
+    role = Column(String(50), nullable=False, default='hospital_admin')
     worker = relationship("HospitalWorker", back_populates="admin")
     __mapper_args__ = {
         'polymorphic_identity': 'admin'

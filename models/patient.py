@@ -22,5 +22,6 @@ class Patient(Users):
     id = Column(String, ForeignKey('user.id',  ondelete="CASCADE"), primary_key=True)
     insuranceID = Column(String(128),nullable=True, unique=True)
     address = Column(String(128), nullable=False)
+    role = Column(String(50), nullable=False, default='patient')
     patient_record = relationship(Record, cascade_backrefs='patient')
     

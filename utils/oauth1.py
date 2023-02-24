@@ -1,9 +1,12 @@
 #!/usr/bin/env python3
-import base64
+from fastapi import Request
+from fastapi.responses import RedirectResponse
+from jwt.exceptions import ExpiredSignatureError
 from typing import List
 from fastapi_jwt_auth import AuthJWT
 from pydantic import BaseModel
 import sys
+
 sys.path.insert(0, '..')
 from config.config import settings
 
@@ -36,4 +39,3 @@ def get_config():
             decorated class settings
     """
     return Settings()
-

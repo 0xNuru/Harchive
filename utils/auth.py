@@ -57,8 +57,7 @@ def set_refresh_cookies(token: str,response: Response):
 
 def access_token(data: dict[str, Any]) -> str:
     to_encode = data.copy()
-    expire = settings.token_life_span
-    to_encode.update({'exp': expire})
+    expire = timedelta(minutes=ACCESS_TOKEN_EXPIRES_IN)
     access_token : str = auth.create_access_token(subject=
         to_encode['username'], 
         expires_time = expire,
@@ -68,9 +67,7 @@ def access_token(data: dict[str, Any]) -> str:
 
 def refresh_token(data: dict[str, Any]) -> str:
     to_encode = data.copy()
-    print(to_encode)
-    expire =  settings.token_long_life_span
-    to_encode.update({'exp':expire})
+    expire =  timedelta(minutes=REFRESH_TOKEN_EXPIRES_IN)
     refresh_token : str = auth.create_refresh_token(subject=
         to_encode['username'], 
         expires_time = expire,

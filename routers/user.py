@@ -1,17 +1,22 @@
 #!/usr/bin/python3
 
-from fastapi import APIRouter, Depends, status, HTTPException, Response
-from schema import showUser
-from fastapi.security import OAuth2PasswordRequestForm
-from schema import user as userSchema
+""" User logging endpoint"""
+
+from dependencies.depends import get_current_user
 from engine.loadb import load
-from sqlalchemy import or_
+from fastapi import APIRouter, Depends, HTTPException, Response, Request
+from fastapi.security import OAuth2PasswordRequestForm
+from fastapi.responses import JSONResponse
 from models import user as userModel
+from schema import showUser
+from schema import user as userSchema
+from sqlalchemy import or_
+from sqlalchemy.orm import Session
+from starlette import status
+from typing import Dict, List
 from utils import auth
 from utils.oauth1 import AuthJWT
-from sqlalchemy.orm import Session
-from typing import Dict, List
-from dependencies.depends import get_current_user
+
 
 
 
@@ -48,8 +53,9 @@ def create_user(request: userSchema.User, db: Session = Depends(load)):
     return new_user
 
 
+# protected route that requires login, uses the get_current_user func
 @router.get("/all", response_model=List[showUser.ShowUser], status_code=status.HTTP_200_OK)
-def all(db: Session = Depends(load)):
+def all(db: Session = Depends(load), user_data: get_current_user = Depends()):
     users = db.query_eng(userModel.Users).all()
     return users
 
@@ -104,8 +110,9 @@ def login(response: Response, request: OAuth2PasswordRequestForm = Depends(),
     return {"msg": "user logged in"}
 
 
+
 @router.get('/refresh')
-def refresh(response: Response, Authorize: AuthJWT = Depends(), db: Session = Depends(load)):
+async def refresh(request: Request, response: Response, Authorize: AuthJWT = Depends(), db: Session = Depends(load)):
 
     try:
 
@@ -126,8 +133,8 @@ def refresh(response: Response, Authorize: AuthJWT = Depends(), db: Session = De
     except Exception as e:
         error = e.__class__.__name__
         if error == 'MissingTokenError':
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST, detail='Please provide refresh token')
+            redirect_url = request.url_for('login')
+            return  JSONResponse(content={"redirect_url":redirect_url, "redirect": True},status_code=307)
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST, detail=error)
     
@@ -142,12 +149,12 @@ def refresh(response: Response, Authorize: AuthJWT = Depends(), db: Session = De
     access_token = auth.access_token(data)
 
     # save tokens in the cookies
-    auth.set_access_cookies(access_token, resp)
+    auth.set_access_cookies(access_token, response)
 
-    return {"msg": "access token refreshed"}
+    return {"msg": "access token refreshed", 'user_id':user_id}
 
 @router.get('/logout', status_code=status.HTTP_200_OK)
-def logout(Authorize: AuthJWT = Depends()):
+def logout(response: Response, Authorize: AuthJWT = Depends()):
     Authorize.unset_jwt_cookies()
-    print(Authorize.get_raw_jwt())
+    response.set_cookie("logged_in", '', -1)
     return {'status': 'success'}
