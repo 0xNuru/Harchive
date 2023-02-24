@@ -10,9 +10,6 @@ class Hospital(BaseModel):
     address: str
     hospitalID: str
     phone: str
-    # patients: List[Patient] = []
-    # healthWorkers: List[HealthWorker] = []
-    # insuranceCompanines: List[Insurance] = []
 
     class Config():
         orm_mode = True
