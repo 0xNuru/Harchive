@@ -8,7 +8,7 @@ jinja2
 aiofiles
 
 #for database   
-sqlalchemy         
+sqlalchemy==1.4.46
 psycopg2
 
 #for loading environment variables  
@@ -24,3 +24,11 @@ python-jose[cryptography]
 passlib[bcrypt] 
 
 python-multipart
+
+pyjwt
+
+fastapi-jwt-auth
+
+sympy
+
+alembic
