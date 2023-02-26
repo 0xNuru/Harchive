@@ -1,17 +1,69 @@
 from fastapi import APIRouter, Depends, status, HTTPException
-from schema import showHospital
 from schema import hospital as hospitalSchema
 from engine.loadb import load
 from models import hospital as hospitalModel
 from sqlalchemy.orm import Session
 from typing import Dict, List
+from models import user as userModel
+
+
+from utils import auth
 
 router = APIRouter(
+    prefix="/hospital",
     tags=["hospital"]
 )
 
 
-@router.post("/hospital", response_model=showHospital.ShowHospital, status_code=status.HTTP_201_CREATED)
+@router.post("/admin/register", response_model=hospitalSchema.ShowHospital, status_code=status.HTTP_201_CREATED)
+def create_hospital_admin(request: hospitalSchema.HospitalAdmin, db: Session = Depends(load)):
+    phone = request.phone
+    hospitalID = request.hospitalID
+    email = request.email
+
+    checkPhone = db.query_eng(userModel.Users).filter(
+        userModel.Users.phone == phone).first()
+    checkEmail = db.query_eng(userModel.Users).filter(
+        userModel.Users.email == email).first()
+    checkhospitalID = db.query_eng(hospitalModel.Admin).filter(
+        hospitalModel.Admin.hospitalID == hospitalID).first()
+
+    if checkPhone:
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT,
+                            detail=f"hospital with phone: {phone} exists")
+    if checkEmail:
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT,
+                            detail=f"hospital with email: {email} exists")
+    if checkhospitalID:
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT,
+                            detail=f"hospital with hospital ID: {hospitalID} exists")
+
+    passwd_hash = auth.get_password_hash(request.password2.get_secret_value())
+
+    new_hospital_admin = hospitalModel.Admin(
+        name=request.name, phone=request.phone, email=request.email, password_hash=passwd_hash, hospitalID=request.hospitalID)
+    db.new(new_hospital_admin)
+    db.save()
+    return new_hospital_admin
+
+
+@router.get("/admin/all", response_model=List[hospitalSchema.ShowHospital], status_code=status.HTTP_200_OK)
+def all_admins(db: Session = Depends(load)):
+    admins = db.query_eng(hospitalModel.Admin).all()
+    return admins
+
+
+@router.get("/admin/{hospitalID}", response_model=hospitalSchema.ShowHospital, status_code=status.HTTP_200_OK)
+def show_admin(hospitalID, db: Session = Depends(load)):
+    admin = db.query_eng(hospitalModel.Admin).filter(
+        hospitalModel.Admin.hospitalID == hospitalID).first()
+    if not admin:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail=f"admin with the hospital ID: {hospitalID} not found")
+    return admin
+
+
+@router.post("/register", response_model=hospitalSchema.ShowHospital, status_code=status.HTTP_201_CREATED)
 def create_hospital(request: hospitalSchema.Hospital, db: Session = Depends(load)):
     phone = request.phone
     hospitalID = request.hospitalID
@@ -29,19 +81,19 @@ def create_hospital(request: hospitalSchema.Hospital, db: Session = Depends(load
                             detail=f"hospital with hospital ID: {hospitalID} exists")
 
     new_hospital = hospitalModel.Hospital(
-        name=request.name, phone=request.phone, address=request.address, hospitalID=request.hospitalID)
+        name=request.name, phone=request.phone, hospitalID=request.hospitalID, address=request.address)
     db.new(new_hospital)
     db.save()
     return new_hospital
 
 
-@router.get("/hospital/all", response_model=List[showHospital.ShowHospital], status_code=status.HTTP_200_OK)
+@router.get("/all", response_model=List[hospitalSchema.ShowHospital], status_code=status.HTTP_200_OK)
 def all(db: Session = Depends(load)):
     hospitals = db.query_eng(hospitalModel.Hospital).all()
     return hospitals
 
 
-@router.get("/hospital/{hospitalID}", response_model=showHospital.ShowHospital, status_code=status.HTTP_200_OK)
+@router.get("/{hospitalID}", response_model=hospitalSchema.ShowHospital, status_code=status.HTTP_200_OK)
 def show(hospitalID, db: Session = Depends(load)):
     hospital = db.query_eng(hospitalModel.Hospital).filter(
         hospitalModel.Hospital.hospitalID == hospitalID).first()

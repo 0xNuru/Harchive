@@ -1,18 +1,26 @@
+from pydantic import BaseModel, EmailStr, SecretStr, root_validator, constr
+from datetime import date
+from models.patient import genderEnum
+from typing import List
 import re
-from pydantic import BaseModel, EmailStr, SecretStr, constr, root_validator
-
 
 password_regex = "(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!#%*?&]{8,20}"
 
 
-class HospitalAdmin(BaseModel):
+class Doctor(BaseModel):
     name: constr(min_length=5)
     email: EmailStr
-    phone: constr(min_length=11, max_length=14)
     password1: SecretStr
     password2: SecretStr
-    hospitalID: str
-    role: str = 'hospital_admin'
+    gender: genderEnum
+    dob: date
+    phone: constr(min_length=11, max_length=14)
+    address: constr(min_length=10)
+    hospitalID: List[str]
+    role: str = 'doctor'
+
+    class Config():
+        orm_mode = True
 
     @root_validator()
     def verify_password_match(cls, values):
@@ -26,20 +34,9 @@ class HospitalAdmin(BaseModel):
         return values
 
 
-class Hospital(BaseModel):
-    name: constr(min_length=5)
-    address: constr(min_length=10)
-    phone: constr(min_length=11, max_length=14)
-    hospitalID: str
-
-    class Config():
-        orm_mode = True
-
-
-class ShowHospital(BaseModel):
-
+class ShowDoctor(BaseModel):
     name: str
-    hospitalID: str
+    email: str
 
     class Config():
         orm_mode = True
