@@ -2,7 +2,7 @@ from fastapi import FastAPI
 import models.base_model
 from fastapi.middleware.cors import CORSMiddleware
 from engine.dbStorage import DBStorage
-from routers import user, insurance, hospital, patient, doctor
+from routers import user, insurance, hospital, patient
 import sys
 
 # sys.path.insert(0, '..')
@@ -21,4 +21,3 @@ app.include_router(user.router)
 app.include_router(insurance.router)
 app.include_router(hospital.router)
 app.include_router(patient.router)
-app.include_router(doctor.router)

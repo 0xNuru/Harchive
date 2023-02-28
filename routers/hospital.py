@@ -101,3 +101,46 @@ def show(hospitalID, db: Session = Depends(load)):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail=f"hospital with the hospital ID: {hospitalID} not found")
     return hospital
+
+
+@router.post("/doctor/register", response_model=hospitalSchema.ShowDoctor,
+             status_code=status.HTTP_201_CREATED)
+def create_doctor(request: hospitalSchema.Doctor, db: Session = Depends(load)):
+    phone = request.phone
+    email = request.email
+
+    checkPhone = db.query_eng(userModel.Users).filter(
+        userModel.Users.phone == phone).first()
+    checkEmail = db.query_eng(userModel.Users).filter(
+        userModel.Users.email == email).first()
+    if checkPhone:
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT,
+                            detail=f"user with phone: {phone} exists")
+    if checkEmail:
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT,
+                            detail=f"user with email: {email} exists")
+
+    passwd_hash = auth.get_password_hash(request.password2.get_secret_value())
+
+    new_doctor = hospitalModel.Doctor(name=request.name, phone=request.phone,
+                                      email=request.email, address=request.address, password_hash=passwd_hash,
+                                      hospitalID=request.hospitalID, dob=request.dob, gender=request.gender)
+    db.new(new_doctor)
+    db.save()
+    return new_doctor
+
+
+@router.get("/doctor/all", response_model=List[hospitalSchema.ShowDoctor], status_code=status.HTTP_200_OK)
+def all(db: Session = Depends(load)):
+    doctor = db.query_eng(hospitalModel.Doctor).all()
+    return doctor
+
+
+@router.get("/doctor/{email}", response_model=hospitalSchema.ShowDoctor, status_code=status.HTTP_200_OK)
+def show(email, db: Session = Depends(load)):
+    doctor = db.query_eng(hospitalModel.Doctor).filter(
+        hospitalModel.Doctor.email == email).first()
+    if not doctor:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail=f"doctor with the email {email} not found")
+    return doctor

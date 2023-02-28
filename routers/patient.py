@@ -46,7 +46,7 @@ def all(db: Session = Depends(load)):
     return patient
 
 
-@router.get("/email/{email}", response_model=patientSchema.ShowPatient, status_code=status.HTTP_200_OK)
+@router.get("/{email}", response_model=patientSchema.ShowPatient, status_code=status.HTTP_200_OK)
 def show(email, db: Session = Depends(load)):
     patient = db.query_eng(patientModel.Patient).filter(
         patientModel.Patient.email == email).first()
