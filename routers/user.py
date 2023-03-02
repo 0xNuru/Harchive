@@ -68,7 +68,6 @@ def show(email, db: Session = Depends(load)):
 
 
 # logging endpoint
-
 @router.post('/login', status_code=status.HTTP_200_OK)
 def login(response: Response, request: OAuth2PasswordRequestForm = Depends(),
           Authorize: AuthJWT = Depends(), db: Session = Depends(load)):
