@@ -1,8 +1,10 @@
 from fastapi import APIRouter, Depends, Request, Response, status, HTTPException
+from dependencies.depends import get_current_user
 from schema import patient as patientSchema
 from engine.loadb import load
 from models import user as userModel
 from models import patient as patientModel
+from models import record as recordModel
 from sqlalchemy.orm import Session
 from typing import Dict, List
 from utils import auth
@@ -145,3 +147,41 @@ def logout(response: Response, Authorize: AuthJWT = Depends()):
     Authorize.unset_jwt_cookies()
     response.set_cookie("logged_in", '', -1)
     return {'status': 'success'}
+
+
+@router.post("/record/add", response_model=patientSchema.PatientRecord,
+             status_code=status.HTTP_201_CREATED)
+def create_patient_record(request: patientSchema.PatientRecord, user_data: get_current_user = Depends(), db: Session = Depends(load)):
+    id = user_data["user_id"]
+    check = db.query_eng(recordModel.Record).filter(
+        recordModel.Record.patient == id).first()
+    if check:
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT,
+                            detail=f"record for this patient exists")
+
+    new_record = recordModel.Record(type=request.type, patient=id, DOB=request.DOB,
+                                    BloodType=request.BloodType, Height=request.Height, weight=request.weight,
+                                    BMI=request.BMI)
+    db.new(new_record)
+    db.save()
+    return new_record
+
+
+@router.get("/record/all", response_model=List[patientSchema.PatientRecord], status_code=status.HTTP_200_OK)
+def all(user_data: get_current_user = Depends(), db: Session = Depends(load)):
+    records = db.query_eng(recordModel.Record).all()
+    return records
+
+
+@router.get("/record/email/{email}", response_model=patientSchema.PatientRecord, status_code=status.HTTP_200_OK)
+def show(email, user_data: get_current_user = Depends(), db: Session = Depends(load)):
+    patient = db.query_eng(patientModel.Patient).filter(
+        patientModel.Patient.email == email).first()
+    if not patient:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail=f"patient with the email {email} not found")
+    id = patient.id
+    record = db.query_eng(recordModel.Record).filter(
+        recordModel.Record.patient == id).first()
+    print(record)
+    return record

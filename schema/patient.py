@@ -39,3 +39,15 @@ class ShowPatient(BaseModel):
 
     class Config():
         orm_mode = True
+
+
+class PatientRecord(BaseModel):
+    type: str
+    DOB: date
+    BloodType: str
+    Height: float
+    weight: float
+    BMI: float
+
+    class Config():
+        orm_mode = True

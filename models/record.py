@@ -118,7 +118,7 @@ class Record(BaseModel, Base):
     medication_record = relationship(Medication, backref='record')
     transactions_record = relationship(Transactions, backref='record')
 
-    __mapper_args__ = {
-        'polymorphic_identity': 'record',
-        'polymorphic_on': type
-    }
+    # __mapper_args__ = {
+    #     'polymorphic_identity': 'record',
+    #     'polymorphic_on': type
+    # }

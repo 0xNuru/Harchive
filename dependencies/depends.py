@@ -19,7 +19,7 @@ class UserNotFound(Exception):
     pass
 
 
-def get_current_user(Authorize: AuthJWT = Depends(), db = Depends(load)):
+def get_current_user(Authorize: AuthJWT = Depends(), db=Depends(load)):
 
     try:
         Authorize.jwt_required()
@@ -28,9 +28,11 @@ def get_current_user(Authorize: AuthJWT = Depends(), db = Depends(load)):
         data = Authorize.get_raw_jwt()
         user = db.query_eng(userModel.Users).filter(
             userModel.Users.name == user_id).first()
+        id = user.id
+        data["user_id"] = id
+
         if not user:
             raise UserNotFound('User no longer exist')
-
 
     except Exception as e:
         error = e.__class__.__name__
