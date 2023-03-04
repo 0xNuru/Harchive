@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+
 from datetime import date
 import re
 from pydantic import BaseModel, EmailStr, SecretStr, constr, root_validator

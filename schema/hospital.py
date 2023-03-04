@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+
 from schema.user import User
 from datetime import date
 import re

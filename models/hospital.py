@@ -43,8 +43,8 @@ class Hospital(BaseModel, Base):
     admin = relationship("Admin", back_populates="hospital")
     workers = relationship(
         "HospitalWorker", back_populates="hospital", cascade='all, delete-orphan')
-    doctors = relationship(
-        "Doctor", back_populates="hospital", cascade='all, delete-orphan')
+    # doctors = relationship(
+    #     "Doctor", back_populates="hospital", cascade='all, delete-orphan')
 
 
 class HospitalWorker(BaseModel, Base):
@@ -60,17 +60,17 @@ class HospitalWorker(BaseModel, Base):
     hospital = relationship("Hospital", back_populates="workers")
 
 
-class Doctor(Users):
-    """
-        doctor details
-    """
-    __tablename__ = "doctor"
-    id = Column(String, ForeignKey(
-        'user.id',  ondelete="CASCADE"), primary_key=True)
-    hospitalID = Column(String, ForeignKey(
-        "hospital.hospitalID",  ondelete="CASCADE"), nullable=False)
-    role = Column(String(50), nullable=False, default='doctor')
-    hospital = relationship("Hospital", back_populates="doctors")
+# class Doctor(Users):
+#     """
+#         doctor details
+#     """
+#     __tablename__ = "doctor"
+#     id = Column(String, ForeignKey(
+#         'user.id',  ondelete="CASCADE"), primary_key=True)
+#     hospitalID = Column(String, ForeignKey(
+#         "hospital.hospitalID",  ondelete="CASCADE"), nullable=False)
+#     role = Column(String(50), nullable=False, default='doctor')
+#     hospital = relationship("Hospital", back_populates="doctors")
 
 
 class Doctors(Users):

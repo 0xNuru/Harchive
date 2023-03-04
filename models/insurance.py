@@ -15,16 +15,9 @@ class InAdmin(Users):
         Desc:
             admin details
     """
-<<<<<<< HEAD:models/insurance.py
     __tablename__ = "Inadmin"
     id = Column(String, ForeignKey("user.id",  ondelete="CASCADE"),primary_key=True, nullable=False)
     insuranceID = Column(String, ForeignKey("insurance.id",  ondelete="CASCADE"), nullable=False)
-=======
-    __tablename__ = "inAdmin"
-    id = Column(String, ForeignKey("user.id",  ondelete="CASCADE"),
-                primary_key=True, nullable=False)
-    insuranceID = Column(String(128), nullable=False, unique=True)
->>>>>>> 4c5095c48384f1f386bd72c756a09168f796b78e:models/inusrance.py
     role = Column(String(50), nullable=False, default='insurance_admin')
     insurance = relationship("Insurance", back_populates="inAdmin")
 

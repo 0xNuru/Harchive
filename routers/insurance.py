@@ -1,7 +1,11 @@
+#!/usr/bin/python3
+
+"""End point routes for insurance company"""
+
 from dependencies.depends import get_current_user
 from fastapi import APIRouter, Depends, status, HTTPException
-from schema import showInsurance
-from fastapi import APIRouter, Depends, Request, Response, status, HTTPException
+from schema.insurance import ShowInsurance
+from fastapi import APIRouter, Depends,status, HTTPException
 from schema import insurance as insuranceSchema
 from engine.loadb import load
 from models import insurance as insuranceModel
@@ -9,14 +13,7 @@ from sqlalchemy.orm import Session
 from typing import Dict, List
 from utils.acl import check_role
 from utils import auth
-from utils.oauth1 import AuthJWT
-from fastapi.security import OAuth2PasswordRequestForm
-from fastapi.responses import JSONResponse
-from models import user as userModel
-from sqlalchemy import or_
 
-
-from utils import auth
 
 router = APIRouter(
     prefix="/insurance",

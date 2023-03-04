@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+
 from pydantic import BaseModel, EmailStr, SecretStr, root_validator, constr
 from datetime import date
 from models.patient import genderEnum

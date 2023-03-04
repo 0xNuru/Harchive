@@ -26,14 +26,7 @@ def get_current_user(Authorize: AuthJWT = Depends(), db=Depends(load)):
         user_email = Authorize.get_jwt_subject()
         data = Authorize.get_raw_jwt()
         user = db.query_eng(userModel.Users).filter(
-<<<<<<< HEAD
-            userModel.Users.email == user_email).first()
-=======
-            userModel.Users.name == user_id).first()
-        id = user.id
-        data["user_id"] = id
-
->>>>>>> 4c5095c48384f1f386bd72c756a09168f796b78e
+        userModel.Users.email == user_email).first()
         if not user:
             raise UserNotFound('User no longer exist')
 

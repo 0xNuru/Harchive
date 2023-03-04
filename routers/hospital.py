@@ -8,7 +8,6 @@ from utils.acl import check_role
 from typing import Dict, List
 from models import user as userModel
 from utils import auth
-from utils.oauth1 import AuthJWT
 from models import user as userModel
 
 

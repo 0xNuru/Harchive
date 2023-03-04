@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+
 from pydantic import BaseModel, EmailStr, SecretStr, root_validator, constr
 from typing import Optional
 import re

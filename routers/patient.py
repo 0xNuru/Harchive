@@ -3,7 +3,7 @@
 from utils.acl import check_role
 from dependencies.depends import get_current_user
 from fastapi import APIRouter, Depends, status, HTTPException
-from schema import showPatient
+from schema.patient import ShowPatient
 from schema import patient as patientSchema
 from engine.loadb import load
 from models import user as userModel
@@ -51,7 +51,7 @@ def create_patient(request: patientSchema.Patient, db: Session = Depends(load)):
     return new_patient
 
 
-@router.get("/all", response_model=List[showPatient.ShowPatient], status_code=status.HTTP_200_OK)
+@router.get("/all", response_model=List[ShowPatient], status_code=status.HTTP_200_OK)
 def all(db: Session = Depends(load), user_data = Depends(get_current_user)):
     check_role('patient', user_data['user_id'])
     patient = db.query_eng(patientModel.Patient).all()
@@ -107,5 +107,4 @@ def show(email, user_data: get_current_user = Depends(), db: Session = Depends(l
     id = patient.id
     record = db.query_eng(recordModel.Record).filter(
         recordModel.Record.patient == id).first()
-    print(record)
     return record

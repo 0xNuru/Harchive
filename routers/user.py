@@ -101,7 +101,7 @@ def login(response: Response, request: OAuth2PasswordRequestForm = Depends(),
     # save tokens in the cookies
     auth.set_access_cookies(access_token, response)
     auth.set_refresh_cookies(refresh_token, response)
-    logger.info(f" {request.name} logged in !!")
+    logger.info(f" {check.name} logged in !!")
 
     return {"msg": "user logged in"}
 
