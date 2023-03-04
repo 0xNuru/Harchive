@@ -51,13 +51,15 @@ def create_in_admin(request: insuranceSchema.InAdmin, db: Session = Depends(load
 
 
 @router.get("/admin/all", response_model=List[insuranceSchema.ShowInsurance], status_code=status.HTTP_200_OK)
-def all_admins(db: Session = Depends(load)):
+def all_admins(db: Session = Depends(load), user_data: get_current_user = Depends()):
+    check_role('insurance_admin', user_data['user_id'])
     admins = db.query_eng(insuranceModel.InAdmin).all()
     return admins
 
 
 @router.get("/admin/insuranceID/{insuranceID}", response_model=insuranceSchema.ShowInsurance, status_code=status.HTTP_200_OK)
-def show_admin(insuranceID, db: Session = Depends(load)):
+def show_admin(insuranceID, db: Session = Depends(load), user_data: get_current_user = Depends()):
+    check_role('insurance_admin', user_data['user_id'])
     admin = db.query_eng(insuranceModel.InAdmin).filter(
         insuranceModel.InAdmin.insuranceID == insuranceID).first()
     if not admin:
@@ -67,10 +69,10 @@ def show_admin(insuranceID, db: Session = Depends(load)):
 
 
 @router.post("/register", response_model=insuranceSchema.ShowInsurance, status_code=status.HTTP_201_CREATED)
-def create_insurance(request: insuranceSchema.Insurance, db: Session = Depends(load)):
+def create_insurance(request: insuranceSchema.Insurance, db: Session = Depends(load), user_data: get_current_user = Depends()):
+    check_role('insurance_admin', user_data['user_id'])
     phone = request.phone
     insuranceID = request.insuranceID
-
     checkPhone = db.query_eng(insuranceModel.Insurance).filter(
         insuranceModel.Insurance.phone == phone).first()
     checkInsuranceID = db.query_eng(insuranceModel.Insurance).filter(
@@ -91,13 +93,15 @@ def create_insurance(request: insuranceSchema.Insurance, db: Session = Depends(l
 
 
 @router.get("/all", response_model=List[insuranceSchema.ShowInsurance], status_code=status.HTTP_200_OK)
-def all(db: Session = Depends(load)):
+def all(db: Session = Depends(load), user_data: get_current_user = Depends()):
+    check_role('insurance_admin', user_data['user_id'])
     companies = db.query_eng(insuranceModel.Insurance).all()
     return companies
 
 
 @router.get("/{insuranceID}", response_model=insuranceSchema.ShowInsurance, status_code=status.HTTP_200_OK)
-def show(insuranceID, db: Session = Depends(load)):
+def show(insuranceID, db: Session = Depends(load), user_data: get_current_user = Depends()):
+    check_role('insurance_admin', user_data['user_id'])
     company = db.query_eng(insuranceModel.Insurance).filter(
         insuranceModel.Insurance.insuranceID == insuranceID).first()
     if not company:

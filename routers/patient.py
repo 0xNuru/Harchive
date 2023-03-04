@@ -12,11 +12,8 @@ from models import record as recordModel
 from sqlalchemy.orm import Session
 from typing import Dict, List
 from utils import auth
-from utils.oauth1 import AuthJWT
-from fastapi.security import OAuth2PasswordRequestForm
-from fastapi.responses import JSONResponse
 from models import user as userModel
-from sqlalchemy import or_
+
 
 
 
@@ -62,7 +59,8 @@ def all(db: Session = Depends(load), user_data = Depends(get_current_user)):
 
 
 @router.get("/email/{email}", response_model=patientSchema.ShowPatient, status_code=status.HTTP_200_OK)
-def show(email, db: Session = Depends(load)):
+def show(email, db: Session = Depends(load), user_data: get_current_user = Depends()):
+    check_role('patient', user_data['user_id'])
     patient = db.query_eng(patientModel.Patient).filter(
         patientModel.Patient.email == email).first()
     if not patient:
@@ -71,16 +69,11 @@ def show(email, db: Session = Depends(load)):
     return patient
 
 
-@router.get('/logout', status_code=status.HTTP_200_OK)
-def logout(response: Response, Authorize: AuthJWT = Depends()):
-    Authorize.unset_jwt_cookies()
-    response.set_cookie("logged_in", '', -1)
-    return {'status': 'success'}
-
 
 @router.post("/record/add", response_model=patientSchema.PatientRecord,
              status_code=status.HTTP_201_CREATED)
 def create_patient_record(request: patientSchema.PatientRecord, user_data: get_current_user = Depends(), db: Session = Depends(load)):
+    check_role('patient', user_data['user_id'])
     id = user_data["user_id"]
     check = db.query_eng(recordModel.Record).filter(
         recordModel.Record.patient == id).first()
@@ -98,12 +91,14 @@ def create_patient_record(request: patientSchema.PatientRecord, user_data: get_c
 
 @router.get("/record/all", response_model=List[patientSchema.PatientRecord], status_code=status.HTTP_200_OK)
 def all(user_data: get_current_user = Depends(), db: Session = Depends(load)):
+    check_role('patient', user_data['user_id'])
     records = db.query_eng(recordModel.Record).all()
     return records
 
 
 @router.get("/record/email/{email}", response_model=patientSchema.PatientRecord, status_code=status.HTTP_200_OK)
 def show(email, user_data: get_current_user = Depends(), db: Session = Depends(load)):
+    check_role('patient', user_data['user_id'])
     patient = db.query_eng(patientModel.Patient).filter(
         patientModel.Patient.email == email).first()
     if not patient:
