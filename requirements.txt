@@ -8,7 +8,7 @@ jinja2
 aiofiles
 
 #for database   
-sqlalchemy         
+sqlalchemy==1.4.46
 psycopg2
 
 #for loading environment variables  
@@ -27,3 +27,11 @@ python-multipart
 
 #logger file
 loguru==0.6.0
+
+pyjwt
+
+fastapi-jwt-auth
+
+sympy
+
+alembic

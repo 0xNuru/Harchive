@@ -8,7 +8,6 @@ from fastapi import APIRouter, Depends, HTTPException, Response, Request
 from fastapi.security import OAuth2PasswordRequestForm
 from fastapi.responses import JSONResponse
 from models import user as userModel
-from schema import showUser
 from schema import user as userSchema
 from sqlalchemy.orm import Session
 from starlette import status
@@ -17,15 +16,13 @@ from utils import auth
 from utils.oauth1 import AuthJWT
 from utils.logger import logger
 
-
-
 router = APIRouter(
     prefix='/user',
     tags=["user"]
 )
 
 
-@router.post("/register", response_model=showUser.ShowUser,
+@router.post("/register", response_model=userSchema.ShowUser,
              status_code=status.HTTP_201_CREATED)
 def create_user(request: userSchema.User, db: Session = Depends(load)):
     phone = request.phone
@@ -45,7 +42,7 @@ def create_user(request: userSchema.User, db: Session = Depends(load)):
     passwd_hash = auth.get_password_hash(request.password2.get_secret_value())
 
     new_user = userModel.Users(name=request.name, phone=request.phone,
-                               email=request.email, address=request.address, 
+                               email=request.email, address=request.address,
                                password_hash=passwd_hash)
     logger.info(f"user with the name {request.name} has been created")
     db.new(new_user)
@@ -54,15 +51,14 @@ def create_user(request: userSchema.User, db: Session = Depends(load)):
 
 
 # protected route that requires login, uses the get_current_user func
-@router.get("/all", response_model=List[showUser.ShowUser], status_code=status.HTTP_200_OK)
+@router.get("/all", response_model=List[userSchema.ShowUser], status_code=status.HTTP_200_OK)
 def all(db: Session = Depends(load), user_data: get_current_user = Depends()):
     users = db.query_eng(userModel.Users).all()
     logger.info(f"user with the name {user_data['name']}  queried all users")
     return users
 
 
-
-@router.get("/email/{email}", response_model=showUser.ShowUser, status_code=status.HTTP_200_OK)
+@router.get("/email/{email}", response_model=userSchema.ShowUser, status_code=status.HTTP_200_OK)
 def show(email, db: Session = Depends(load)):
     users = db.query_eng(userModel.Users).filter(
         userModel.Users.email == email).first()
@@ -72,11 +68,10 @@ def show(email, db: Session = Depends(load)):
     return users
 
 
-# logging endpoint 
-
+# logging endpoint
 @router.post('/login', status_code=status.HTTP_200_OK)
 def login(response: Response, request: OAuth2PasswordRequestForm = Depends(),
-     Authorize: AuthJWT = Depends(), db: Session = Depends(load)):
+          Authorize: AuthJWT = Depends(), db: Session = Depends(load)):
 
     email = request.username
     password = request.password
@@ -84,22 +79,21 @@ def login(response: Response, request: OAuth2PasswordRequestForm = Depends(),
     check = db.query_eng(userModel.Users).filter(
         userModel.Users.email == email).first()
 
-
     if not check:
         raise HTTPException(status_code=status.HTTP_409_CONFLICT,
-                            detail=f"Incorrect Username and Password")
-    
+                            detail=f"Incorrect Username or Password")
+
     if not auth.verify_password(password, check.password_hash):
-         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
-                            detail='Incorrect Username and Password')
-    
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
+                            detail='Incorrect Username or Password')
+
     data = {
         'username': check.name,
         'email' : check.email,
         'user_id': check.id
         
     }
-    
+
     # generate user cookies
     access_token = auth.access_token(data)
     refresh_token = auth.refresh_token(data)
@@ -110,7 +104,6 @@ def login(response: Response, request: OAuth2PasswordRequestForm = Depends(),
     logger.info(f" {request.name} logged in !!")
 
     return {"msg": "user logged in"}
-
 
 
 @router.get('/refresh')
@@ -136,18 +129,17 @@ async def refresh(request: Request, response: Response, Authorize: AuthJWT = Dep
         error = e.__class__.__name__
         if error == 'MissingTokenError':
             redirect_url = request.url_for('login')
-            return  JSONResponse(content={"redirect_url":redirect_url, "redirect": True},status_code=307)
+            return JSONResponse(content={"redirect_url": redirect_url, "redirect": True}, status_code=307)
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST, detail=error)
-    
-    
+
     data = {
         'username': check.name,
         'email' : check.email,
         'user_id': check.id
         
     }
-    
+
     # generate user cookies
     access_token = auth.access_token(data)
 
