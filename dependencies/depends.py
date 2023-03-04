@@ -33,7 +33,6 @@ def get_current_user(Authorize: AuthJWT = Depends(), db = Depends(load)):
 
     except Exception as e:
         error = e.__class__.__name__
-        print(error)
         if error == 'MissingTokenError':
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED, detail='You are not logged in')

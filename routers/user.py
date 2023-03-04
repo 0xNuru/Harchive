@@ -10,13 +10,12 @@ from fastapi.responses import JSONResponse
 from models import user as userModel
 from schema import showUser
 from schema import user as userSchema
-from sqlalchemy import or_
 from sqlalchemy.orm import Session
 from starlette import status
 from typing import Dict, List
 from utils import auth
 from utils.oauth1 import AuthJWT
-
+from utils.logger import logger
 
 
 
@@ -31,8 +30,7 @@ router = APIRouter(
 def create_user(request: userSchema.User, db: Session = Depends(load)):
     phone = request.phone
     email = request.email
-
-
+    
     checkPhone = db.query_eng(userModel.Users).filter(
         userModel.Users.phone == phone).first()
     checkEmail = db.query_eng(userModel.Users).filter(
@@ -49,6 +47,7 @@ def create_user(request: userSchema.User, db: Session = Depends(load)):
     new_user = userModel.Users(name=request.name, phone=request.phone,
                                email=request.email, address=request.address, 
                                password_hash=passwd_hash)
+    logger.info(f"user with the name {request.name} has been created")
     db.new(new_user)
     db.save()
     return new_user
@@ -58,6 +57,7 @@ def create_user(request: userSchema.User, db: Session = Depends(load)):
 @router.get("/all", response_model=List[showUser.ShowUser], status_code=status.HTTP_200_OK)
 def all(db: Session = Depends(load), user_data: get_current_user = Depends()):
     users = db.query_eng(userModel.Users).all()
+    logger.info(f"user with the name {user_data['name']}  queried all users")
     return users
 
 
@@ -107,6 +107,7 @@ def login(response: Response, request: OAuth2PasswordRequestForm = Depends(),
     # save tokens in the cookies
     auth.set_access_cookies(access_token, response)
     auth.set_refresh_cookies(refresh_token, response)
+    logger.info(f" {request.name} logged in !!")
 
     return {"msg": "user logged in"}
 

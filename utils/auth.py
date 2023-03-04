@@ -74,4 +74,3 @@ def refresh_token(data: dict[str, Any]) -> str:
         user_claims = to_encode
     )
     return refresh_token
-

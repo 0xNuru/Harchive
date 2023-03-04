@@ -24,3 +24,6 @@ python-jose[cryptography]
 passlib[bcrypt] 
 
 python-multipart
+
+#logger file
+loguru==0.6.0
