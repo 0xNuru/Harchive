@@ -23,11 +23,10 @@ def get_current_user(Authorize: AuthJWT = Depends(), db = Depends(load)):
 
     try:
         Authorize.jwt_required()
-        user_id = Authorize.get_jwt_subject()
-        print(user_id)
+        user_email = Authorize.get_jwt_subject()
         data = Authorize.get_raw_jwt()
         user = db.query_eng(userModel.Users).filter(
-            userModel.Users.name == user_id).first()
+            userModel.Users.email == user_email).first()
         if not user:
             raise UserNotFound('User no longer exist')
 
@@ -48,3 +47,4 @@ def get_current_user(Authorize: AuthJWT = Depends(), db = Depends(load)):
             status_code=status.HTTP_401_UNAUTHORIZED, detail='Token is invalid or has expired')
 
     return data
+

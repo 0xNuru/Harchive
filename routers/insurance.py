@@ -1,10 +1,12 @@
+from dependencies.depends import get_current_user
 from fastapi import APIRouter, Depends, status, HTTPException
 from schema import showInsurance
 from schema import insurance as insuranceSchema
 from engine.loadb import load
-from models import inusrance as insuranceModel
+from models import insurance as insuranceModel
 from sqlalchemy.orm import Session
 from typing import Dict, List
+from utils.acl import check_role
 
 router = APIRouter(
     tags=["insurance"]
@@ -36,7 +38,8 @@ def create_insurance(request: insuranceSchema.Insurance, db: Session = Depends(l
 
 
 @router.get("/insurance/all", response_model=List[showInsurance.ShowInsurance], status_code=status.HTTP_200_OK)
-def all(db: Session = Depends(load)):
+def all(db: Session = Depends(load), user_data = Depends(get_current_user)):
+    check_role('patient', user_data['user_id'])
     companies = db.query_eng(insuranceModel.Insurance).all()
     return companies
 

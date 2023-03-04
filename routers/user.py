@@ -32,6 +32,7 @@ def create_user(request: userSchema.User, db: Session = Depends(load)):
     phone = request.phone
     email = request.email
 
+
     checkPhone = db.query_eng(userModel.Users).filter(
         userModel.Users.phone == phone).first()
     checkEmail = db.query_eng(userModel.Users).filter(
@@ -77,12 +78,11 @@ def show(email, db: Session = Depends(load)):
 def login(response: Response, request: OAuth2PasswordRequestForm = Depends(),
      Authorize: AuthJWT = Depends(), db: Session = Depends(load)):
 
-    user = request.username
-    email = None
+    email = request.username
     password = request.password
 
-    check = db.query_eng(userModel.Users).filter(or_(
-        userModel.Users.email == email, userModel.Users.name == user)).first()
+    check = db.query_eng(userModel.Users).filter(
+        userModel.Users.email == email).first()
 
 
     if not check:
@@ -96,6 +96,7 @@ def login(response: Response, request: OAuth2PasswordRequestForm = Depends(),
     data = {
         'username': check.name,
         'email' : check.email,
+        'user_id': check.id
         
     }
     
@@ -118,14 +119,14 @@ async def refresh(request: Request, response: Response, Authorize: AuthJWT = Dep
 
         Authorize.jwt_refresh_token_required()
     
-        user_id = Authorize.get_jwt_subject()
+        user_email = Authorize.get_jwt_subject()
 
-        if not user_id:
+        if not user_email:
             raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
                                 detail='Could not refresh access token')
 
         check = db.query_eng(userModel.Users).filter(
-            userModel.Users.name == user_id).first()
+            userModel.Users.email == user_email).first()
 
         if not check:
             raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
@@ -142,6 +143,7 @@ async def refresh(request: Request, response: Response, Authorize: AuthJWT = Dep
     data = {
         'username': check.name,
         'email' : check.email,
+        'user_id': check.id
         
     }
     
@@ -151,7 +153,7 @@ async def refresh(request: Request, response: Response, Authorize: AuthJWT = Dep
     # save tokens in the cookies
     auth.set_access_cookies(access_token, response)
 
-    return {"msg": "access token refreshed", 'user_id':user_id}
+    return {"msg": "access token refreshed", 'user_id':check.id}
 
 @router.get('/logout', status_code=status.HTTP_200_OK)
 def logout(response: Response, Authorize: AuthJWT = Depends()):

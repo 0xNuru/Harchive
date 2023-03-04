@@ -30,6 +30,6 @@ class InAdmin(Users):
     """
     __tablename__ = "Inadmin"
     id = Column(String, ForeignKey("user.id",  ondelete="CASCADE"),primary_key=True, nullable=False)
-    inusranceID = Column(String, ForeignKey("insurance.id",  ondelete="CASCADE"), nullable=False)
+    insuranceID = Column(String, ForeignKey("insurance.id",  ondelete="CASCADE"), nullable=False)
     role = Column(String(50), nullable=False, default='insurance_admin')
     insurance = relationship("Insurance")

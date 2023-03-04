@@ -2,9 +2,12 @@ from fastapi import APIRouter, Depends, status, HTTPException
 from schema import showHospital
 from schema import hospital as hospitalSchema
 from engine.loadb import load
+from dependencies.depends import get_current_user
 from models import hospital as hospitalModel
 from sqlalchemy.orm import Session
+from utils.acl import check_role
 from typing import Dict, List
+
 
 router = APIRouter(
     tags=["hospital"]
@@ -36,7 +39,8 @@ def create_hospital(request: hospitalSchema.Hospital, db: Session = Depends(load
 
 
 @router.get("/hospital/all", response_model=List[showHospital.ShowHospital], status_code=status.HTTP_200_OK)
-def all(db: Session = Depends(load)):
+def all(db: Session = Depends(load), user_data = Depends(get_current_user)):
+    check_role('hospital_admin', user_data['user_id'])
     hospitals = db.query_eng(hospitalModel.Hospital).all()
     return hospitals
 

@@ -8,6 +8,10 @@ from sqlalchemy import Column, ForeignKey, Integer, String, Date, Enum, null
 from models.user import Users
 from models.record import Record
 from sqlalchemy.orm import relationship
+import sys
+sys.path.insert(0, '..')
+
+
 
 class genderEnum(enum.Enum):
     M = "M"

@@ -1,3 +1,7 @@
+#!/usr/bin/python3
+
+from utils.acl import check_role
+from dependencies.depends import get_current_user
 from fastapi import APIRouter, Depends, status, HTTPException
 from schema import showPatient
 from schema import patient as patientSchema
@@ -6,6 +10,8 @@ from models import patient as patientModel
 from sqlalchemy.orm import Session
 from typing import Dict, List
 from utils import auth
+
+
 
 router = APIRouter(
     prefix="/patient",
@@ -41,7 +47,8 @@ def create_patient(request: patientSchema.Patient, db: Session = Depends(load)):
 
 
 @router.get("/all", response_model=List[showPatient.ShowPatient], status_code=status.HTTP_200_OK)
-def all(db: Session = Depends(load)):
+def all(db: Session = Depends(load), user_data = Depends(get_current_user)):
+    check_role('patient', user_data['user_id'])
     patient = db.query_eng(patientModel.Patient).all()
     return patient
 

@@ -18,7 +18,6 @@ class Patient(BaseModel):
     phone: constr(min_length=11, max_length=14)
     address: constr(min_length=10)    
     insuranceID: str
-    role : str = 'patient'
 
     class Config():
         orm_mode = True
