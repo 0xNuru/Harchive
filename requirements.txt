@@ -25,6 +25,9 @@ passlib[bcrypt]
 
 python-multipart
 
+#logger file
+loguru==0.6.0
+
 pyjwt
 
 fastapi-jwt-auth

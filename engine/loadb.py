@@ -2,7 +2,9 @@
 
 """Initializes the storage engine"""
 
-from .dbStorage import DBStorage
+import sys
+sys.path.insert(0, '..')
+from engine.dbStorage import DBStorage
 
 
 def load():

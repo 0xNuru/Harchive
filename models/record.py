@@ -13,7 +13,6 @@ import sys
 sys.path.insert(0, '..')
 
 
-
 class Transactions(BaseModel, Base):
     """
         Desc:
@@ -25,15 +24,18 @@ class Transactions(BaseModel, Base):
 
     """
     __tablename__ = "transactions"
-    hospital_record_id = Column(String, ForeignKey('record.id',  ondelete="CASCADE"))
-    doctor_id = Column(String, ForeignKey('doctors.id',  ondelete="CASCADE"), nullable=False)
-    Doctor = relationship('Doctor', back_populates='transactions')
+    hospital_record_id = Column(
+        String, ForeignKey('record.id',  ondelete="CASCADE"))
+    doctor_id = Column(String, ForeignKey(
+        'doctors.id',  ondelete="CASCADE"), nullable=False)
+    Doctor = relationship('Doctors', back_populates='transactions')
     drug_name = Column(VARCHAR(255), nullable=False, unique=True)
     quantity = Column(VARCHAR(255), nullable=False, unique=True)
     transaction_amount = Column(VARCHAR(255), nullable=False, unique=True)
     transaction_type = Column(VARCHAR(255), nullable=False, unique=True)
     vendor_name = Column(VARCHAR(255), nullable=False, unique=True)
-    transaction_date = Column(DateTime, nullable=False, default=(datetime.utcnow()))
+    transaction_date = Column(DateTime, nullable=False,
+                              default=(datetime.utcnow()))
 
 
 class Medication(BaseModel, Base):
@@ -46,11 +48,13 @@ class Medication(BaseModel, Base):
             - amount : cost
     """
     __tablename__ = "medications"
-   
+
     medication_name = Column(String(128), unique=True, nullable=False)
-    hospital_record_id = Column(String, ForeignKey('record.id',  ondelete="CASCADE"))
-    doctor_id = Column(String, ForeignKey('doctors.id',  ondelete="CASCADE"), nullable=False)
-    Doctor = relationship('Doctor', back_populates='medications')
+    hospital_record_id = Column(
+        String, ForeignKey('record.id',  ondelete="CASCADE"))
+    doctor_id = Column(String, ForeignKey(
+        'doctors.id',  ondelete="CASCADE"), nullable=False)
+    Doctor = relationship('Doctors', back_populates='medications')
 
 
 class Test(BaseModel, Base):
@@ -60,12 +64,14 @@ class Test(BaseModel, Base):
 
     """
     __tablename__ = "test"
-   
+
     test_name = Column(String, unique=True, nullable=False)
     scanned_test = None
-    doctor_id = Column(String, ForeignKey('doctors.id',  ondelete="CASCADE"), nullable=False)
-    Doctor = relationship('Doctor', back_populates='test')
-    hospital_record_id = Column(String, ForeignKey('record.id',  ondelete="CASCADE"))
+    doctor_id = Column(String, ForeignKey(
+        'doctors.id',  ondelete="CASCADE"), nullable=False)
+    Doctor = relationship('Doctors', back_populates='test')
+    hospital_record_id = Column(
+        String, ForeignKey('record.id',  ondelete="CASCADE"))
 
 
 class Allergy(BaseModel, Base):
@@ -74,9 +80,11 @@ class Allergy(BaseModel, Base):
             contains user allergy
     """
     __tablename__ = "allergy"
-   
+
     allergies = Column(String, unique=True, nullable=False)
-    hospital_record_id = Column(String, ForeignKey('record.id',  ondelete="CASCADE"))
+    hospital_record_id = Column(
+        String, ForeignKey('record.id',  ondelete="CASCADE"))
+
 
 class Immunization(BaseModel, Base):
     """
@@ -84,12 +92,12 @@ class Immunization(BaseModel, Base):
             contains immunization detail history
     """
     __tablename__ = "immunization"
-   
+
     immunziation_name = Column(VARCHAR(255), nullable=False, unique=True)
     immunization_date = Column(DateTime, nullable=False, unique=True)
     immunization_location = Column(VARCHAR(255), nullable=False, unique=True)
-    hospital_record_id = Column(String, ForeignKey('record.id',  ondelete="CASCADE"))
-
+    hospital_record_id = Column(
+        String, ForeignKey('record.id',  ondelete="CASCADE"))
 
 
 class Record(BaseModel, Base):
@@ -97,7 +105,7 @@ class Record(BaseModel, Base):
         Record details
     """
     __tablename__ = "record"
-    patient = Column(String,ForeignKey('patient.id',ondelete="CASCADE"))
+    patient = Column(String, ForeignKey('patient.id', ondelete="CASCADE"))
     type = Column(String(50))
     DOB = Column(DateTime,    nullable=False)
     BloodType = Column(VARCHAR(5), nullable=False)
@@ -105,12 +113,12 @@ class Record(BaseModel, Base):
     weight = Column(Float, nullable=False)
     BMI = Column(Float, nullable=False)
     allergy_record = relationship(Allergy, backref='record')
-    test_record = relationship(Test,backref='record')
+    test_record = relationship(Test, backref='record')
     immunization_record = relationship(Immunization, backref='record')
     medication_record = relationship(Medication, backref='record')
     transactions_record = relationship(Transactions, backref='record')
 
-    __mapper_args__ = {
-        'polymorphic_identity': 'record',
-        'polymorphic_on': type
-    }
+    # __mapper_args__ = {
+    #     'polymorphic_identity': 'record',
+    #     'polymorphic_on': type
+    # }

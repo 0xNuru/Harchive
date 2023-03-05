@@ -8,6 +8,10 @@ from sqlalchemy import Column, ForeignKey, Integer, String, Date, Enum, null
 from models.user import Users
 from models.record import Record
 from sqlalchemy.orm import relationship
+import sys
+sys.path.insert(0, '..')
+
+
 
 
 class genderEnum(enum.Enum):
@@ -17,7 +21,7 @@ class genderEnum(enum.Enum):
 
 class Patient(Users):
     """
-        insurance details
+        patient details
     """
     __tablename__ = "patient"
     id = Column(String, ForeignKey(

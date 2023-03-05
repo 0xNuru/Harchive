@@ -59,7 +59,7 @@ def access_token(data: dict[str, Any]) -> str:
     to_encode = data.copy()
     expire = timedelta(minutes=ACCESS_TOKEN_EXPIRES_IN)
     access_token : str = auth.create_access_token(subject=
-        to_encode['username'], 
+        to_encode['email'], 
         expires_time = expire,
         user_claims = to_encode
     )
@@ -69,9 +69,8 @@ def refresh_token(data: dict[str, Any]) -> str:
     to_encode = data.copy()
     expire =  timedelta(minutes=REFRESH_TOKEN_EXPIRES_IN)
     refresh_token : str = auth.create_refresh_token(subject=
-        to_encode['username'], 
+        to_encode['email'], 
         expires_time = expire,
         user_claims = to_encode
     )
     return refresh_token
-
