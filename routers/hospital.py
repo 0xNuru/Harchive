@@ -53,16 +53,16 @@ def create_hospital_admin(request: hospitalSchema.HospitalAdmin, db: Session = D
 
 
 @router.get("/admin/all", response_model=List[hospitalSchema.ShowHospital], status_code=status.HTTP_200_OK)
-def all_admins(db: Session = Depends(load), user_data = Depends(get_current_user) ):
+def all_admins(db: Session = Depends(load), user_data=Depends(get_current_user)):
     check_role('hospital_admin', user_data['user_id'])
     admins = db.query_eng(hospitalModel.Admin).all()
     return admins
 
 
 @router.get("/admin/hospitalID/{hospitalID}",
-         response_model=hospitalSchema.ShowHospital, status_code=status.HTTP_200_OK)
-def show_admin(hospitalID, db: Session = Depends(load), 
-                user_data = Depends(get_current_user)):
+            response_model=hospitalSchema.ShowHospital, status_code=status.HTTP_200_OK)
+def show_admin(hospitalID, db: Session = Depends(load),
+               user_data=Depends(get_current_user)):
     check_role('hospital_admin', user_data['user_id'])
     admin = db.query_eng(hospitalModel.Admin).filter(
         hospitalModel.Admin.hospitalID == hospitalID).first()
@@ -72,11 +72,10 @@ def show_admin(hospitalID, db: Session = Depends(load),
     return admin
 
 
-
-@router.post("/register", response_model=hospitalSchema.ShowHospital, 
-                                    status_code=status.HTTP_201_CREATED)
-def create_hospital(request: hospitalSchema.Hospital, 
-                    db: Session = Depends(load), user_data = Depends(get_current_user)):
+@router.post("/register", response_model=hospitalSchema.ShowHospital,
+             status_code=status.HTTP_201_CREATED)
+def create_hospital(request: hospitalSchema.Hospital,
+                    db: Session = Depends(load), user_data=Depends(get_current_user)):
     check_role('hospital_admin', user_data['user_id'])
     phone = request.phone
     hospitalID = request.hospitalID
@@ -94,22 +93,22 @@ def create_hospital(request: hospitalSchema.Hospital,
                             detail=f"hospital with hospital ID: {hospitalID} exists")
 
     new_hospital = hospitalModel.Hospital(
-        name=request.name, phone=request.phone, 
-                    hospitalID=request.hospitalID, address=request.address)
+        name=request.name, phone=request.phone,
+        hospitalID=request.hospitalID, address=request.address)
     db.new(new_hospital)
     db.save()
     return new_hospital
 
 
 @router.get("/all", response_model=List[hospitalSchema.ShowHospital], status_code=status.HTTP_200_OK)
-def all(db: Session = Depends(load), user_data = Depends(get_current_user)):
+def all(db: Session = Depends(load), user_data=Depends(get_current_user)):
     check_role('hospital_admin', user_data['user_id'])
     hospitals = db.query_eng(hospitalModel.Hospital).all()
     return hospitals
 
 
 @router.get("/{hospitalID}", response_model=hospitalSchema.ShowHospital, status_code=status.HTTP_200_OK)
-def show(hospitalID, db: Session = Depends(load), user_data = Depends(get_current_user)):
+def show(hospitalID, db: Session = Depends(load), user_data=Depends(get_current_user)):
     check_role('hospital_admin', user_data['user_id'])
     hospital = db.query_eng(hospitalModel.Hospital).filter(
         hospitalModel.Hospital.hospitalID == hospitalID).first()
@@ -138,27 +137,27 @@ def create_doctor(request: hospitalSchema.Doctor, db: Session = Depends(load)):
 
     passwd_hash = auth.get_password_hash(request.password2.get_secret_value())
 
-    new_doctor = hospitalModel.Doctor(name=request.name, phone=request.phone,
-                                      email=request.email, address=request.address, password_hash=passwd_hash,
-                                      hospitalID=request.hospitalID, dob=request.dob, gender=request.gender)
+    new_doctor = hospitalModel.Doctors(name=request.name, phone=request.phone,
+                                       email=request.email, address=request.address, password_hash=passwd_hash,
+                                       hospitalID=request.hospitalID, dob=request.dob, gender=request.gender, speciality=request.speciality)
     db.new(new_doctor)
     db.save()
     return new_doctor
 
 
 @router.get("/doctor/all", response_model=List[hospitalSchema.ShowDoctor], status_code=status.HTTP_200_OK)
-def all(db: Session = Depends(load), user_data = Depends(get_current_user)):
+def all(db: Session = Depends(load), user_data=Depends(get_current_user)):
     check_role('doctor', user_data['user_id'])
-    doctor = db.query_eng(hospitalModel.Doctor).all()
+    doctor = db.query_eng(hospitalModel.Doctors).all()
     return doctor
 
 
-@router.get("/doctor/email/{email}", 
+@router.get("/doctor/email/{email}",
             response_model=hospitalSchema.ShowDoctor, status_code=status.HTTP_200_OK)
-def show(email, db: Session = Depends(load), user_data = Depends(get_current_user)):
+def show(email, db: Session = Depends(load), user_data=Depends(get_current_user)):
     check_role('doctor', user_data['user_id'])
-    doctor = db.query_eng(hospitalModel.Doctor).filter(
-        hospitalModel.Doctor.email == email).first()
+    doctor = db.query_eng(hospitalModel.Doctors).filter(
+        hospitalModel.Doctors.email == email).first()
     if not doctor:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail=f"doctor with the email {email} not found")

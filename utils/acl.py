@@ -3,16 +3,13 @@
 """Searches for a user and return claims"""
 
 from engine.loadb import load
-from fastapi import  HTTPException
+from fastapi import HTTPException
 import models as userModel
 from models import patient
 from models import hospital
 from models import insurance
 from sqlalchemy.orm import Session
 from starlette import status
-
-
-
 
 
 def check_role(role: str, user_id: str) -> None:
@@ -22,31 +19,27 @@ def check_role(role: str, user_id: str) -> None:
         Return:
             returns None if succed
     """
-    model = {'patient':['patient','Patient'], 'insurance_admin':['insurance','InAdmin'],
-             'hospital_admin':['hospital','Admin']}
-            
+    model = {'patient': ['patient', 'Patient'], 'insurance_admin': ['insurance', 'InAdmin'],
+             'hospital_admin': ['hospital', 'Admin'], 'doctor': ['hospital', 'Doctors']}
+
     db_gen = load()
     db = next(db_gen)
-    
+
     inst = getattr(userModel, model[role][0])
 
     user = getattr(inst, model[role][1])
 
     search = db.query_eng(user).filter(
-                            user.id == user_id).first()
+        user.id == user_id).first()
 
-    
     if not search:
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN,
                             detail=f"Permission denied")
 
-    if search.role != role :
-        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, 
+    if search.role != role:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN,
                             detail='Permission denied')
 
 
 def create_perms(role: str):
     pass
-
-
-

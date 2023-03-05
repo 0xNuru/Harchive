@@ -60,6 +60,7 @@ class Doctor(BaseModel):
     dob: date
     phone: constr(min_length=11, max_length=14)
     address: constr(min_length=10)
+    speciality: str
     hospitalID: str
     role: str = 'doctor'
 
