@@ -17,6 +17,7 @@ contains:
         - __session
         - dic
 """
+from models.base_model import Base, BaseModel
 from sqlalchemy.orm import sessionmaker, scoped_session
 from sqlalchemy import create_engine
 from pydantic import env_settings
@@ -26,7 +27,6 @@ import os
 from os import getenv
 import sys
 sys.path.insert(0, '..')
-from models.base_model import Base, BaseModel
 
 load_dotenv()
 

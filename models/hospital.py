@@ -81,7 +81,7 @@ class Doctors(Users):
     __tablename__ = "doctors"
     id = Column(String, ForeignKey("user.id",  ondelete="CASCADE"),
                 primary_key=True, nullable=False)
-    speciality = Column(String, nullable=False)
+    speciality = Column(String, nullable=True)
     hospitalID = Column(String, ForeignKey(
         "hospitalWorkers.id"), nullable=False)
     role = Column(String(50), nullable=False, default='doctor')

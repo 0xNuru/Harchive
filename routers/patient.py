@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 
+from loguru import logger
 from utils.acl import check_role
 from dependencies.depends import get_current_user
 from fastapi import APIRouter, Depends, status, HTTPException
@@ -13,9 +14,6 @@ from sqlalchemy.orm import Session
 from typing import Dict, List
 from utils import auth
 from models import user as userModel
-
-
-
 
 
 router = APIRouter(
@@ -45,16 +43,17 @@ def create_patient(request: patientSchema.Patient, db: Session = Depends(load)):
 
     new_patient = patientModel.Patient(name=request.name, phone=request.phone,
                                        email=request.email, address=request.address, password_hash=passwd_hash,
-                                       insuranceID=request.insuranceID, dob=request.dob, gender=request.gender)
+                                       insuranceID=request.insuranceID, dob=request.dob, gender=request.gender, nin=request.nin)
     db.new(new_patient)
     db.save()
     return new_patient
 
 
 @router.get("/all", response_model=List[ShowPatient], status_code=status.HTTP_200_OK)
-def all(db: Session = Depends(load), user_data = Depends(get_current_user)):
+def all(db: Session = Depends(load), user_data=Depends(get_current_user)):
     check_role('patient', user_data['user_id'])
     patient = db.query_eng(patientModel.Patient).all()
+    logger.info("hi")
     return patient
 
 
@@ -67,7 +66,6 @@ def show(email, db: Session = Depends(load), user_data: get_current_user = Depen
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail=f"patient with the email {email} not found")
     return patient
-
 
 
 @router.post("/record/add", response_model=patientSchema.PatientRecord,
@@ -96,15 +94,50 @@ def all(user_data: get_current_user = Depends(), db: Session = Depends(load)):
     return records
 
 
-@router.get("/record/email/{email}", response_model=patientSchema.PatientRecord, status_code=status.HTTP_200_OK)
-def show(email, user_data: get_current_user = Depends(), db: Session = Depends(load)):
+@router.get("/record/nin/{nin}", response_model=patientSchema.PatientRecord, status_code=status.HTTP_200_OK)
+def show(nin, user_data: get_current_user = Depends(), db: Session = Depends(load)):
     check_role('patient', user_data['user_id'])
     patient = db.query_eng(patientModel.Patient).filter(
-        patientModel.Patient.email == email).first()
+        patientModel.Patient.nin == nin).first()
     if not patient:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
-                            detail=f"patient with the email {email} not found")
+                            detail=f"patient with the nin {nin} not found")
     id = patient.id
     record = db.query_eng(recordModel.Record).filter(
         recordModel.Record.patient == id).first()
+    if not record:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail=f"patient with the nin {nin} does not have a record")
     return record
+
+
+@router.put("/record/update/{nin}", response_model=patientSchema.PatientRecord)
+def update_admin(nin, request: patientSchema.PatientRecord, db: Session = Depends(load)):
+    patient = db.query_eng(patientModel.Patient).filter(
+        patientModel.Patient.nin == nin).first()
+
+    if not patient:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail=f"patient with nin: {nin} not found")
+    id = patient.id
+    record = db.query_eng(recordModel.Record).filter(
+        recordModel.Record.patient == id).first()
+    if not record:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail=f"patient with the nin {nin} does not have a record")
+    record.type = request.type,
+    record.patient = id,
+    record.DOB = request.DOB,
+    record.BloodType = request.BloodType,
+    record.Height = request.Height,
+    record.weight = request.weight,
+    record.BMI = request.BMI
+
+    updated_record = recordModel.Record(type=request.type, patient=id, DOB=request.DOB,
+                                        BloodType=request.BloodType, Height=request.Height, weight=request.weight,
+                                        BMI=request.BMI)
+    db.save()
+    return updated_record
+
+
+

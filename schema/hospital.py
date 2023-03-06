@@ -18,7 +18,6 @@ class HospitalAdmin(BaseModel):
     password1: SecretStr
     password2: SecretStr
     hospitalID: str
-    role: str = 'hospital_admin'
 
     @root_validator()
     def verify_password_match(cls, values):
@@ -59,10 +58,8 @@ class Doctor(BaseModel):
     gender: genderEnum
     dob: date
     phone: constr(min_length=11, max_length=14)
-    address: constr(min_length=10)
     speciality: str
     hospitalID: str
-    role: str = 'doctor'
 
     class Config():
         orm_mode = True

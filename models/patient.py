@@ -12,8 +12,6 @@ import sys
 sys.path.insert(0, '..')
 
 
-
-
 class genderEnum(enum.Enum):
     M = "M"
     F = "F"
@@ -26,7 +24,8 @@ class Patient(Users):
     __tablename__ = "patient"
     id = Column(String, ForeignKey(
         'user.id',  ondelete="CASCADE"), primary_key=True)
+    nin = Column(String(11), nullable=False, unique=True)
     insuranceID = Column(String(128), nullable=True, unique=True)
-    address = Column(String(128), nullable=False)
+    address = Column(String(128), nullable=True)
     role = Column(String(50), nullable=False, default='patient')
     patient_record = relationship(Record, cascade_backrefs='patient')

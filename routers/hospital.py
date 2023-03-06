@@ -72,6 +72,19 @@ def show_admin(hospitalID, db: Session = Depends(load),
     return admin
 
 
+@router.delete("/admin/delete/{hospitalID}", status_code=status.HTTP_204_NO_CONTENT)
+def delete_hospital_admin(hospitalID, db: Session = Depends(load), user_data=Depends(get_current_user)):
+    check_role('hospital_admin', user_data['user_id'])
+    admin = db.query_eng(hospitalModel.Admin).filter(
+        hospitalModel.Admin.hospitalID == hospitalID).first()
+    if not admin:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail=f"Admin with id {hospitalID} not found")
+    db.delete(admin)
+    db.save()
+    return {"data": "Deleted!"}
+
+
 @router.post("/register", response_model=hospitalSchema.ShowHospital,
              status_code=status.HTTP_201_CREATED)
 def create_hospital(request: hospitalSchema.Hospital,
@@ -138,7 +151,7 @@ def create_doctor(request: hospitalSchema.Doctor, db: Session = Depends(load)):
     passwd_hash = auth.get_password_hash(request.password2.get_secret_value())
 
     new_doctor = hospitalModel.Doctors(name=request.name, phone=request.phone,
-                                       email=request.email, address=request.address, password_hash=passwd_hash,
+                                       email=request.email, password_hash=passwd_hash,
                                        hospitalID=request.hospitalID, dob=request.dob, gender=request.gender, speciality=request.speciality)
     db.new(new_doctor)
     db.save()
@@ -162,3 +175,16 @@ def show(email, db: Session = Depends(load), user_data=Depends(get_current_user)
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail=f"doctor with the email {email} not found")
     return doctor
+
+
+@router.delete("/doctor/delete/{email}", status_code=status.HTTP_204_NO_CONTENT)
+def delete_doctor(email, db: Session = Depends(load),   user_data=Depends(get_current_user)):
+    check_role('hospital_admin', user_data['user_id'])
+    doctor = db.query_eng(hospitalModel.Doctors).filter(
+        hospitalModel.Doctors.email == email).first()
+    if not doctor:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail=f"doctor with email: {email} not found")
+    db.delete(doctor)
+    db.save()
+    return {"data": "Deleted!"}

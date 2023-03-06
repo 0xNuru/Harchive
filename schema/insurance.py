@@ -17,7 +17,6 @@ class InAdmin(BaseModel):
     password1: SecretStr
     password2: SecretStr
     insuranceID: str
-    role: str = 'insurance_admin'
 
     @root_validator()
     def verify_password_match(cls, values):

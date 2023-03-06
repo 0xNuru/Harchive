@@ -10,6 +10,7 @@ password_regex = "(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!#%*?
 
 class Patient(BaseModel):
     name: constr(min_length=5)
+    nin: constr(min_length=11, max_length=11)
     email: EmailStr
     password1: SecretStr
     password2: SecretStr
@@ -37,6 +38,7 @@ class Patient(BaseModel):
 class ShowPatient(BaseModel):
     name: str
     email: str
+    nin: str
 
     class Config():
         orm_mode = True
@@ -45,7 +47,7 @@ class ShowPatient(BaseModel):
 class PatientRecord(BaseModel):
     type: str
     DOB: date
-    BloodType: str
+    BloodType: constr(max_length=5)
     Height: float
     weight: float
     BMI: float
