@@ -7,6 +7,7 @@ import enum
 from sqlalchemy import Column, ForeignKey, Integer, String, Date, Enum, null
 from models.user import Users
 from models.record import Record, Medication, Allergy,Immunization, Transactions
+from models.hospital import CheckIn
 from sqlalchemy.orm import relationship
 import sys
 sys.path.insert(0, '..')
@@ -34,4 +35,5 @@ class Patient(Users):
     patient_allergy = relationship(Allergy, cascade_backrefs='patient')
     patient_immunization = relationship(Immunization, cascade_backrefs='patient')
     patient_transaction = relationship(Transactions, cascade_backrefs='patient')
+    patient_checkIn = relationship(CheckIn, cascade_backrefs='patient')
     

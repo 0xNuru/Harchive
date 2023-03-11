@@ -89,3 +89,10 @@ class HealthWorker(User):
 
     class Config():
         orm_mode = True
+
+
+class CheckIn(BaseModel):
+    nin: constr(min_length=11, max_length=11)
+
+    class Config():
+        orm_mode = True

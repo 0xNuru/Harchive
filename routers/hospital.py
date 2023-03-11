@@ -4,6 +4,7 @@ from schema import hospital as hospitalSchema
 from engine.loadb import load
 from dependencies.depends import get_current_user
 from models import hospital as hospitalModel
+from models import patient as patientModel
 from sqlalchemy.orm import Session
 from utils.acl import check_role
 from typing import Dict, List
@@ -189,3 +190,47 @@ def delete_doctor(email, db: Session = Depends(load),   user_data=Depends(get_cu
     db.delete(doctor)
     db.save()
     return {"data": "Deleted!"}
+
+
+@router.post("/checkIn", status_code=status.HTTP_201_CREATED)
+def check_in(request: hospitalSchema.CheckIn, db: Session = Depends(load), user_data=Depends(get_current_user)):
+    check_role('hospital_admin', user_data['user_id'])
+    admin_id = user_data["user_id"]
+    patient = db.query_eng(patientModel.Patient).filter(
+        patientModel.Patient.nin == request.nin).first()
+    admin = db.query_eng(hospitalModel.Admin).filter(
+        hospitalModel.Admin.id == admin_id).first()
+    if not patient:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail=f"patient with the nin {request.nin} not found")
+
+    checkPatient = db.query_eng(hospitalModel.CheckIn).filter(
+        hospitalModel.CheckIn.patient == patient.id).first()
+    checkHID = db.query_eng(hospitalModel.CheckIn).filter(
+        hospitalModel.CheckIn.hospitalID == admin.hospitalID).first()
+    if checkPatient and checkHID:
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT,
+                            detail=f"This patient is already checked into this hospital")
+
+    new_check_in = hospitalModel.CheckIn(
+        patient=patient.id, hospitalID=admin.hospitalID)
+    db.new(new_check_in)
+    db.save()
+    return new_check_in
+
+
+@router.delete("/checkout", status_code=status.HTTP_204_NO_CONTENT)
+def check_out(request: hospitalSchema.CheckIn, db: Session = Depends(load), user_data=Depends(get_current_user)):
+    check_role('hospital_admin', user_data['user_id'])
+    patient = db.query_eng(patientModel.Patient).filter(
+        patientModel.Patient.nin == request.nin).first()
+    if not patient:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail=f"patient with the nin {request.nin} not found")
+    check_in = db.query_eng(hospitalModel.CheckIn).filter(
+        hospitalModel.CheckIn.patient == patient.id).first()
+
+    db.delete(check_in)
+    logger.info(f"patient checked-out {patient}")
+    db.save()
+    return {"data": "checked-out!"}

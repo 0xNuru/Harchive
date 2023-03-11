@@ -45,6 +45,7 @@ class Hospital(BaseModel, Base):
         "HospitalWorker", back_populates="hospital", cascade='all, delete-orphan')
     medication = relationship("Medication", cascade_backrefs='hospitalID')
     allergy = relationship("Allergy", cascade_backrefs='hospitalID')
+    checkIn = relationship("CheckIn", cascade_backrefs='hospitalID')
 
     # doctors = relationship(
     #     "Doctor", back_populates="hospital", cascade='all, delete-orphan')
@@ -88,3 +89,15 @@ class Doctors(Users):
         'polymorphic_identity': 'doctor',
         # 'inherit_condition': 'doctors' == 'user'
     }
+
+
+class CheckIn(BaseModel, Base):
+    """
+        Desc:
+            table for checked-in patients and the hospital(s) they are checked into
+    """
+    __tablename__ = "checkIn"
+    patient = Column(String, ForeignKey(
+        'patient.id', ondelete="CASCADE"), primary_key=True, nullable=False)
+    hospitalID = Column(String, ForeignKey(
+        "hospital.hospitalID"), nullable=False)
