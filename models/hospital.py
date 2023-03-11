@@ -43,6 +43,9 @@ class Hospital(BaseModel, Base):
     admin = relationship("Admin", back_populates="hospital")
     workers = relationship(
         "HospitalWorker", back_populates="hospital", cascade='all, delete-orphan')
+    medication = relationship("Medication", cascade_backrefs='hospitalID')
+    allergy = relationship("Allergy", cascade_backrefs='hospitalID')
+
     # doctors = relationship(
     #     "Doctor", back_populates="hospital", cascade='all, delete-orphan')
 
@@ -58,19 +61,6 @@ class HospitalWorker(BaseModel, Base):
         "hospital.id",  ondelete="CASCADE"), nullable=False)
     doctors = relationship("Doctors", back_populates="worker")
     hospital = relationship("Hospital", back_populates="workers")
-
-
-# class Doctor(Users):
-#     """
-#         doctor details
-#     """
-#     __tablename__ = "doctor"
-#     id = Column(String, ForeignKey(
-#         'user.id',  ondelete="CASCADE"), primary_key=True)
-#     hospitalID = Column(String, ForeignKey(
-#         "hospital.hospitalID",  ondelete="CASCADE"), nullable=False)
-#     role = Column(String(50), nullable=False, default='doctor')
-#     hospital = relationship("Hospital", back_populates="doctors")
 
 
 class Doctors(Users):
@@ -90,6 +80,8 @@ class Doctors(Users):
                                 primaryjoin='Doctors.id == Transactions.doctor_id')
     medications = relationship('Medication', back_populates='Doctor',
                                primaryjoin='Doctors.id == Medication.doctor_id')
+    allergies = relationship("Allergy", back_populates="doctor")
+    immunizations = relationship("Immunization", back_populates="doctor")
     test = relationship('Test', back_populates='Doctor',
                         primaryjoin='Doctors.id == Test.doctor_id')
     __mapper_args__ = {

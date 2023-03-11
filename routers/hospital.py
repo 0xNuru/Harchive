@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends, Request, Response, status, HTTPException
+from loguru import logger
 from schema import hospital as hospitalSchema
 from engine.loadb import load
 from dependencies.depends import get_current_user
