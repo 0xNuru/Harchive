@@ -3,14 +3,24 @@
 Record module
 """
 # from graphene import Int
-from enum import Enum
+import enum
 from sqlalchemy.orm import relationship
-from sqlalchemy import ARRAY, Column, ForeignKey, Integer, String, Float, DateTime, BOOLEAN, VARCHAR
+from sqlalchemy import ARRAY, Column, ForeignKey, Integer, String, Float, DateTime, BOOLEAN, VARCHAR, Enum
 from models.base_model import BaseModel, Base
 from models.hospital import *
 from datetime import datetime
 import sys
 sys.path.insert(0, '..')
+
+
+class allergyEnum(enum.Enum):
+    FOOD = "FOOD"
+    DRUG = "DRUG"
+    ENVIRONMENTAL = "ENVIRONMENTAL"
+    INSECT = "INSECT"
+    LATEX = "LATEX"
+    CONTACT = "CONTACT"
+    WEATHER = "WEATHER"
 
 
 class Transactions(BaseModel, Base):
@@ -24,18 +34,14 @@ class Transactions(BaseModel, Base):
 
     """
     __tablename__ = "transactions"
-    hospital_record_id = Column(
-        String, ForeignKey('record.id',  ondelete="CASCADE"))
+
     doctor_id = Column(String, ForeignKey(
         'doctors.id',  ondelete="CASCADE"), nullable=False)
-    Doctor = relationship('Doctors', back_populates='transactions')
-    drug_name = Column(VARCHAR(255), nullable=False, unique=True)
+    description = Column(VARCHAR(255), nullable=False, unique=True)
     quantity = Column(VARCHAR(255), nullable=False, unique=True)
-    transaction_amount = Column(VARCHAR(255), nullable=False, unique=True)
-    transaction_type = Column(VARCHAR(255), nullable=False, unique=True)
-    vendor_name = Column(VARCHAR(255), nullable=False, unique=True)
-    transaction_date = Column(DateTime, nullable=False,
-                              default=(datetime.utcnow()))
+    hospitalID = Column(String, ForeignKey("hospital.hospitalID"))
+    patient = Column(String, ForeignKey('patient.id', ondelete="CASCADE"))
+    Doctor = relationship('Doctors', back_populates='transactions')
 
 
 class Medication(BaseModel, Base):
@@ -49,11 +55,15 @@ class Medication(BaseModel, Base):
     """
     __tablename__ = "medications"
 
-    medication_name = Column(String(128), unique=True, nullable=False)
-    hospital_record_id = Column(
-        String, ForeignKey('record.id',  ondelete="CASCADE"))
+    medication_name = Column(String(128), unique=False, nullable=False)
+    patient = Column(String, ForeignKey('patient.id', ondelete="CASCADE"))
+    dosage = Column(String, nullable=True)
     doctor_id = Column(String, ForeignKey(
         'doctors.id',  ondelete="CASCADE"), nullable=False)
+    hospitalID = Column(String, ForeignKey("hospital.hospitalID"))
+    start_date = Column(DateTime, nullable=True)
+    due_date = Column(DateTime, nullable=True)
+    reason = Column(String, nullable=True)
     Doctor = relationship('Doctors', back_populates='medications')
 
 
@@ -81,9 +91,16 @@ class Allergy(BaseModel, Base):
     """
     __tablename__ = "allergy"
 
-    allergies = Column(String, unique=True, nullable=False)
-    hospital_record_id = Column(
-        String, ForeignKey('record.id',  ondelete="CASCADE"))
+    allergy_name = Column(String, unique=False, nullable=False)
+    patient = Column(String, ForeignKey('patient.id', ondelete="CASCADE"))
+    type = Column(Enum(allergyEnum, name="allergy_enum"),
+                  nullable=False, unique=False)
+    reactions = Column(String, unique=False, nullable=False)
+    hospitalID = Column(String, ForeignKey("hospital.hospitalID"))
+    more_info = Column(String, unique=False, nullable=False)
+    doctor_id = Column(String, ForeignKey(
+        'doctors.id',  ondelete="CASCADE"), nullable=False)
+    doctor = relationship("Doctors", back_populates="allergies")
 
 
 class Immunization(BaseModel, Base):
@@ -93,11 +110,17 @@ class Immunization(BaseModel, Base):
     """
     __tablename__ = "immunization"
 
-    immunziation_name = Column(VARCHAR(255), nullable=False, unique=True)
-    immunization_date = Column(DateTime, nullable=False, unique=True)
-    immunization_location = Column(VARCHAR(255), nullable=False, unique=True)
-    hospital_record_id = Column(
-        String, ForeignKey('record.id',  ondelete="CASCADE"))
+    name = Column(VARCHAR(255), nullable=False, unique=False)
+    immunization_date = Column(DateTime, nullable=False, unique=False)
+    expiry_date = Column(DateTime, nullable=False, unique=False)
+    immunization_location = Column(VARCHAR(255), nullable=False, unique=False)
+    lot_number = Column(VARCHAR(255), nullable=False, unique=False)
+    patient = Column(String, ForeignKey('patient.id', ondelete="CASCADE"))
+    hospitalID = Column(String, ForeignKey("hospital.hospitalID"))
+    more_info = Column(String, unique=False, nullable=False)
+    doctor_id = Column(String, ForeignKey(
+        'doctors.id',  ondelete="CASCADE"), nullable=False)
+    doctor = relationship("Doctors", back_populates="immunizations")
 
 
 class Record(BaseModel, Base):
@@ -112,11 +135,7 @@ class Record(BaseModel, Base):
     Height = Column(Float, nullable=False)
     weight = Column(Float, nullable=False)
     BMI = Column(Float, nullable=False)
-    allergy_record = relationship(Allergy, backref='record')
     test_record = relationship(Test, backref='record')
-    immunization_record = relationship(Immunization, backref='record')
-    medication_record = relationship(Medication, backref='record')
-    transactions_record = relationship(Transactions, backref='record')
 
     # __mapper_args__ = {
     #     'polymorphic_identity': 'record',

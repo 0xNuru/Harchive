@@ -5,11 +5,14 @@ from datetime import date
 from models.patient import genderEnum
 import re
 
+from models.record import allergyEnum
+
 password_regex = "(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!#%*?&]{8,20}"
 
 
 class Patient(BaseModel):
     name: constr(min_length=5)
+    nin: constr(min_length=11, max_length=11)
     email: EmailStr
     password1: SecretStr
     password2: SecretStr
@@ -37,6 +40,7 @@ class Patient(BaseModel):
 class ShowPatient(BaseModel):
     name: str
     email: str
+    nin: str
 
     class Config():
         orm_mode = True
@@ -45,10 +49,88 @@ class ShowPatient(BaseModel):
 class PatientRecord(BaseModel):
     type: str
     DOB: date
-    BloodType: str
+    BloodType: constr(max_length=5)
     Height: float
     weight: float
     BMI: float
+
+    class Config():
+        orm_mode = True
+
+
+class Medication(BaseModel):
+    medication_name: str
+    dosage: str
+    start_date: date
+    due_date: date
+    reason: str
+
+    class Config():
+        orm_mode = True
+
+
+class ShowMedication(BaseModel):
+    medication_name: str
+    dosage: str
+    start_date: date
+    due_date: date
+    reason: str
+    doctor_name: str
+
+    class Config():
+        orm_mode = True
+
+
+class Allergy(BaseModel):
+    allergy_name: str
+    type: allergyEnum
+    reactions: str
+    more_info: str
+
+    class Config():
+        orm_mode = True
+
+
+class ShowAllergy(BaseModel):
+    allergy_name: str
+    type: allergyEnum
+    reactions: str
+    more_info: str
+    doctor_name: str
+
+    class Config():
+        orm_mode = True
+
+
+class Immunization(BaseModel):
+    name: str
+    immunization_date: date
+    immunization_location: str
+    lot_number: str
+    expiry_date: date
+    more_info: str
+    doctor_name: str
+
+    class Config():
+        orm_mode = True
+
+
+class ShowImmunization(BaseModel):
+    name: str
+    immunization_date: date
+    immunization_location: str
+    lot_number: str
+    expiry_date: date
+    more_info: str
+    doctor_name: str
+
+    class Config():
+        orm_mode = True
+
+
+class Transaction(BaseModel):
+    description: str
+    quantity: float
 
     class Config():
         orm_mode = True
