@@ -37,6 +37,5 @@ class ShowUser(BaseModel):
 
 
 class UserLogin(BaseModel):
-    Username: constr(min_length=5)
-    email: Optional[str]
+    email: str
     password: SecretStr

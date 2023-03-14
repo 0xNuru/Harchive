@@ -43,6 +43,10 @@ class Hospital(BaseModel, Base):
     admin = relationship("Admin", back_populates="hospital")
     workers = relationship(
         "HospitalWorker", back_populates="hospital", cascade='all, delete-orphan')
+    medication = relationship("Medication", cascade_backrefs='hospitalID')
+    allergy = relationship("Allergy", cascade_backrefs='hospitalID')
+    checkIn = relationship("CheckIn", cascade_backrefs='hospitalID')
+
     # doctors = relationship(
     #     "Doctor", back_populates="hospital", cascade='all, delete-orphan')
 
@@ -60,19 +64,6 @@ class HospitalWorker(BaseModel, Base):
     hospital = relationship("Hospital", back_populates="workers")
 
 
-# class Doctor(Users):
-#     """
-#         doctor details
-#     """
-#     __tablename__ = "doctor"
-#     id = Column(String, ForeignKey(
-#         'user.id',  ondelete="CASCADE"), primary_key=True)
-#     hospitalID = Column(String, ForeignKey(
-#         "hospital.hospitalID",  ondelete="CASCADE"), nullable=False)
-#     role = Column(String(50), nullable=False, default='doctor')
-#     hospital = relationship("Hospital", back_populates="doctors")
-
-
 class Doctors(Users):
     """
         Desc:
@@ -81,7 +72,7 @@ class Doctors(Users):
     __tablename__ = "doctors"
     id = Column(String, ForeignKey("user.id",  ondelete="CASCADE"),
                 primary_key=True, nullable=False)
-    speciality = Column(String, nullable=False)
+    speciality = Column(String, nullable=True)
     hospitalID = Column(String, ForeignKey(
         "hospitalWorkers.id"), nullable=False)
     role = Column(String(50), nullable=False, default='doctor')
@@ -90,9 +81,23 @@ class Doctors(Users):
                                 primaryjoin='Doctors.id == Transactions.doctor_id')
     medications = relationship('Medication', back_populates='Doctor',
                                primaryjoin='Doctors.id == Medication.doctor_id')
+    allergies = relationship("Allergy", back_populates="doctor")
+    immunizations = relationship("Immunization", back_populates="doctor")
     test = relationship('Test', back_populates='Doctor',
                         primaryjoin='Doctors.id == Test.doctor_id')
     __mapper_args__ = {
         'polymorphic_identity': 'doctor',
         # 'inherit_condition': 'doctors' == 'user'
     }
+
+
+class CheckIn(BaseModel, Base):
+    """
+        Desc:
+            table for checked-in patients and the hospital(s) they are checked into
+    """
+    __tablename__ = "checkIn"
+    patient = Column(String, ForeignKey(
+        'patient.id', ondelete="CASCADE"), primary_key=True, nullable=False)
+    hospitalID = Column(String, ForeignKey(
+        "hospital.hospitalID"), nullable=False)
