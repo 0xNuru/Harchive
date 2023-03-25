@@ -1,21 +1,23 @@
-fastapi
-uvicorn
+# fastapi
+fastapi==0.89.1
+uvicorn==0.17.6
+pydantic
+pydantic[email]
 
 #for template
 jinja2
 
 #for static files
-aiofiles
+aiofiles==23.1.0
 
-#for database   
+#for database
 sqlalchemy==1.4.46
-psycopg2
+setuptools
+psycopg2==2.9.5
 
 #for loading environment variables  
 python-dotenv
 
-
-#postgresql
 
 #jwt Authentication modules
 
@@ -25,7 +27,6 @@ passlib[bcrypt]
 
 python-multipart
 
-#logger file
 loguru==0.6.0
 
 pyjwt
@@ -34,4 +35,10 @@ fastapi-jwt-auth
 
 sympy
 
+# alembic
 alembic
+
+pipenv
+
+# cloud authenticator
+cloud-sql-python-connector[pg8000]
