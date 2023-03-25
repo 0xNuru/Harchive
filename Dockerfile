@@ -12,4 +12,6 @@ RUN \
     pip install --upgrade pip && \
     pip install --upgrade -r requirements.txt
 
+EXPOSE 8000
+
 CMD exec gunicorn --bind :$PORT --workers 1 --worker-class uvicorn.workers.UvicornWorker  --threads 8 app.main:app
