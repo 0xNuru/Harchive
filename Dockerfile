@@ -6,7 +6,7 @@ Env PORT=8000
 
 WORKDIR $tech_mavericks
 
-ENV PYTHONPATH "${PYTHONPATH}:/app/app"
+ENV PYTHONPATH "${PYTHONPATH}:/app/"
 
 COPY . ./
 
