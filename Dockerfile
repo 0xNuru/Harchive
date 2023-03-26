@@ -2,11 +2,13 @@ FROM python:3.7-slim
 
 ENV tech_mavericks /app
 
+Env PORT=8000
+
 WORKDIR $tech_mavericks
 
 ENV PYTHONPATH "${PYTHONPATH}:/app/app"
 
-COPY . .
+COPY . ./
 
 RUN apt-get update && \
     apt-get -y install gunicorn uvicorn && \
@@ -14,6 +16,5 @@ RUN apt-get update && \
     pip install --upgrade pip && \
     pip install --no-cache-dir --upgrade -r requirements.txt
 
-EXPOSE 8080
 
-CMD exec gunicorn --bind 0.0.0.0:8080 --workers 1 --worker-class uvicorn.workers.UvicornWorker  --threads 8 app.main:app
+CMD exec gunicorn --bind :$PORT --workers 1 --worker-class uvicorn.workers.UvicornWorker  --threads 8 app.main:app
