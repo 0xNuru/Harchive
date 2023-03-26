@@ -1,5 +1,6 @@
+#!/usr/bin/python3
+
 from fastapi import FastAPI
-import models.base_model
 from fastapi.middleware.cors import CORSMiddleware
 from engine.dbStorage import DBStorage
 from routers import user, insurance, hospital, patient
