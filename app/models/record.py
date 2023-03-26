@@ -3,14 +3,17 @@
 Record module
 """
 # from graphene import Int
+
+import sys
+sys.path.insert(0, '..')
+
 import enum
 from sqlalchemy.orm import relationship
 from sqlalchemy import ARRAY, Column, ForeignKey, String, Float, DateTime, VARCHAR, Enum
 from models.base_model import BaseModel, Base
 from models.hospital import *
 from datetime import datetime
-import sys
-sys.path.insert(0, '..')
+
 
 
 class allergyEnum(enum.Enum):

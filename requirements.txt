@@ -18,6 +18,10 @@ psycopg2==2.9.5
 #for loading environment variables  
 python-dotenv
 
+#gunicorn
+uvloop
+uvicorn
+gunicorn
 
 #jwt Authentication modules
 

@@ -1,5 +1,8 @@
 #!/usr/bin/python3
 
+import sys
+sys.path.insert(0, '..')
+
 from datetime import date
 import re
 from pydantic import BaseModel, EmailStr, SecretStr, constr, root_validator

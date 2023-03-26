@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 
+
 """Searches for a user and return claims"""
 
 from engine.loadb import load

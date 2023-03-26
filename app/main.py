@@ -1,9 +1,11 @@
-from fastapi import FastAPI
-import models.base_model
-from fastapi.middleware.cors import CORSMiddleware
-from engine.dbStorage import DBStorage
-from routers import user, insurance, hospital, patient
+#!/usr/bin/python3
+
 import sys
+sys.path.insert(0, '..')
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+from routers import user, insurance, hospital, patient
+
 
 # sys.path.insert(0, '..')
 

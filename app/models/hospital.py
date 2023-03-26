@@ -3,12 +3,15 @@
 Hospital module
 
 """
+
+import sys
+sys.path.insert(0, '..')
+
 from models.base_model import BaseModel, Base
 from sqlalchemy import Column, ForeignKey, Integer, String, Float
 from sqlalchemy.orm import relationship
 from models.user import Users
-import sys
-sys.path.insert(0, '..')
+
 
 
 class Admin(Users):

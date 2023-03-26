@@ -2,6 +2,9 @@
 
 """ User logging endpoint"""
 
+
+import sys
+sys.path.insert(0, '..')
 from dependencies.depends import get_current_user
 from engine.loadb import load
 from fastapi import APIRouter, Depends, HTTPException, Response, Request

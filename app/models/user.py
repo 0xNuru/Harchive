@@ -2,15 +2,14 @@
 """
 user module
 """
-from sympy import chebyshevt
-from models.base_model import BaseModel, Base
-from sqlalchemy import Column, Integer, String, Enum, CheckConstraint
-from sqlalchemy.orm import relationship
-
 
 import sys
 sys.path.insert(0, '..')
 
+from sympy import chebyshevt
+from models.base_model import BaseModel, Base
+from sqlalchemy import Column, Integer, String, Enum, CheckConstraint
+from sqlalchemy.orm import relationship
 
 class Users(BaseModel, Base):
     """

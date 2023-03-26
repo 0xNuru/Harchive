@@ -2,6 +2,9 @@
 
 """End point routes for insurance company"""
 
+
+import sys
+sys.path.insert(0, '..')
 from dependencies.depends import get_current_user
 from fastapi import APIRouter, Depends, status, HTTPException
 from schema.insurance import ShowInsurance

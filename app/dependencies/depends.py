@@ -2,10 +2,11 @@
 
 """Dependencies for authenticating user"""
 
+import sys
+sys.path.insert(0, '..')
+
 from typing import Any, Generator
 from fastapi import Depends, HTTPException, status
-from config.config import settings
-from utils import auth
 from utils.oauth1 import AuthJWT
 from engine.loadb import load
 from models import user as userModel

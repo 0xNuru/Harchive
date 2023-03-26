@@ -1,5 +1,8 @@
 #!/usr/bin/python3
 
+
+import sys
+sys.path.insert(0, '..')
 from loguru import logger
 from utils.acl import check_role
 from dependencies.depends import get_current_user
