@@ -2,7 +2,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from routers import user, insurance, hospital, patient
-import sys
+
 
 # sys.path.insert(0, '..')
 
