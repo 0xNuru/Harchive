@@ -4,6 +4,8 @@ ENV tech_mavericks /app
 
 WORKDIR $tech_mavericks
 
+ENV PYTHONPATH "${PYTHONPATH}:/app/app"
+
 COPY . .
 
 RUN apt-get update && \
