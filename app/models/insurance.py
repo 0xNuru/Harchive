@@ -2,12 +2,13 @@
 """
 insurance module
 """
+import sys
+sys.path.insert(0, '..')
 from sqlalchemy.orm import relationship
 from sqlalchemy import Column, ForeignKey, Integer, String, Float
 from models.base_model import BaseModel, Base
 from models.user import Users
-import sys
-sys.path.insert(0, '..')
+
 
 
 class InAdmin(Users):

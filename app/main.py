@@ -1,4 +1,7 @@
 #!/usr/bin/python3
+
+import sys
+sys.path.insert(0, '..')
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from routers import user, insurance, hospital, patient

@@ -3,14 +3,15 @@
 patient module
 
 """
+import sys
+sys.path.insert(0, '..')
+
 import enum
 from sqlalchemy import Column, ForeignKey, Integer, String, Date, Enum, null
 from models.user import Users
 from models.record import Record, Medication, Allergy,Immunization, Transactions
 from models.hospital import CheckIn
 from sqlalchemy.orm import relationship
-import sys
-sys.path.insert(0, '..')
 
 
 class genderEnum(enum.Enum):

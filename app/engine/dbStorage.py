@@ -17,6 +17,9 @@ contains:
         - __session
         - dic
 """
+import sys
+sys.path.insert(0, '..')
+
 from google.cloud.sql.connector import Connector, IPTypes
 from config.config import settings
 from models.base_model import Base, BaseModel
@@ -27,8 +30,6 @@ from dotenv import load_dotenv
 import psycopg2
 import os
 from os import getenv
-import sys
-sys.path.insert(0, '..')
 
 load_dotenv()
 
