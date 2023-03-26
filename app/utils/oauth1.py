@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+
+
 from fastapi import Request
 from fastapi.responses import RedirectResponse
 from jwt.exceptions import ExpiredSignatureError

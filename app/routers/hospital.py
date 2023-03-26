@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+
 from fastapi import APIRouter, Depends, Request, Response, status, HTTPException
 from loguru import logger
 from schema import hospital as hospitalSchema

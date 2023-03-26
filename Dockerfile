@@ -1,17 +1,17 @@
 FROM python:3.7-slim
 
-ENV tech-mavericks /app
+ENV tech_mavericks /app
 
-WORKDIR tech-mavericks
+WORKDIR $tech_mavericks
 
-COPY . ./
+COPY . .
 
-RUN \  
-    apt-get update && \
+RUN apt-get update && \
+    apt-get -y install gunicorn uvicorn && \
     apt-get -y install libpq-dev gcc && \
     pip install --upgrade pip && \
-    pip install --upgrade -r requirements.txt
+    pip install --no-cache-dir --upgrade -r requirements.txt
 
-EXPOSE 8000
+EXPOSE 8080
 
-CMD exec gunicorn --bind :$PORT --workers 1 --worker-class uvicorn.workers.UvicornWorker  --threads 8 app.main:app
+CMD exec gunicorn --bind 0.0.0.0:8080 --workers 1 --worker-class uvicorn.workers.UvicornWorker  --threads 8 app.main:app
