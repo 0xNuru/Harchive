@@ -3,7 +3,7 @@
 ![](Harchive_Logo_White.png)
 
 
-## **About **
+## **About**
 <p>Our team at Harchive believes that patients deserve better, and that's why we've built Harchive  - a platform that allows patients to securely and easily access their health records in any hospital they check into. 
 
 Our platform provides a secure, user-friendly solution for managing and accessing medical records anywhere, anytime. 
