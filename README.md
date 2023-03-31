@@ -33,6 +33,169 @@ To use our API, you need to authenticate your requests using an API key, which y
 Authorization: Bearer <your-api-key>
 ```
 
+## **Endpoints**
+
+Our API exposes the following endpoints:
+
+**User Routes**
+
+POST /user/register
+
+Create's a User
+
+GET /user/all
+
+Returns a list of all users in the system.
+
+GET /user/email/{email}
+
+Returns the user with the specified email.
+
+POST /user/login
+
+Logs a user into the system and returns a JWT token.
+
+GET /user/refresh
+
+Refreshes a user's JWT token.
+
+GET /user/logout
+
+Logs a user out of the system.
+
+## **Insurance Routes**
+
+POST /insurance/admin/register
+
+Creates an insurance admin account.
+
+GET /insurance/admin/all
+
+Returns a list of all insurance admins in the system.
+
+GET /insurance/admin/insuranceID/{insuranceID}
+
+Returns the insurance admin with the specified ID.
+
+POST /insurance/register
+
+Creates an insurance account.
+
+GET /insurance/all
+
+Returns a list of all insurance accounts in the system.
+
+GET /insurance/{insuranceID}
+
+Returns the insurance account with the specified ID.
+
+## **Hospital Routes**
+
+POST /hospital/admin/register
+
+Creates a hospital admin account.
+
+GET /hospital/admin/all
+
+Returns a list of all hospital admins in the system.
+
+GET /hospital/admin/hospitalID/{hospitalID}
+
+Returns the hospital admin with the specified ID.
+
+DELETE /hospital/admin/delete/{hospitalID}
+
+Deletes the hospital admin with the specified ID.
+
+POST /hospital/register
+
+Creates a hospital account.
+
+GET /hospital/all
+
+Returns a list of all hospital accounts in the system.
+
+GET /hospital/{hospitalID}
+
+Returns the hospital account with the specified ID.
+
+POST /hospital/doctor/register
+
+Creates a doctor account.
+
+GET /hospital/doctor/all
+
+Returns a list of all doctor accounts in the system.
+
+GET /hospital/doctor/email/{email}
+
+Returns the doctor account with the specified email.
+
+DELETE /hospital/doctor/delete/{email}
+
+Deletes the doctor account with the specified email.
+
+POST /hospital/checkIn
+
+Checks a patient into the hospital.
+
+DELETE /hospital/checkout
+
+Checks a patient out of the hospital.
+
+## **Patient Routes**
+
+POST /patient/register
+
+Creates a patient account.
+GET /patient/all
+
+Returns a list of all patient accounts in the system.
+
+GET /patient/email/{email}
+
+Returns the patient account with the specified email.
+
+POST /patient/record/add
+
+Creates a patient medical record.
+
+GET /patient/record/all
+
+Returns a list of all patient medical records in the system.
+
+GET /patient/record/nin/{nin}
+
+Returns the patient medical record with the specified National Insurance Number (NIN).
+
+PUT /patient/record/update/{nin}
+
+Updates the patient medical record with the specified NIN.
+
+POST /patient/medication/add/{nin}
+
+Adds a medication to the patient's medical record.
+
+POST /patient/allergy/add/{nin}
+
+Adds an allergy to the patient's medical record.
+
+POST /patient/immunization/add/{nin}
+
+Adds an immunization to the patient's medical record.
+
+
+POST /patient/transaction/add/{nin}
+
+Adds a transaction to the patient's account.
+
+## **Response Format**
+
+All responses from our API are JSON-encoded. The format of the response depends on the endpoint you're accessing. Typically, the response contains a top-level data field that contains the requested data. If there are any errors, the response contains a top-level error field that contains a message explaining the error.
+
+
+
+
 ## **Contributors**
 - Hamza Saidu ([Cyberguru1](https://github.com/Cyberguru1))
 - Nurudeen Ahmed ([nurvdeen](https://github.com/nurvdeen/t))
