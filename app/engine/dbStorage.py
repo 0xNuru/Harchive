@@ -93,17 +93,17 @@ class DBStorage:
             connects to the sql database with the params stored in env
         """
 
-        # user = getenv("dbUSER")
-        # passwd = getenv("dbPWD")
-        # db = getenv("dbDB")
-        # host = getenv("dbHost_instance")
-        # connection_str = "postgresql+psycopg2://{}:{}@{}/{}".format(
-        #     user, passwd, host, db)
-        # self.engine = create_engine(connection_str, pool_pre_ping=True)
+        user = getenv("dbUSER")
+        passwd = getenv("dbPWD")
+        db = getenv("dbDB")
+        host = getenv("dbHost_instance")
+        connection_str = "postgresql+psycopg2://{}:{}@{}/{}".format(
+             user, passwd, host, db)
+        self.engine = create_engine(connection_str, pool_pre_ping=True)
 
-        SQLALCHEMY_DATABASE_URL = "postgresql+pg8000://"
+        # SQLALCHEMY_DATABASE_URL = "postgresql+pg8000://"
 
-        self.engine = create_engine(SQLALCHEMY_DATABASE_URL, creator=getconn,
+        # self.engine = create_engine(SQLALCHEMY_DATABASE_URL, creator=getconn,
             pool_pre_ping=True)
 
         self.__session = None
