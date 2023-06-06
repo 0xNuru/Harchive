@@ -104,7 +104,7 @@ class DBStorage:
         # SQLALCHEMY_DATABASE_URL = "postgresql+pg8000://"
 
         # self.engine = create_engine(SQLALCHEMY_DATABASE_URL, creator=getconn,
-            pool_pre_ping=True)
+        #    pool_pre_ping=True)
 
         self.__session = None
 
