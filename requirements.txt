@@ -46,3 +46,6 @@ pipenv
 
 # cloud authenticator
 cloud-sql-python-connector[pg8000]
+
+
+gunicorn

@@ -2,7 +2,7 @@ FROM python:3.7-slim
 
 ENV tech_mavericks /app
 
-Env PORT=8000
+ENV PORT=8000
 
 WORKDIR $tech_mavericks
 
