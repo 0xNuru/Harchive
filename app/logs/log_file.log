@@ -40,3 +40,34 @@
 2023 Mar 11  23:08:59.09 | hospital.py took 0:02:12.666318 to execute | INFO | [Patient] (25acad2f-ba9e-4f8d-a125-069da5d1663f) {'_sa_instance_state': <sqlalchemy.orm.state.InstanceState object at 0x00000275470042E0>, 'name': 'patient', 'email': 'patints@example.com', 'password_hash': '$2b$12$XLgMoNXRyLkYQ25ZCwgQzu15pLgRKH8Xz13zmGs2yzBU6cDg68OI.', 'insuranceID': 'NHISid', 'address': 'stringstri', 'gender': <genderEnum.M: 'M'>, 'id': '25acad2f-ba9e-4f8d-a125-069da5d1663f', 'created_at': datetime.datetime(2023, 3, 7, 2, 1, 32, 339823), 'updated_at': datetime.datetime(2023, 3, 7, 2, 1, 32, 339823), 'phone': '090909ss090', 'nin': '11111111112', 'role': 'patient'} checked-out
 2023 Mar 11  23:10:09.17 | hospital.py took 0:00:06.167334 to execute | INFO | patient checked-out [Patient] (25acad2f-ba9e-4f8d-a125-069da5d1663f) {'_sa_instance_state': <sqlalchemy.orm.state.InstanceState object at 0x000001B004AFCE50>, 'name': 'patient', 'email': 'patints@example.com', 'password_hash': '$2b$12$XLgMoNXRyLkYQ25ZCwgQzu15pLgRKH8Xz13zmGs2yzBU6cDg68OI.', 'insuranceID': 'NHISid', 'address': 'stringstri', 'gender': <genderEnum.M: 'M'>, 'id': '25acad2f-ba9e-4f8d-a125-069da5d1663f', 'created_at': datetime.datetime(2023, 3, 7, 2, 1, 32, 339823), 'updated_at': datetime.datetime(2023, 3, 7, 2, 1, 32, 339823), 'phone': '090909ss090', 'nin': '11111111112', 'role': 'patient'}
 2023 Mar 25  17:29:42.22 | user.py took 0:01:29.522015 to execute | INFO |  Hamza Saidu logged in !!
+2023 Jun 23  18:37:48.97 | user.py took 0:07:38.666885 to execute | INFO |  Tataa logged in !!
+2023 Jun 23  18:38:11.76 | user.py took 0:08:01.453093 to execute | INFO | user with the email tata@em.com  queried all users
+2023 Jun 23  18:43:13.18 | user.py took 0:00:02.573343 to execute | INFO |  Tataa logged in !!
+2023 Jun 23  18:43:23.20 | user.py took 0:00:12.591035 to execute | INFO |  Tataa logged in !!
+2023 Jun 23  18:44:00.96 | user.py took 0:00:50.356868 to execute | INFO |  nurudeen logged in !!
+2023 Jun 23  18:49:10.47 | user.py took 0:00:01.564561 to execute | INFO |  nurudeen logged in !!
+2023 Jun 23  19:38:34.55 | user.py took 0:44:33.175269 to execute | INFO | user with the email nuru@gmail.com  queried all users
+2023 Jun 23  19:50:49.09 | user.py took 0:56:47.711202 to execute | INFO | user with the email nuru@gmail.com  queried all users
+2023 Jun 23  19:51:23.52 | user.py took 0:00:16.148959 to execute | INFO |  nurudeen logged in !!
+2023 Jun 23  22:37:50.28 | user.py took 0:00:01.551433 to execute | INFO |  nurudeen logged in !!
+2023 Jun 23  22:40:19.65 | user.py took 0:00:01.217139 to execute | INFO |  nurudeen logged in !!
+2023 Jun 23  23:16:46.81 | user.py took 0:14:08.179310 to execute | INFO | user with the name string has been created
+2023 Jun 23  23:19:21.27 | user.py took 0:16:42.642609 to execute | INFO |  ULTIMATE logged in !!
+2023 Jun 23  23:19:38.25 | user.py took 0:16:59.617091 to execute | INFO |  ULTIMATE logged in !!
+2023 Jun 30  00:45:43.07 | user.py took 0:11:29.371253 to execute | INFO |  ULTIMATE logged in !!
+2023 Jun 30  01:06:47.67 | user.py took 0:02:26.675943 to execute | INFO |  admin logged in !!
+2023 Jun 30  01:07:00.68 | user.py took 0:02:39.680033 to execute | INFO | user with the email admin@example.com  queried all users
+2023 Jun 30  01:28:37.91 | user.py took 0:00:16.141523 to execute | INFO | user with the email admin@example.com  queried all users
+2023 Jun 30  01:57:44.99 | user.py took 0:00:19.639831 to execute | INFO | user with the email admin@example.com  queried all users
+2023 Jun 30  02:26:51.43 | user.py took 0:00:17.854272 to execute | INFO |  admin logged in !!
+2023 Jul 2  14:05:23.16 | user.py took 0:12:26.439644 to execute | INFO |  patient logged in !!
+2023 Jul 2  15:52:52.18 | user.py took 0:00:42.241445 to execute | INFO | user with the email patient@example.com  queried all users
+2023 Jul 2  15:53:39.51 | user.py took 0:00:03.410401 to execute | INFO | user with the email patient@example.com  queried all users
+2023 Jul 2  15:54:06.47 | user.py took 0:00:30.366121 to execute | INFO |  Hadmin logged in !!
+2023 Jul 2  16:21:27.54 | user.py took 0:00:03.895369 to execute | INFO |  Hadmin logged in !!
+2023 Jul 2  16:51:16.35 | user.py took 0:02:46.933256 to execute | INFO |  doctor logged in !!
+2023 Jul 2  17:01:11.69 | user.py took 0:00:18.375300 to execute | INFO | user with the email doctor@example.com  queried all users
+2023 Jul 2  17:01:21.08 | user.py took 0:00:27.768403 to execute | INFO |  patient logged in !!
+2023 Jul 2  17:52:36.63 | user.py took 0:51:43.316103 to execute | INFO |  doctor logged in !!
+2023 Jul 2  17:53:16.71 | user.py took 0:52:23.391598 to execute | INFO |  Hadmin logged in !!
+2023 Jul 2  17:57:06.60 | user.py took 0:00:17.302116 to execute | INFO |  doctor logged in !!

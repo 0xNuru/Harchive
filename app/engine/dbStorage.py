@@ -53,7 +53,7 @@ def login():
         os.environ["dbUSER"] = user
         os.environ["dbPWD"] = passwd
         os.environ["dbDB"] = db
-        os.environ["dbHOST"] = host
+        os.environ["dbHost_instance"] = host
 
         # psql
         print("mysql connected successfully !!")

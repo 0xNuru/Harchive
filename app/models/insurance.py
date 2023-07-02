@@ -19,7 +19,6 @@ class InAdmin(Users):
     __tablename__ = "InAdmin"
     id = Column(String, ForeignKey("user.id",  ondelete="CASCADE"),primary_key=True, nullable=False)
     insuranceID = Column(String, ForeignKey("Insurance.id",  ondelete="CASCADE"), nullable=False)
-    role = Column(String(50), nullable=False, default='insurance_admin')
     Insurance = relationship("Insurance", back_populates="InAdmin")
 
 

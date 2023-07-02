@@ -3,21 +3,21 @@
 """ User logging endpoint"""
 
 
+from utils.logger import logger
+from utils.oauth1 import AuthJWT
+from utils import auth
+from typing import Dict, List
+from starlette import status
+from sqlalchemy.orm import Session
+from schema import user as userSchema
+from models import user as userModel
+from fastapi.responses import JSONResponse
+from fastapi.security import OAuth2PasswordRequestForm
+from fastapi import APIRouter, Depends, HTTPException, Response, Request
+from engine.loadb import load
+from dependencies.depends import get_current_user
 import sys
 sys.path.insert(0, '..')
-from dependencies.depends import get_current_user
-from engine.loadb import load
-from fastapi import APIRouter, Depends, HTTPException, Response, Request
-from fastapi.security import OAuth2PasswordRequestForm
-from fastapi.responses import JSONResponse
-from models import user as userModel
-from schema import user as userSchema
-from sqlalchemy.orm import Session
-from starlette import status
-from typing import Dict, List
-from utils import auth
-from utils.oauth1 import AuthJWT
-from utils.logger import logger
 
 router = APIRouter(
     prefix='/user',
@@ -46,7 +46,7 @@ def create_user(request: userSchema.User, db: Session = Depends(load)):
 
     new_user = userModel.Users(name=request.name, phone=request.phone,
                                email=request.email, address=request.address,
-                               password_hash=passwd_hash)
+                               password_hash=passwd_hash, role="user")
     logger.info(f"user with the name {request.name} has been created")
     db.new(new_user)
     db.save()

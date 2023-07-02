@@ -4,16 +4,14 @@ Record module
 """
 # from graphene import Int
 
+from datetime import datetime
+from models.hospital import *
+from models.base_model import BaseModel, Base
+from sqlalchemy import ARRAY, Column, ForeignKey, String, Float, DateTime, VARCHAR, Enum
+from sqlalchemy.orm import relationship
+import enum
 import sys
 sys.path.insert(0, '..')
-
-import enum
-from sqlalchemy.orm import relationship
-from sqlalchemy import ARRAY, Column, ForeignKey, String, Float, DateTime, VARCHAR, Enum
-from models.base_model import BaseModel, Base
-from models.hospital import *
-from datetime import datetime
-
 
 
 class allergyEnum(enum.Enum):
@@ -40,8 +38,8 @@ class Transactions(BaseModel, Base):
 
     doctor_id = Column(String, ForeignKey(
         'doctors.id',  ondelete="CASCADE"), nullable=False)
-    description = Column(VARCHAR(255), nullable=False, unique=True)
-    quantity = Column(VARCHAR(255), nullable=False, unique=True)
+    description = Column(VARCHAR(255), nullable=False)
+    quantity = Column(VARCHAR(255), nullable=False)
     hospitalID = Column(String, ForeignKey("hospital.hospitalID"))
     patient = Column(String, ForeignKey('patient.id', ondelete="CASCADE"))
     Doctor = relationship('Doctors', back_populates='transactions')
