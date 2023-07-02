@@ -11,6 +11,7 @@ from starlette import status
 from sqlalchemy.orm import Session
 from schema import user as userSchema
 from models import user as userModel
+from models import patient as patientModel
 from fastapi.responses import JSONResponse
 from fastapi.security import OAuth2PasswordRequestForm
 from fastapi import APIRouter, Depends, HTTPException, Response, Request
@@ -81,6 +82,8 @@ def login(response: Response, request: userSchema.UserLogin = Depends(),
 
     check = db.query_eng(userModel.Users).filter(
         userModel.Users.email == email).first()
+    patient = db.query_eng(patientModel.Patient).filter(
+        patientModel.Patient.id == check.id).first()
 
     if not check:
         raise HTTPException(status_code=status.HTTP_409_CONFLICT,
@@ -93,9 +96,14 @@ def login(response: Response, request: userSchema.UserLogin = Depends(),
     data = {
         'username': check.name,
         'email': check.email,
-        'user_id': check.id
-
+        'user_id': check.id,
+        'role': check.role
     }
+
+    if patient:
+        data['nin'] = patient.nin
+    else:
+        data['nin'] = None
 
     # generate user cookies
     access_token = auth.access_token(data)

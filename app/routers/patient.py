@@ -77,7 +77,7 @@ def show(email, db: Session = Depends(load), user_data: get_current_user = Depen
 @router.post("/record/add", response_model=patientSchema.PatientRecord,
              status_code=status.HTTP_201_CREATED)
 def create_patient_record(request: patientSchema.PatientRecord, user_data: get_current_user = Depends(), db: Session = Depends(load)):
-    roles = ["patient", "doctor"]
+    roles = ["patient", "doctor", "hospital_admin"]
     check_role(roles, user_data['user_id'])
     id = user_data["user_id"]
     check = db.query_eng(recordModel.Record).filter(
