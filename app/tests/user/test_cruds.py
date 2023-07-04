@@ -221,7 +221,7 @@ def test_patient_medcation_add():
 
 
 def test_patient_allergy_add():
-    """_summary_
+    z"""_summary_
     """
 
     nin = 'stringstrin'
