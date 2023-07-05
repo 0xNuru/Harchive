@@ -149,7 +149,7 @@ def test_patient_record_all():
     
     response = client.get("/patient/record/all")
 
-    assert response.status_code == 200  or response.status_code == 401
+    assert response.status_code == 200 or response.status_code == 401
 
     # assert response.json()[0] == body
 
