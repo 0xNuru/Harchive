@@ -19,7 +19,7 @@ psycopg2==2.9.5
 python-dotenv
 
 #gunicorn
-uvloop
+# uvloop
 uvicorn
 gunicorn
 
@@ -46,3 +46,8 @@ pipenv
 
 # cloud authenticator
 cloud-sql-python-connector[pg8000]
+
+
+gunicorn
+
+google

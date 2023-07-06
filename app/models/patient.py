@@ -30,7 +30,6 @@ class Patient(Users):
     insuranceID = Column(String(128), nullable=True, unique=False)
     address = Column(String(128), nullable=True)
     gender = Column(Enum(genderEnum, name="gender_enum"))
-    role = Column(String(50), nullable=False, default='patient')
     patient_record = relationship(Record, cascade_backrefs='patient')
     patient_medication = relationship(Medication, cascade_backrefs='patient')
     patient_allergy = relationship(Allergy, cascade_backrefs='patient')

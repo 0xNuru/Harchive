@@ -1,3 +1,1 @@
-engine/setup_mysql_dev.sql
-/app/.env
-logs/log_file.log
+.env
