@@ -2,18 +2,16 @@ FROM python:3.7-slim
 
 ENV tech_mavericks /app
 
-ENV PORT=8000
+Env PORT=8000
 
 WORKDIR $tech_mavericks
 
 ENV PYTHONPATH "${PYTHONPATH}:/app/app"
 
 COPY . ./
-COPY .env ./
 
-RUN apt-get update && apt-get install -y postgresql-client
-
-RUN apt-get -y install gunicorn uvicorn && \
+RUN apt-get update && \
+    apt-get -y install gunicorn uvicorn && \
     apt-get -y install libpq-dev gcc && \
     pip install --upgrade pip && \
     pip install --no-cache-dir --upgrade -r requirements.txt
