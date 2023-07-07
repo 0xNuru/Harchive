@@ -3,6 +3,7 @@
 
 """Searches for a user and return claims"""
 
+from typing import List
 from engine.loadb import load
 from fastapi import HTTPException
 import models as userModel
@@ -13,7 +14,7 @@ from sqlalchemy.orm import Session
 from starlette import status
 
 
-def check_role(role: str, user_id: str) -> None:
+def check_role(roles: List[str], user_id: str) -> None:
     """
         Doc:
             searches for users perms,
@@ -25,13 +26,16 @@ def check_role(role: str, user_id: str) -> None:
 
     db_gen = load()
     db = next(db_gen)
+    for role in roles:
+        inst = getattr(userModel, model[role][0])
 
-    inst = getattr(userModel, model[role][0])
+        user = getattr(inst, model[role][1])
 
-    user = getattr(inst, model[role][1])
+        search = db.query_eng(user).filter(
+            user.id == user_id).first()
 
-    search = db.query_eng(user).filter(
-        user.id == user_id).first()
+        if search:
+            return None
 
     if not search:
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN,
