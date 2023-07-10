@@ -28,7 +28,7 @@ router = APIRouter(
 @router.post("/register", response_model=patientSchema.ShowPatient,
              status_code=status.HTTP_201_CREATED)
 def create_patient(request: patientSchema.Patient, db: Session = Depends(load), user_data=Depends(get_current_user)):
-    roles = ["hospital_admin"]
+    roles = ["hospital_admin", "patient", "insurance_admin"]
     check_role(roles, user_data['user_id'])
     phone = request.phone
     email = request.email
@@ -104,7 +104,7 @@ def all(user_data: get_current_user = Depends(), db: Session = Depends(load)):
 
 @router.get("/record/nin/{nin}", response_model=patientSchema.PatientRecord, status_code=status.HTTP_200_OK)
 def show(nin, user_data: get_current_user = Depends(), db: Session = Depends(load)):
-    roles = ["hospital_admin", "doctor"]
+    roles = ["patient", "hospital_admin", "doctor"]
     check_role(roles, user_data['user_id'])
     patient = db.query_eng(patientModel.Patient).filter(
         patientModel.Patient.nin == nin).first()
