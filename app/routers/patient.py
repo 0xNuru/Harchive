@@ -104,7 +104,7 @@ def all(user_data: get_current_user = Depends(), db: Session = Depends(load)):
 
 @router.get("/record/nin/{nin}", response_model=patientSchema.PatientRecord, status_code=status.HTTP_200_OK)
 def show(nin, user_data: get_current_user = Depends(), db: Session = Depends(load)):
-    roles = ["hospital_admin", "doctor"]
+    roles = ["patient", "hospital_admin", "doctor"]
     check_role(roles, user_data['user_id'])
     patient = db.query_eng(patientModel.Patient).filter(
         patientModel.Patient.nin == nin).first()
