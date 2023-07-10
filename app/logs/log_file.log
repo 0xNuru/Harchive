@@ -74,3 +74,4 @@
 2023 Jul 2  23:21:40.34 | user.py took 0:10:11.788290 to execute | INFO |  patient logged in !!
 2023 Jul 2  23:53:47.39 | user.py took 0:00:04.051549 to execute | INFO |  patient logged in !!
 2023 Jul 2  23:54:48.81 | user.py took 0:01:05.470017 to execute | INFO |  doctor logged in !!
+2023 Jul 7  18:22:52.98 | user.py took 0:00:55.797232 to execute | INFO |  patient logged in !!
