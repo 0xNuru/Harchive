@@ -51,7 +51,7 @@ def create_user(request: userSchema.User, db: Session = Depends(load)):
     logger.info(f"user with the name {request.name} has been created")
     db.new(new_user)
     db.save()
-    return {"name": request.name, "email":email}
+    return {"name": request.name, "email": email}
 
 
 # protected route that requires login, uses the get_current_user func
