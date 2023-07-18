@@ -27,9 +27,7 @@ router = APIRouter(
 
 @router.post("/register", response_model=patientSchema.ShowPatient,
              status_code=status.HTTP_201_CREATED)
-def create_patient(request: patientSchema.Patient, db: Session = Depends(load), user_data=Depends(get_current_user)):
-    roles = ["hospital_admin", "patient", "insurance_admin"]
-    check_role(roles, user_data['user_id'])
+def create_patient(request: patientSchema.Patient, db: Session = Depends(load)):
     phone = request.phone
     email = request.email
 
