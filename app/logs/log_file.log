@@ -77,3 +77,6 @@
 2023 Jul 7  18:22:52.98 | user.py took 0:00:55.797232 to execute | INFO |  patient logged in !!
 2023 Jul 10  11:29:00.99 | user.py took 0:01:17.192234 to execute | INFO |  patient logged in !!
 2023 Jul 11  14:10:54.42 | user.py took 0:00:47.975309 to execute | INFO |  patient logged in !!
+2023 Jul 29  00:05:13.64 | user.py took 0:04:42.704009 to execute | INFO |  patient logged in !!
+2023 Jul 29  00:06:34.71 | user.py took 0:00:37.023880 to execute | INFO |  patient logged in !!
+2023 Jul 29  00:07:53.97 | user.py took 0:01:56.277732 to execute | INFO |  Hadmin logged in !!
