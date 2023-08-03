@@ -72,7 +72,7 @@ def show(email, db: Session = Depends(load)):
     return users
 
 
-# logging endpoint
+# login endpoint
 @router.post('/login', status_code=status.HTTP_200_OK)
 def login(response: Response, request: userSchema.UserLogin = Depends(),
           Authorize: AuthJWT = Depends(), db: Session = Depends(load)):
@@ -82,12 +82,11 @@ def login(response: Response, request: userSchema.UserLogin = Depends(),
 
     check = db.query_eng(userModel.Users).filter(
         userModel.Users.email == email).first()
-    patient = db.query_eng(patientModel.Patient).filter(
-        patientModel.Patient.id == check.id).first()
-
     if not check:
         raise HTTPException(status_code=status.HTTP_409_CONFLICT,
                             detail=f"Incorrect Username or Password")
+    patient = db.query_eng(patientModel.Patient).filter(
+        patientModel.Patient.id == check.id).first()
 
     if not auth.verify_password(password, check.password_hash):
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,

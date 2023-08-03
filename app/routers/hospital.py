@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 
 
+from pydantic import EmailStr
 from utils import auth
 from models import user as userModel
 from typing import Dict, List
@@ -179,7 +180,7 @@ def all(db: Session = Depends(load), user_data=Depends(get_current_user)):
 
 @router.get("/doctor/email/{email}",
             response_model=hospitalSchema.ShowDoctor, status_code=status.HTTP_200_OK)
-def show(email, db: Session = Depends(load), user_data=Depends(get_current_user)):
+def show(email: EmailStr, db: Session = Depends(load), user_data=Depends(get_current_user)):
     roles = ["hospital_admin"]
     check_role(roles, user_data['user_id'])
     doctor = db.query_eng(hospitalModel.Doctors).filter(
@@ -191,7 +192,7 @@ def show(email, db: Session = Depends(load), user_data=Depends(get_current_user)
 
 
 @router.delete("/doctor/delete/{email}", status_code=status.HTTP_204_NO_CONTENT)
-def delete_doctor(email, db: Session = Depends(load),   user_data=Depends(get_current_user)):
+def delete_doctor(email: EmailStr, db: Session = Depends(load),   user_data=Depends(get_current_user)):
     roles = ["hospital_admin"]
     check_role(roles, user_data['user_id'])
     doctor = db.query_eng(hospitalModel.Doctors).filter(
