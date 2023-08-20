@@ -80,3 +80,4 @@
 2023 Jul 29  00:05:13.64 | user.py took 0:04:42.704009 to execute | INFO |  patient logged in !!
 2023 Jul 29  00:06:34.71 | user.py took 0:00:37.023880 to execute | INFO |  patient logged in !!
 2023 Jul 29  00:07:53.97 | user.py took 0:01:56.277732 to execute | INFO |  Hadmin logged in !!
+2023 Aug 20  19:09:03.28 | user.py took 0:00:41.297503 to execute | INFO |  patient1 logged in !!
