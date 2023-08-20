@@ -1,0 +1,12 @@
+{
+    "editor.defaultFormatter": "ms-python.autopep8",
+    "editor.formatOnSave": true,
+    "editor.formatOnPaste": true,
+    "editor.formatOnType": true,
+    "python.formatting.provider": "autopep8",
+    "python.formatting.autopep8Args": ["--max-line-length", "120"],
+    "python.formatting.autopep8Path": "/path/to/autopep8",  // Optional: Specify the path to autopep8
+    "python.formatting.autopep8Args": ["--max-line-length", "120", "--aggressive"],
+    "python.formatting.alwaysFormatOnSave": true,
+    
+}
