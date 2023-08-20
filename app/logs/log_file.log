@@ -81,3 +81,5 @@
 2023 Jul 29  00:06:34.71 | user.py took 0:00:37.023880 to execute | INFO |  patient logged in !!
 2023 Jul 29  00:07:53.97 | user.py took 0:01:56.277732 to execute | INFO |  Hadmin logged in !!
 2023 Aug 20  19:09:03.28 | user.py took 0:00:41.297503 to execute | INFO |  patient1 logged in !!
+2023 Aug 20  19:36:56.49 | user.py took 0:00:51.603405 to execute | INFO |  patient logged in !!
+2023 Aug 20  19:42:31.67 | user.py took 0:01:46.886673 to execute | INFO |  patient logged in !!
