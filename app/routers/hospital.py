@@ -25,7 +25,9 @@ router = APIRouter(
 
 
 @router.post("/admin/register", response_model=hospitalSchema.ShowHospital, status_code=status.HTTP_201_CREATED)
-def create_hospital_admin(request: hospitalSchema.HospitalAdmin, db: Session = Depends(load)):
+def create_hospital_admin(request: hospitalSchema.HospitalAdmin, db: Session = Depends(load),user_data=Depends(get_current_user)):
+    roles = ["superuser"]
+    check_role(roles, user_data['user_id'])
     phone = request.phone
     hospitalID = request.hospitalID
     email = request.email

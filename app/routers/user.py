@@ -45,13 +45,13 @@ def create_user(request: userSchema.User, db: Session = Depends(load)):
 
     passwd_hash = auth.get_password_hash(request.password2.get_secret_value())
 
-    new_user = userModel.Users(name=request.name, phone=request.phone,
+    new_user = userModel.Superuser(name=request.name, phone=request.phone,
                                email=request.email, address=request.address,
-                               password_hash=passwd_hash, role="user")
-    logger.info(f"user with the name {request.name} has been created")
+                               password_hash=passwd_hash, role="superuser")
+    logger.info(f"superuser with the name {request.name} has been created")
     db.new(new_user)
     db.save()
-    return {"name": request.name, "email": email}
+    return new_user
 
 
 # protected route that requires login, uses the get_current_user func
