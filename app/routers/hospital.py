@@ -146,6 +146,10 @@ def show(hospitalID, db: Session = Depends(load), user_data=Depends(get_current_
 def create_doctor(request: hospitalSchema.Doctor, db: Session = Depends(load), user_data=Depends(get_current_user)):
     roles = ["hospital_admin"]
     check_role(roles, user_data['user_id'])
+    admin_id = user_data["user_id"]
+    admin = db.query_eng(hospitalModel.Admin).filter(
+        hospitalModel.Admin.id == admin_id).first()
+    
     phone = request.phone
     email = request.email
 
@@ -164,7 +168,7 @@ def create_doctor(request: hospitalSchema.Doctor, db: Session = Depends(load), u
 
     new_doctor = hospitalModel.Doctors(name=request.name, phone=request.phone,
                                        email=request.email, password_hash=passwd_hash,
-                                       hospitalID=request.hospitalID, dob=request.dob, gender=request.gender, speciality=request.speciality, role="doctor")
+                                       hospitalID=admin.hospitalID, dob=request.dob, gender=request.gender, speciality=request.speciality, role="doctor")
     db.new(new_doctor)
     db.save()
     return new_doctor
@@ -217,6 +221,11 @@ def check_in(request: hospitalSchema.CheckIn, db: Session = Depends(load), user_
     if not patient:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail=f"patient with the nin {request.nin} not found")
+
+    checkHospital = db.query_eng(hospitalModel.Hospital).filter(hospitalModel.Hospital.hospitalID == admin.hospitalID).first()
+    if not checkHospital:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail=f"Hospital with ID '{admin.hospitalID}' not found")
 
     checkPatient = db.query_eng(hospitalModel.CheckIn).filter(
         hospitalModel.CheckIn.patient == patient.id).first()
