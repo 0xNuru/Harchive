@@ -25,6 +25,7 @@ from config.config import settings
 from models.base_model import Base, BaseModel
 from sqlalchemy.orm import sessionmaker, scoped_session
 from sqlalchemy import create_engine
+from sqlalchemy.exc import OperationalError
 from pydantic import env_settings
 from dotenv import load_dotenv
 import psycopg2
@@ -79,6 +80,24 @@ def getconn():
     return conn
 
 
+def is_postgresql_up(db_url):
+    """_summary_: checks if postgresql is available
+
+    Args:
+        db_url (str): database url
+    """
+    try:
+        # Attempt to create an SQLAlchemy engine and connect to the database
+        engine = create_engine(db_url)
+        connection = engine.connect()
+        connection.close()
+        return True
+
+    except OperationalError:
+        return False
+        
+
+
 class DBStorage:
     """
     Desc:
@@ -99,7 +118,12 @@ class DBStorage:
         host = getenv("dbHost_instance")
         connection_str = "postgresql+psycopg2://{}:{}@{}/{}".format(
              user, passwd, host, db)
-        self.engine = create_engine(connection_str, pool_pre_ping=True)
+
+        if is_postgresql_up(connection_str):
+            self.engine = create_engine(connection_str, pool_pre_ping=True)
+        else:
+            print("PostgreSQL is not running or the connection failed.")
+            exit()
 
         # SQLALCHEMY_DATABASE_URL = "postgresql+pg8000://"
 
