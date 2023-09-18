@@ -22,7 +22,7 @@ def check_role(roles: List[str], user_id: str) -> None:
             returns None if succed
     """
     model = {'patient': ['patient', 'Patient'], 'insurance_admin': ['insurance', 'InAdmin'],
-             'hospital_admin': ['hospital', 'Admin'], 'doctor': ['hospital', 'Doctors']}
+             'hospital_admin': ['hospital', 'Admin'], 'doctor': ['hospital', 'Doctors'], 'superuser':['user', 'Superuser']}
 
     db_gen = load()
     db = next(db_gen)
