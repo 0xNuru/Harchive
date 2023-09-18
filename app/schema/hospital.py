@@ -62,7 +62,6 @@ class Doctor(BaseModel):
     dob: date
     phone: constr(min_length=11, max_length=14)
     speciality: str
-    hospitalID: str
 
     class Config():
         orm_mode = True

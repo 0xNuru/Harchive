@@ -45,13 +45,13 @@ def create_user(request: userSchema.User, db: Session = Depends(load)):
 
     passwd_hash = auth.get_password_hash(request.password2.get_secret_value())
 
-    new_user = userModel.Users(name=request.name, phone=request.phone,
+    new_user = userModel.Superuser(name=request.name, phone=request.phone,
                                email=request.email, address=request.address,
-                               password_hash=passwd_hash, role="user")
-    logger.info(f"user with the name {request.name} has been created")
+                               password_hash=passwd_hash, role="superuser")
+    logger.info(f"superuser with the name {request.name} has been created")
     db.new(new_user)
     db.save()
-    return {"name": request.name, "email":email}
+    return new_user
 
 
 # protected route that requires login, uses the get_current_user func
@@ -72,7 +72,7 @@ def show(email, db: Session = Depends(load)):
     return users
 
 
-# logging endpoint
+# login endpoint
 @router.post('/login', status_code=status.HTTP_200_OK)
 def login(response: Response, request: userSchema.UserLogin = Depends(),
           Authorize: AuthJWT = Depends(), db: Session = Depends(load)):
@@ -82,12 +82,11 @@ def login(response: Response, request: userSchema.UserLogin = Depends(),
 
     check = db.query_eng(userModel.Users).filter(
         userModel.Users.email == email).first()
-    patient = db.query_eng(patientModel.Patient).filter(
-        patientModel.Patient.id == check.id).first()
-
     if not check:
         raise HTTPException(status_code=status.HTTP_409_CONFLICT,
                             detail=f"Incorrect Username or Password")
+    patient = db.query_eng(patientModel.Patient).filter(
+        patientModel.Patient.id == check.id).first()
 
     if not auth.verify_password(password, check.password_hash):
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
