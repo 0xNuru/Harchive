@@ -17,6 +17,16 @@ contains:
         - __session
         - dic
 """
+from os import getenv
+import os
+import psycopg2
+from dotenv import load_dotenv
+from pydantic import env_settings
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker, scoped_session
+from models.base_model import Base, BaseModel
+from config.config import settings
+from google.cloud.sql.connector import Connector, IPTypes
 import sys
 sys.path.insert(0, '..')
 
@@ -54,7 +64,7 @@ def login():
         os.environ["dbUSER"] = user
         os.environ["dbPWD"] = passwd
         os.environ["dbDB"] = db
-        os.environ["dbHOST"] = host
+        os.environ["dbHost_instance"] = host
 
         # psql
         print("mysql connected successfully !!")
@@ -70,13 +80,13 @@ if not os.getenv("dbUSER"):
 
 def getconn():
     conn = connector.connect(
-            settings.dbHost_instance ,
-            "pg8000",
-            user=settings.dbUSER,
-            password=settings.dbPWD,
-            db=settings.dbDB,
-            ip_type=IPTypes.PUBLIC
-        )
+        settings.dbHost_instance,
+        "pg8000",
+        user=settings.dbUSER,
+        password=settings.dbPWD,
+        db=settings.dbDB,
+        ip_type=IPTypes.PUBLIC
+    )
     return conn
 
 
@@ -128,7 +138,7 @@ class DBStorage:
         # SQLALCHEMY_DATABASE_URL = "postgresql+pg8000://"
 
         # self.engine = create_engine(SQLALCHEMY_DATABASE_URL, creator=getconn,
-        #    pool_pre_ping=True)
+        #                             pool_pre_ping=True)
 
         self.__session = None
 

@@ -1,11 +1,11 @@
 #!/usr/bin/python3
 
 
+import re
+from typing import Optional
+from pydantic import BaseModel, EmailStr, SecretStr, root_validator, constr
 import sys
 sys.path.insert(0, '..')
-from pydantic import BaseModel, EmailStr, SecretStr, root_validator, constr
-from typing import Optional
-import re
 
 password_regex = "(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!#%*?&]{8,20}"
 
@@ -34,6 +34,7 @@ class ShowUser(BaseModel):
 
     name: str
     email: str
+    role: str
 
     class Config():
         orm_mode = True

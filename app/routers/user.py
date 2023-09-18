@@ -3,21 +3,22 @@
 """ User logging endpoint"""
 
 
+from utils.logger import logger
+from utils.oauth1 import AuthJWT
+from utils import auth
+from typing import Dict, List
+from starlette import status
+from sqlalchemy.orm import Session
+from schema import user as userSchema
+from models import user as userModel
+from models import patient as patientModel
+from fastapi.responses import JSONResponse
+from fastapi.security import OAuth2PasswordRequestForm
+from fastapi import APIRouter, Depends, HTTPException, Response, Request
+from engine.loadb import load
+from dependencies.depends import get_current_user
 import sys
 sys.path.insert(0, '..')
-from dependencies.depends import get_current_user
-from engine.loadb import load
-from fastapi import APIRouter, Depends, HTTPException, Response, Request
-from fastapi.security import OAuth2PasswordRequestForm
-from fastapi.responses import JSONResponse
-from models import user as userModel
-from schema import user as userSchema
-from sqlalchemy.orm import Session
-from starlette import status
-from typing import Dict, List
-from utils import auth
-from utils.oauth1 import AuthJWT
-from utils.logger import logger
 
 router = APIRouter(
     prefix='/user',
@@ -46,11 +47,11 @@ def create_user(request: userSchema.User, db: Session = Depends(load)):
 
     new_user = userModel.Users(name=request.name, phone=request.phone,
                                email=request.email, address=request.address,
-                               password_hash=passwd_hash)
+                               password_hash=passwd_hash, role="user")
     logger.info(f"user with the name {request.name} has been created")
     db.new(new_user)
     db.save()
-    return new_user
+    return {"name": request.name, "email": email}
 
 
 # protected route that requires login, uses the get_current_user func
@@ -71,7 +72,7 @@ def show(email, db: Session = Depends(load)):
     return users
 
 
-# logging endpoint
+# login endpoint
 @router.post('/login', status_code=status.HTTP_200_OK)
 def login(response: Response, request: userSchema.UserLogin = Depends(),
           Authorize: AuthJWT = Depends(), db: Session = Depends(load)):
@@ -81,10 +82,11 @@ def login(response: Response, request: userSchema.UserLogin = Depends(),
 
     check = db.query_eng(userModel.Users).filter(
         userModel.Users.email == email).first()
-
     if not check:
         raise HTTPException(status_code=status.HTTP_409_CONFLICT,
                             detail=f"Incorrect Username or Password")
+    patient = db.query_eng(patientModel.Patient).filter(
+        patientModel.Patient.id == check.id).first()
 
     if not auth.verify_password(password, check.password_hash):
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
@@ -93,9 +95,14 @@ def login(response: Response, request: userSchema.UserLogin = Depends(),
     data = {
         'username': check.name,
         'email': check.email,
-        'user_id': check.id
-
+        'user_id': check.id,
+        'role': check.role
     }
+
+    if patient:
+        data['nin'] = patient.nin
+    else:
+        data['nin'] = None
 
     # generate user cookies
     access_token = auth.access_token(data)
