@@ -150,7 +150,7 @@ POST /patient/register
 Creates a patient account.
 GET /patient/all
 
-Returns a list of all the patient accounts in the system.
+Returns a list of all patient accounts in the system.
 
 GET /patient/email/{email}
 
