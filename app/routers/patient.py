@@ -56,7 +56,7 @@ def create_patient(request: patientSchema.Patient, db: Session = Depends(load)):
 
 @router.get("/all", response_model=List[ShowPatient], status_code=status.HTTP_200_OK)
 def all(db: Session = Depends(load), user_data=Depends(get_current_user)):
-    roles = ["hospital_admin"]
+    roles = ["hospital_admin", "superuser"]
     check_role(roles, user_data['user_id'])
     patient = db.query_eng(patientModel.Patient).all()
     return patient
@@ -64,7 +64,7 @@ def all(db: Session = Depends(load), user_data=Depends(get_current_user)):
 
 @router.get("/email/{email}", response_model=patientSchema.ShowPatient, status_code=status.HTTP_200_OK)
 def show(email: EmailStr, db: Session = Depends(load), user_data: get_current_user = Depends()):
-    roles = ["hospital_admin", "doctor"]
+    roles = ["hospital_admin", "doctor", "superuser"]
     check_role(roles, user_data['user_id'])
     patient = db.query_eng(patientModel.Patient).filter(
         patientModel.Patient.email == email).first()
@@ -77,7 +77,7 @@ def show(email: EmailStr, db: Session = Depends(load), user_data: get_current_us
 @router.post("/record/add", response_model=patientSchema.PatientRecord,
              status_code=status.HTTP_201_CREATED)
 def create_patient_record(request: patientSchema.PatientRecord, user_data: get_current_user = Depends(), db: Session = Depends(load)):
-    roles = ["patient", "doctor", "hospital_admin"]
+    roles = ["patient", "doctor", "hospital_admin", "superuser"]
     check_role(roles, user_data['user_id'])
     id = user_data["user_id"]
     check = db.query_eng(recordModel.Record).filter(
@@ -96,7 +96,7 @@ def create_patient_record(request: patientSchema.PatientRecord, user_data: get_c
 
 @router.get("/record/all", response_model=List[patientSchema.PatientRecord], status_code=status.HTTP_200_OK)
 def all(user_data: get_current_user = Depends(), db: Session = Depends(load)):
-    roles = ["hospital_admin", "doctor"]
+    roles = ["hospital_admin", "doctor", "superuser"]
     check_role(roles, user_data['user_id'])
     records = db.query_eng(recordModel.Record).all()
     return records
@@ -104,7 +104,7 @@ def all(user_data: get_current_user = Depends(), db: Session = Depends(load)):
 
 @router.get("/record/nin/{nin}", response_model=patientSchema.PatientRecord, status_code=status.HTTP_200_OK)
 def show(nin: int, user_data: get_current_user = Depends(), db: Session = Depends(load)):
-    roles = ["patient", "hospital_admin", "doctor"]
+    roles = ["patient", "hospital_admin", "doctor", "superuser"]
     check_role(roles, user_data['user_id'])
     patient = db.query_eng(patientModel.Patient).filter(
         patientModel.Patient.nin == nin).first()
@@ -122,7 +122,7 @@ def show(nin: int, user_data: get_current_user = Depends(), db: Session = Depend
 
 @router.put("/record/update/{nin}", response_model=patientSchema.PatientRecord)
 def update_admin(nin: int, request: patientSchema.PatientRecord, user_data: get_current_user = Depends(), db: Session = Depends(load)):
-    roles = ["patient", "doctor"]
+    roles = ["patient", "doctor", "superuser"]
     check_role(roles, user_data['user_id'])
     patient = db.query_eng(patientModel.Patient).filter(
         patientModel.Patient.nin == nin).first()
@@ -154,7 +154,7 @@ def update_admin(nin: int, request: patientSchema.PatientRecord, user_data: get_
 @router.post("/medication/add/{nin}", response_model=patientSchema.ShowMedication,
              status_code=status.HTTP_201_CREATED)
 def create_patient_medication(nin: int, request: patientSchema.Medication, user_data: get_current_user = Depends(), db: Session = Depends(load)):
-    roles = ["doctor"]
+    roles = ["doctor", "superuser"]
     check_role(roles, user_data['user_id'])
     id = user_data["user_id"]
     patient = db.query_eng(patientModel.Patient).filter(
@@ -176,7 +176,7 @@ def create_patient_medication(nin: int, request: patientSchema.Medication, user_
 @router.post("/allergy/add/{nin}", response_model=patientSchema.ShowAllergy,
              status_code=status.HTTP_201_CREATED)
 def create_patient_allergy(nin: int, request: patientSchema.Allergy, user_data: get_current_user = Depends(), db: Session = Depends(load)):
-    roles = ["doctor", "patient"]
+    roles = ["doctor", "patient", "superuser"]
     check_role(roles, user_data['user_id'])
     id = user_data["user_id"]
     patient = db.query_eng(patientModel.Patient).filter(
@@ -197,7 +197,7 @@ def create_patient_allergy(nin: int, request: patientSchema.Allergy, user_data: 
 @router.post("/immunization/add/{nin}", response_model=patientSchema.ShowImmunization,
              status_code=status.HTTP_201_CREATED)
 def create_patient_immunization(nin: int, request: patientSchema.Immunization, user_data: get_current_user = Depends(), db: Session = Depends(load)):
-    roles = ["patient", "doctor"]
+    roles = ["patient", "doctor", "superuser"]
     check_role(roles, user_data['user_id'])
     id = user_data["user_id"]
     patient = db.query_eng(patientModel.Patient).filter(
@@ -218,7 +218,7 @@ def create_patient_immunization(nin: int, request: patientSchema.Immunization, u
 @router.post("/transaction/add/{nin}", response_model=patientSchema.Transaction,
              status_code=status.HTTP_201_CREATED)
 def create_patient_transaction(nin: int, request: patientSchema.Transaction, user_data: get_current_user = Depends(), db: Session = Depends(load)):
-    roles = ["doctor"]
+    roles = ["doctor", "superuser"]
     check_role(roles, user_data['user_id'])
     id = user_data["user_id"]
     patient = db.query_eng(patientModel.Patient).filter(
