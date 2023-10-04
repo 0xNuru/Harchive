@@ -20,6 +20,7 @@ import sys
 from utils.email import Email, generateToken, verifyToken
 from jinja2 import Environment, select_autoescape, PackageLoader
 from utils.auth import oauth, OAuthError
+from utils import acl, time
 
 sys.path.insert(0, '..')
 
@@ -273,27 +274,47 @@ async def auth_google_login(request: Request,
 @router.post('/login', status_code=status.HTTP_200_OK)
 def login(response: Response, request: userSchema.UserLogin = Depends(),
           Authorize: AuthJWT = Depends(), db: Session = Depends(load)):
-
+    duration = 3 # current timeout duration is 3 minutes
+    tryalls = 3 # current maximum retry is 3 times
     email = request.email
     password = request.password._secret_value
 
     check = db.query_eng(userModel.Users).filter(
         userModel.Users.email == email).first()
+
     if not check:
         raise HTTPException(status_code=status.HTTP_409_CONFLICT,
                             detail=f"Incorrect Username or Password")
+    
+    # check if user is currently suspended 
+    # current timeout value: 3 minutes
+
+    if check.is_suspended and time.compare_time(check.suspended_at, duration):
+        acl.reset_user_state(email) # reset user state if timeout is reached
+    
+    if check.is_suspended and not time.compare_time(check.suspended_at, duration):
+        # get the remaining time left
+        remain_time = duration - time.getRemain_time(check.suspended_at)
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
+                            detail=f"Maximum login limit reached try again in {remain_time} minutes")
+
     patient = db.query_eng(patientModel.Patient).filter(
         patientModel.Patient.id == check.id).first()
 
     if not auth.verify_password(password, check.password_hash):
+        # start jail login features
+        acl.update_max_trys(email, tryalls)
+        remain_tryalls = tryalls - check.failed_login_attempts
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
-                            detail='Incorrect Username or Password')
+                            detail=f'Incorrect Username or Password, {remain_tryalls} trys remainning')
 
+    # reset max login retry after succesful login
+    if  check.failed_login_attempts is not None or check.failed_login_attempts > 0 :
+        acl.reset_user_state(email)
+    
     if not check.is_verified:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
-                            detail='User not verified, please \
-                                verify your email to continue')
-
+                            detail='User not verified, please verify your email to continue')
 
     data = {
         'username': check.name,

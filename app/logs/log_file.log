@@ -95,3 +95,4 @@
 2023 Oct 3  04:51:53.98 | user.py took 0:01:23.791264 to execute | INFO | user with the name hamza has been created
 2023 Oct 4  06:58:52.27 | user.py took 0:00:30.566683 to execute | INFO |  hamza logged in !!
 2023 Oct 4  07:12:56.71 | user.py took 0:04:32.915834 to execute | INFO |  hamza logged in !!
+2023 Oct 4  11:23:59.56 | user.py took 0:00:02.044204 to execute | INFO |  hamza logged in !!
