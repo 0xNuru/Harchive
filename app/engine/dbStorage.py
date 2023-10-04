@@ -179,8 +179,20 @@ class DBStorage:
             Desc:
                 adds a new object in the table
         """
-        print(self.__session)
         self.__session.add(obj)
+
+    def update(self, obj):
+        """
+        Desc:
+            Update an existing object in the database.
+        Args:
+            obj: The object to update.
+        """
+        try:
+            self.__session.merge(obj)
+        except Exception as e:
+            print("Error updating object:", str(e))
+            self.__session.rollback()
 
     def save(self):
         """

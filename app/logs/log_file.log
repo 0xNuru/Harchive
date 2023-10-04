@@ -80,3 +80,18 @@
 2023 Jul 29  00:05:13.64 | user.py took 0:04:42.704009 to execute | INFO |  patient logged in !!
 2023 Jul 29  00:06:34.71 | user.py took 0:00:37.023880 to execute | INFO |  patient logged in !!
 2023 Jul 29  00:07:53.97 | user.py took 0:01:56.277732 to execute | INFO |  Hadmin logged in !!
+2023 Oct 3  02:20:04.36 | user.py took 0:00:07.413532 to execute | INFO | user with the name hamza has been created
+2023 Oct 3  02:42:29.83 | user.py took 0:00:21.167839 to execute | INFO | user with the name hamza has been created
+2023 Oct 3  02:56:48.67 | user.py took 0:00:09.251603 to execute | INFO | user with the name hamza has been created
+2023 Oct 3  02:58:27.08 | user.py took 0:00:08.727031 to execute | INFO | user with the name hamza has been created
+2023 Oct 3  02:59:22.97 | user.py took 0:01:04.619048 to execute | INFO | user with the name hamza has been created
+2023 Oct 3  03:00:09.77 | user.py took 0:00:14.708480 to execute | INFO | user with the name hamza has been created
+2023 Oct 3  04:04:02.37 | user.py took 0:00:10.887772 to execute | INFO | user with the name hamza has been created
+2023 Oct 3  04:04:49.72 | user.py took 0:00:07.094951 to execute | INFO | user with the name hamza has been created
+2023 Oct 3  04:18:07.00 | user.py took 0:00:15.512317 to execute | INFO | user with the name hamza has been created
+2023 Oct 3  04:31:06.36 | user.py took 0:01:42.042385 to execute | INFO | user with the name hamza has been created
+2023 Oct 3  04:42:44.98 | user.py took 0:00:12.152913 to execute | INFO | user with the name hamza has been created
+2023 Oct 3  04:43:50.00 | user.py took 0:00:07.433186 to execute | INFO | user with the name hamza has been created
+2023 Oct 3  04:51:53.98 | user.py took 0:01:23.791264 to execute | INFO | user with the name hamza has been created
+2023 Oct 4  06:58:52.27 | user.py took 0:00:30.566683 to execute | INFO |  hamza logged in !!
+2023 Oct 4  07:12:56.71 | user.py took 0:04:32.915834 to execute | INFO |  hamza logged in !!

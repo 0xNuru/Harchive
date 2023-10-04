@@ -4,9 +4,8 @@ user module
 """
 
 from sqlalchemy.orm import relationship
-from sqlalchemy import Column, Integer, String, Enum, CheckConstraint
+from sqlalchemy import Column, String, Boolean
 from models.base_model import BaseModel, Base
-from sympy import chebyshevt
 import sys
 sys.path.insert(0, '..')
 
@@ -20,4 +19,5 @@ class Users(BaseModel, Base):
     phone: str = Column(String(60), unique=True, nullable=False)
     email = Column(String(128), unique=True, nullable=False)
     password_hash = Column(String(128), nullable=False)
-    role = Column(String(50), nullable=False)
+    role = Column(String(50), nullable=True)
+    is_verified = Column(Boolean, nullable=True)

@@ -26,7 +26,7 @@ class User(BaseModel):
             raise ValueError("The two passwords did not match.")
         if not re.match(password_regex, confirm_password):
             raise ValueError(
-                "Password length must atleast be 8 and contains alphabets ,number with a spectial character")
+                "Password length must atleast be 8 and contain alphabets, number and atleast a spectial character")
         return values
 
 
@@ -35,6 +35,7 @@ class ShowUser(BaseModel):
     name: str
     email: str
     role: str
+    message: str
 
     class Config():
         orm_mode = True
@@ -43,3 +44,21 @@ class ShowUser(BaseModel):
 class UserLogin(BaseModel):
     email: str
     password: SecretStr
+
+class forgotPassword(BaseModel):
+    email: EmailStr
+
+class resetPassword(BaseModel):
+    rPassword1: SecretStr
+    rPassword2: SecretStr
+
+    @root_validator()
+    def verify_password_match(cls, values):
+        password = values.get("rPassword1").get_secret_value()
+        confirm_password = values.get("rPassword2").get_secret_value()
+        if password != confirm_password:
+            raise ValueError("The two passwords did not match.")
+        if not re.match(password_regex, confirm_password):
+            raise ValueError(
+                "Password length must atleast be 8 and contain alphabets, number and atleast a spectial character")
+        return values
