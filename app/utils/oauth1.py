@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-
 from fastapi import Request
 from fastapi.responses import RedirectResponse
 from jwt.exceptions import ExpiredSignatureError
@@ -11,6 +10,7 @@ import sys
 
 sys.path.insert(0, '..')
 from config.config import settings
+
 
 class Settings(BaseModel):
     """
@@ -30,8 +30,6 @@ class Settings(BaseModel):
     authjwt_cookie_csrf_protect: bool = False
 
     authjwt_secret_key: str = settings.jwt_secret_key
-    
-
 
 @AuthJWT.load_config
 def get_config():

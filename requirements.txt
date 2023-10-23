@@ -18,13 +18,14 @@ psycopg2-binary
 #for loading environment variables  
 python-dotenv
 
-#gunicorn
-# uvloop
 uvicorn
 gunicorn
 
-#jwt Authentication modules
+# email
+fastapi-mail
+itsdangerous
 
+#jwt Authentication modules
 python-jose[cryptography]
 
 passlib[bcrypt] 
@@ -41,13 +42,12 @@ sympy
 
 # alembic
 alembic
-
 pipenv
 
 # cloud authenticator
 cloud-sql-python-connector[pg8000]
-
-
 gunicorn
-
 google
+
+# google auth
+authlib
