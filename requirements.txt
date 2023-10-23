@@ -51,3 +51,5 @@ google
 
 # google auth
 authlib
+
+httpx
