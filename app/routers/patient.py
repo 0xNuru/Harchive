@@ -39,10 +39,10 @@ def create_patient(request: patientSchema.Patient, db: Session = Depends(load)):
         userModel.Users.email == email).first()
     if checkPhone:
         raise HTTPException(status_code=status.HTTP_409_CONFLICT,
-                            detail=f"user with phone: {phone} exists")
+                            detail=[{"msg":f"user with phone: {phone} exists"}])
     if checkEmail:
         raise HTTPException(status_code=status.HTTP_409_CONFLICT,
-                            detail=f"user with email: {email} exists")
+                            detail=f[{"msg":"user with email: {email} exists"}])
 
     passwd_hash = auth.get_password_hash(request.password2.get_secret_value())
 
@@ -70,7 +70,7 @@ def show(email: EmailStr, db: Session = Depends(load), user_data: get_current_us
         patientModel.Patient.email == email).first()
     if not patient:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
-                            detail=f"patient with the email {email} not found")
+                            detail=[{"msg":f"patient with the email {email} not found"}])
     return patient
 
 
@@ -84,7 +84,7 @@ def create_patient_record(request: patientSchema.PatientRecord, user_data: get_c
         recordModel.Record.patient == id).first()
     if check:
         raise HTTPException(status_code=status.HTTP_409_CONFLICT,
-                            detail=f"record for this patient exists")
+                            detail=[{"msg":f"record for this patient exists"}])
 
     new_record = recordModel.Record(type=request.type, patient=id, DOB=request.DOB,
                                     BloodType=request.BloodType, Height=request.Height, weight=request.weight,
@@ -110,13 +110,13 @@ def show(nin: int, user_data: get_current_user = Depends(), db: Session = Depend
         patientModel.Patient.nin == nin).first()
     if not patient:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
-                            detail=f"patient with the nin {nin} not found")
+                            detail=[{"msg":f"patient with the nin {nin} not found"}])
     id = patient.id
     record = db.query_eng(recordModel.Record).filter(
         recordModel.Record.patient == id).first()
     if not record:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
-                            detail=f"patient with the nin {nin} does not have a record")
+                            detail=[{"msg":f"patient with the nin {nin} does not have a record"}])
     return record
 
 
@@ -129,13 +129,13 @@ def update_admin(nin: int, request: patientSchema.PatientRecord, user_data: get_
 
     if not patient:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
-                            detail=f"patient with nin: {nin} not found")
+                            detail=[{"msg":f"patient with nin: {nin} not found"}])
     id = patient.id
     record = db.query_eng(recordModel.Record).filter(
         recordModel.Record.patient == id).first()
     if not record:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
-                            detail=f"patient with the nin {nin} does not have a record")
+                            detail=[{"msg":f"patient with the nin {nin} does not have a record"}])
     record.type = request.type,
     record.patient = id,
     record.DOB = request.DOB,
@@ -163,7 +163,7 @@ def create_patient_medication(nin: int, request: patientSchema.Medication, user_
         hospitalModel.Doctors.id == id).first()
     if not patient:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
-                            detail=f"patient with the nin {nin} not found")
+                            detail=[{"msg":f"patient with the nin {nin} not found"}])
 
     new_medication = patientModel.Medication(medication_name=request.medication_name, patient=patient.id, hospitalID=doctor.hospitalID, dosage=request.dosage,
                                              doctor_id=id, start_date=request.start_date, due_date=request.due_date,
@@ -185,7 +185,7 @@ def create_patient_allergy(nin: int, request: patientSchema.Allergy, user_data: 
         hospitalModel.Doctors.id == id).first()
     if not patient:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
-                            detail=f"patient with the nin {nin} not found")
+                            detail=[{"msg":f"patient with the nin {nin} not found"}])
 
     new_allergy = patientModel.Allergy(allergy_name=request.allergy_name, patient=patient.id, hospitalID=doctor.hospitalID, reactions=request.reactions,
                                        doctor_id=id, more_info=request.more_info, type=request.type, doctor_name=user_data["username"])
@@ -206,7 +206,7 @@ def create_patient_immunization(nin: int, request: patientSchema.Immunization, u
         hospitalModel.Doctors.id == id).first()
     if not patient:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
-                            detail=f"patient with the nin {nin} not found")
+                            detail=[{"msg":f"patient with the nin {nin} not found"}])
 
     new_immunization = patientModel.Immunization(patient=patient.id, name=request.name, hospitalID=doctor.hospitalID, immunization_date=request.immunization_date,
                                                  doctor_id=id, more_info=request.more_info, expiry_date=request.expiry_date, lot_number=request.lot_number, immunization_location=request.immunization_location, doctor_name=user_data["username"])
@@ -227,7 +227,7 @@ def create_patient_transaction(nin: int, request: patientSchema.Transaction, use
         hospitalModel.Doctors.id == id).first()
     if not patient:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
-                            detail=f"patient with the nin {nin} not found")
+                            detail=[{"msg":f"patient with the nin {nin} not found"}])
 
     new_transaction = patientModel.Transactions(patient=patient.id, hospitalID=doctor.hospitalID, doctor_id=id,
                                                 doctor_name=user_data["username"], description=request.description, quantity=request.quantity)

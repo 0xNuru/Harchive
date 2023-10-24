@@ -98,3 +98,10 @@
 2023 Oct 4  11:23:59.56 | user.py took 0:00:02.044204 to execute | INFO |  hamza logged in !!
 2023 Oct 23  19:01:08.19 | user.py took 0:36:04.688678 to execute | INFO | user with the name nurudeen has been created
 2023 Oct 23  19:02:02.69 | user.py took 0:36:59.193303 to execute | INFO |  nurudeen logged in !!
+2023 Oct 23  20:25:36.48 | user.py took 0:03:02.984246 to execute | INFO | user with the name string has been created
+2023 Oct 23  21:05:08.59 | user.py took 0:03:46.881755 to execute | INFO |  nurudeen logged in !!
+2023 Oct 23  21:05:58.96 | user.py took 0:04:37.249035 to execute | INFO |  nurudeen logged in !!
+2023 Oct 23  21:08:22.69 | user.py took 0:07:00.984061 to execute | INFO |  nurudeen logged in !!
+2023 Oct 23  21:39:08.98 | user.py took 0:37:47.273759 to execute | INFO | user with the name saeed has been created
+2023 Oct 23  21:43:25.04 | user.py took 0:42:03.333687 to execute | INFO |  saeed logged in !!
+2023 Oct 23  21:48:14.17 | user.py took 0:46:52.463289 to execute | INFO |  saeed logged in !!
