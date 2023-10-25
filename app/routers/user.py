@@ -264,7 +264,6 @@ async def auth_google_login(request: Request,
     refresh_token = auth.refresh_token(data)
 
     # save tokens in the cookies
-    print(access_token, refresh_token)
     logger.info(f" {check.name} logged in !!")
 
 
@@ -347,7 +346,7 @@ async def login(response: Response, request: userSchema.UserLogin = Depends(),
     access_token = auth.access_token(data)
     refresh_token = auth.refresh_token(data)
 
-    # save tokens in the cookies
+    # # save tokens in the cookies
     # auth.set_access_cookies(access_token, response)
     # auth.set_refresh_cookies(refresh_token, response)
     # logger.info(f" {check.name} logged in !!")
