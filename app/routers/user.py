@@ -20,7 +20,7 @@ import sys
 from utils.email import Email, generateToken, verifyToken
 from jinja2 import Environment, select_autoescape, PackageLoader
 from utils.auth import oauth, OAuthError
-from utils import acl, time
+from utils import acl, utime
 
 sys.path.insert(0, '..')
 
@@ -196,8 +196,19 @@ def show(email, db: Session = Depends(load)):
     return users
 
 # login with google endpoint
-@router.route('/user/login_with_google')
+@router.get('/login_with_google')
 async def login(request: Request):
+    """_summary_: 
+                 Endpoint used to login a user using google account credentials
+                 To use this endpoint, copy the request link to your browser; this 
+                 is because it does not work directly from fastapi swagger!
+
+    Args:
+        request (Request): _description_
+
+    Returns:
+        _type_: _description_
+    """
     redirect_url = request.url_for('auth_google_login')
     return await oauth.google.authorize_redirect(request, redirect_url)
 
@@ -209,7 +220,6 @@ async def auth_google_login(request: Request,
                   Endpoint where google redirects the user to after authentication
                   from google ends, input parameters are token used to get userinfo.
                   Won't work from fastapi swagger openai.json interface
-
     Args:
         request (Request): _description_
         db (Session, optional): _description_. Defaults to Depends(load).
@@ -272,9 +282,9 @@ async def auth_google_login(request: Request,
 
 # login endpoint
 @router.post('/login', status_code=status.HTTP_200_OK)
-def login(response: Response, request: userSchema.UserLogin = Depends(),
+async def login(response: Response, request: userSchema.UserLogin = Depends(),
           Authorize: AuthJWT = Depends(), db: Session = Depends(load)):
-    duration = 3 # current timeout duration is 3 minutes
+    duration = 0.1 # current timeout duration is 3 minutes
     tryalls = 3 # current maximum retry is 3 times
     email = request.email
     password = request.password._secret_value
@@ -285,30 +295,34 @@ def login(response: Response, request: userSchema.UserLogin = Depends(),
     if not check:
         raise HTTPException(status_code=status.HTTP_409_CONFLICT,
                             detail=f"Incorrect Username or Password")
+
+    
+    if check.is_suspended and not utime.compare_time(check.suspended_at, duration):
+        # get the remaining time left
+        minute, secs = utime.getRemain_time(check.suspended_at, duration)
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
+                            detail=f"Maximum login limit reached, try again in {minute} min {secs} secs")
     
     # check if user is currently suspended 
-    # current timeout value: 3 minutes
+    # And compare the duration of suspension
 
-    if check.is_suspended and time.compare_time(check.suspended_at, duration):
+    if check.is_suspended and utime.compare_time(check.suspended_at, duration):
         acl.reset_user_state(email) # reset user state if timeout is reached
-    
-    if check.is_suspended and not time.compare_time(check.suspended_at, duration):
-        # get the remaining time left
-        remain_time = duration - time.getRemain_time(check.suspended_at)
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
-                            detail=f"Maximum login limit reached try again in {remain_time} minutes")
 
     patient = db.query_eng(patientModel.Patient).filter(
         patientModel.Patient.id == check.id).first()
 
     if not auth.verify_password(password, check.password_hash):
-        # start jail login features
+
+        # initiate jail login 
+
         acl.update_max_trys(email, tryalls)
         remain_tryalls = tryalls - check.failed_login_attempts
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
                             detail=f'Incorrect Username or Password, {remain_tryalls} trys remainning')
+    
 
-    # reset max login retry after succesful login
+    # reset max login retry after succesfull login
     if  check.failed_login_attempts is not None or check.failed_login_attempts > 0 :
         acl.reset_user_state(email)
     
@@ -348,7 +362,10 @@ def login(response: Response, request: userSchema.UserLogin = Depends(),
         })
 
 @router.get('/refresh')
-async def refresh(request: Request, response: Response, Authorize: AuthJWT = Depends(), db: Session = Depends(load)):
+async def refresh(request: Request,
+                  response: Response,
+                  Authorize: AuthJWT = Depends(),
+                  db: Session = Depends(load)):
 
     try:
 
@@ -370,7 +387,12 @@ async def refresh(request: Request, response: Response, Authorize: AuthJWT = Dep
         error = e.__class__.__name__
         if error == 'MissingTokenError':
             redirect_url = request.url_for('login')
-            return JSONResponse(content={"redirect_url": redirect_url, "redirect": True}, status_code=307)
+            
+            return JSONResponse(content={
+                "redirect_url": redirect_url,
+                "redirect": True
+                }, status_code=307)
+        
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST, detail=error)
 
