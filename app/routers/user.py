@@ -47,10 +47,10 @@ async def create_user(request: userSchema.User, req: Request, db: Session = Depe
         userModel.Users.email == email).first()
     if checkPhone:
         raise HTTPException(status_code=status.HTTP_409_CONFLICT,
-                            detail=f"user with phone: {phone} exists")
+                            detail=[{"msg":f"user with phone: {phone} exists"}])
     if checkEmail:
         raise HTTPException(status_code=status.HTTP_409_CONFLICT,
-                            detail=f"user with email: {email} exists")
+                            detail=[{"msg":f"user with email: {email} exists"}])
     try:
         token = generateToken(email)
         token_url =  f"{req.url.scheme}://{req.client.host}:{req.url.port}/user/verifyemail/{token}"
@@ -59,7 +59,7 @@ async def create_user(request: userSchema.User, req: Request, db: Session = Depe
     except Exception as error:
         print(error)
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-                            detail='There was an error sending email, please check your email address!')
+                            detail=[{'msg':'There was an error sending email, please check your email address!'}])
     del request.password1
     passwd_hash = auth.get_password_hash(request.password2.get_secret_value())
 
@@ -93,7 +93,7 @@ def verify_token(token: str, db: Session = Depends(load)):
 
     if not result:
         raise HTTPException(status_code=status.HTTP_406_NOT_ACCEPTABLE,
-                            detail= "Token for Email Verification has expired.")
+                            detail=[{"msg":"Token for Email Verification has expired."}])
     else:
         email = result['email']
         user_model = db.query_eng(userModel.Users).filter(
@@ -119,7 +119,7 @@ async def forgot_password(request: userSchema.forgotPassword,
 
     if not user_check:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
-                            detail=f"user with email: {email} does not exists")
+                            detail=[{"msg":f"user with email: {email} does not exists"}])
     try:
         token = generateToken(email)
         token_url =  f"{req.url.scheme}://{req.client.host}:{req.url.port}/user/reset_password/{token}"
@@ -127,7 +127,7 @@ async def forgot_password(request: userSchema.forgotPassword,
 
     except Exception as error:
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-                            detail='There was an error sending email, please check your email address!')
+                            detail=[{'msg':'There was an error sending email, please check your email address!'}])
     return {
         "status": "success",
         "message": "Recovery Email sent successfully"
@@ -141,7 +141,7 @@ def reset_password(token: str, req: Request, db: Session = Depends(load)):
 
     if not result:
         raise HTTPException(status_code=status.HTTP_406_NOT_ACCEPTABLE,
-                            detail= "Token for Email Verification has expired.")
+                            detail=[{"msg":"Token for Email Verification has expired."}])
 
     template = env.get_template(f'reset_password_markup.html')
 
@@ -160,7 +160,7 @@ def reset_password(request: userSchema.resetPassword, token: str, db: Session = 
 
     if not result:
         raise HTTPException(status_code=status.HTTP_406_NOT_ACCEPTABLE,
-                            detail= "Token for Email Verification has expired.")
+                            detail=[{"msg":"Token for Email Verification has expired."}])
     else:
         email = result['email']
         user_model = db.query_eng(userModel.Users).filter(
@@ -192,7 +192,7 @@ def show(email, db: Session = Depends(load)):
         userModel.Users.email == email).first()
     if not users:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
-                            detail=f"user with the email {email} not found")
+                            detail=[{"msg":f"user with the email {email} not found"}])
     return users
 
 # login with google endpoint
@@ -243,7 +243,7 @@ async def auth_google_login(request: Request,
 
     if not check:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
-                            detail=f"User not registered, please create an account")
+                            detail=[{"msg":f"User not registered, please create an account"}])
         
     patient = db.query_eng(patientModel.Patient).filter(
         patientModel.Patient.id == check.id).first()
@@ -294,20 +294,25 @@ async def login(response: Response, request: userSchema.UserLogin = Depends(),
 
     if not check:
         raise HTTPException(status_code=status.HTTP_409_CONFLICT,
-                            detail=f"Incorrect Username or Password")
+                            detail=[{"msg":f"Incorrect Username or Password"}])
+    
+    # check if user is currently suspended 
+    # current timeout value: 3 minutes
+
 
     
     if check.is_suspended and not utime.compare_time(check.suspended_at, duration):
         # get the remaining time left
         minute, secs = utime.getRemain_time(check.suspended_at, duration)
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
-                            detail=f"Maximum login limit reached, try again in {minute} min {secs} secs")
-    
+                            detail=[{"msg":f"Maximum login limit reached try again in {remain_time} minutes"}])
+
     # check if user is currently suspended 
     # And compare the duration of suspension
 
     if check.is_suspended and utime.compare_time(check.suspended_at, duration):
         acl.reset_user_state(email) # reset user state if timeout is reached
+                            
 
     patient = db.query_eng(patientModel.Patient).filter(
         patientModel.Patient.id == check.id).first()
@@ -319,8 +324,7 @@ async def login(response: Response, request: userSchema.UserLogin = Depends(),
         acl.update_max_trys(email, tryalls)
         remain_tryalls = tryalls - check.failed_login_attempts
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
-                            detail=f'Incorrect Username or Password, {remain_tryalls} trys remainning')
-    
+                            detail=[{'msg':f'Incorrect Username or Password, {remain_tryalls} trys remainning'}])
 
     # reset max login retry after succesfull login
     if  check.failed_login_attempts is not None or check.failed_login_attempts > 0 :
@@ -328,7 +332,7 @@ async def login(response: Response, request: userSchema.UserLogin = Depends(),
     
     if not check.is_verified:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
-                            detail='User not verified, please verify your email to continue')
+                            detail=[{'msg':'User not verified, please verify your email to continue'}])
 
     data = {
         'username': check.name,
@@ -375,14 +379,14 @@ async def refresh(request: Request,
 
         if not user_email:
             raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
-                                detail='Could not refresh access token')
+                                detail=[{'msg':'Could not refresh access token'}])
 
         check = db.query_eng(userModel.Users).filter(
             userModel.Users.email == user_email).first()
 
         if not check:
             raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
-                                detail='The user belonging to this token no logger exist')
+                                detail=[{'msg':'The user belonging to this token no logger exist'}])
     except Exception as e:
         error = e.__class__.__name__
         if error == 'MissingTokenError':

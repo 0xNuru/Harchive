@@ -96,16 +96,22 @@
 2023 Oct 4  06:58:52.27 | user.py took 0:00:30.566683 to execute | INFO |  hamza logged in !!
 2023 Oct 4  07:12:56.71 | user.py took 0:04:32.915834 to execute | INFO |  hamza logged in !!
 2023 Oct 4  11:23:59.56 | user.py took 0:00:02.044204 to execute | INFO |  hamza logged in !!
-2023 Oct 24  22:52:06.46 | user.py took 0:04:34.595181 to execute | INFO |  hamza logged in !!
-2023 Oct 24  22:56:29.92 | user.py took 0:00:03.590938 to execute | INFO |  hamza logged in !!
-2023 Oct 24  23:29:18.61 | user.py took 0:02:37.914752 to execute | INFO |  hamza logged in !!
-2023 Oct 24  23:57:39.12 | user.py took 0:00:13.772134 to execute | INFO |  hamza logged in !!
-2023 Oct 25  01:46:30.38 | user.py took 0:01:26.120467 to execute | INFO |  hamza logged in !!
-2023 Oct 25  01:46:38.51 | user.py took 0:01:34.245251 to execute | INFO |  hamza logged in !!
-2023 Oct 25  01:46:39.90 | user.py took 0:01:35.638039 to execute | INFO |  hamza logged in !!
-2023 Oct 25  01:46:52.56 | user.py took 0:01:48.297915 to execute | INFO |  hamza logged in !!
-2023 Oct 25  01:46:55.74 | user.py took 0:01:51.474600 to execute | INFO |  hamza logged in !!
-2023 Oct 25  01:48:00.83 | user.py took 0:00:06.642086 to execute | INFO |  hamza logged in !!
-2023 Oct 25  01:48:07.61 | user.py took 0:00:13.427274 to execute | INFO |  hamza logged in !!
-2023 Oct 25  01:48:29.73 | user.py took 0:00:35.540219 to execute | INFO |  hamza logged in !!
-2023 Oct 25  01:48:41.28 | user.py took 0:00:47.090107 to execute | INFO |  hamza logged in !!
+2023 Oct 23  19:01:08.19 | user.py took 0:36:04.688678 to execute | INFO | user with the name nurudeen has been created
+2023 Oct 23  19:02:02.69 | user.py took 0:36:59.193303 to execute | INFO |  nurudeen logged in !!
+2023 Oct 23  20:25:36.48 | user.py took 0:03:02.984246 to execute | INFO | user with the name string has been created
+2023 Oct 23  21:05:08.59 | user.py took 0:03:46.881755 to execute | INFO |  nurudeen logged in !!
+2023 Oct 23  21:05:58.96 | user.py took 0:04:37.249035 to execute | INFO |  nurudeen logged in !!
+2023 Oct 23  21:08:22.69 | user.py took 0:07:00.984061 to execute | INFO |  nurudeen logged in !!
+2023 Oct 23  21:39:08.98 | user.py took 0:37:47.273759 to execute | INFO | user with the name saeed has been created
+2023 Oct 23  21:43:25.04 | user.py took 0:42:03.333687 to execute | INFO |  saeed logged in !!
+2023 Oct 23  21:48:14.17 | user.py took 0:46:52.463289 to execute | INFO |  saeed logged in !!
+2023 Oct 24  11:08:59.42 | user.py took 0:05:42.409357 to execute | INFO | user with the name nurudeen has been created
+2023 Oct 24  11:10:03.63 | user.py took 0:06:46.626409 to execute | INFO |  nurudeen logged in !!
+2023 Oct 24  11:16:52.04 | user.py took 0:13:35.030633 to execute | INFO |  nurudeen logged in !!
+2023 Oct 24  11:22:13.18 | user.py took 0:18:56.168728 to execute | INFO | user with the email nurudeenmyself@gmail.com  queried all users
+2023 Oct 24  11:22:32.83 | user.py took 0:19:15.823325 to execute | INFO | user with the email nurudeenmyself@gmail.com  queried all users
+2023 Oct 24  11:29:05.89 | user.py took 0:00:03.720243 to execute | INFO | user with the email nurudeenmyself@gmail.com  queried all users
+2023 Oct 24  11:29:11.11 | user.py took 0:00:08.943578 to execute | INFO | user with the email nurudeenmyself@gmail.com  queried all users
+2023 Oct 24  22:15:26.07 | user.py took 0:00:33.359638 to execute | INFO |  nurudeen logged in !!
+2023 Oct 24  22:20:08.43 | user.py took 0:05:15.724291 to execute | INFO |  saeed logged in !!
+2023 Oct 24  22:26:38.87 | user.py took 0:01:40.271061 to execute | INFO | user with the email nurudeenmyself@yahoo.com  queried all users
