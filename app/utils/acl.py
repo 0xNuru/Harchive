@@ -7,9 +7,12 @@ from datetime import datetime
 from typing import List
 from engine.loadb import load
 from fastapi import HTTPException
-from models import user as userModel
+import models as userModel
+# from models import user as userModel
 from pydantic import EmailStr
 from starlette import status
+
+modelUser = userModel.user
 
 
 def check_role(roles: List[str], user_id: str) -> None:
@@ -58,8 +61,8 @@ def change_user_state(email: EmailStr,
     db_gen = load()
     db = next(db_gen)
 
-    user = db.query_eng(userModel.Users).filter(
-        userModel.Users.email == email).first()
+    user = db.query_eng(modelUser.Users).filter(
+        modelUser.Users.email == email).first()
 
     # Update columns based on suspend value
 
@@ -80,8 +83,8 @@ def update_max_trys(email: EmailStr, tryalls: int) -> None:
     db_gen = load()
     db = next(db_gen)
 
-    user = db.query_eng(userModel.Users).filter(
-        userModel.Users.email == email).first()
+    user = db.query_eng(modelUser.Users).filter(
+        modelUser.Users.email == email).first()
 
     if user.failed_login_attempts == None:
         user.failed_login_attempts = 0
@@ -106,5 +109,4 @@ def update_max_trys(email: EmailStr, tryalls: int) -> None:
 def reset_user_state(email: EmailStr) -> None:
 
     # unsuspend the user
-
     change_user_state(email, suspended_at=None, suspend=False)

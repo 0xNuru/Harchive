@@ -125,3 +125,5 @@
 2023 Oct 25  11:06:45.89 | user.py took 0:00:04.275362 to execute | INFO | user with the email hamzasaidu34@gmail.com  queried all users
 2023 Oct 25  11:08:40.56 | user.py took 0:00:03.664479 to execute | INFO | user with the email hamzasaidu34@gmail.com  queried all users
 2023 Oct 25  11:12:46.61 | user.py took 0:00:04.783553 to execute | INFO |  hamza logged in !!
+2023 Oct 25  11:54:19.00 | user.py took 0:00:08.014947 to execute | INFO |  hamza logged in !!
+2023 Oct 25  11:54:28.39 | user.py took 0:00:17.405830 to execute | INFO | user with the email hamzasaidu34@gmail.com  queried all users
