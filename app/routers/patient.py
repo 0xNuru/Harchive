@@ -42,7 +42,7 @@ def create_patient(request: patientSchema.Patient, db: Session = Depends(load)):
                             detail=[{"msg":f"user with phone: {phone} exists"}])
     if checkEmail:
         raise HTTPException(status_code=status.HTTP_409_CONFLICT,
-                            detail=f[{"msg":"user with email: {email} exists"}])
+                            detail=[{"msg":f"user with email: {email} exists"}])
 
     passwd_hash = auth.get_password_hash(request.password2.get_secret_value())
 
