@@ -7,10 +7,7 @@ from datetime import datetime
 from typing import List
 from engine.loadb import load
 from fastapi import HTTPException
-import models as userModel
-from models import patient
-from models import hospital
-from models import insurance
+from models import user as userModel
 from pydantic import EmailStr
 from starlette import status
 
@@ -23,7 +20,7 @@ def check_role(roles: List[str], user_id: str) -> None:
             returns None if succed
     """
     model = {'patient': ['patient', 'Patient'], 'insurance_admin': ['insurance', 'InAdmin'],
-             'hospital_admin': ['hospital', 'Admin'], 'doctor': ['hospital', 'Doctors'], 'superuser':['user', 'Users']}
+             'hospital_admin': ['hospital', 'Admin'], 'doctor': ['hospital', 'Doctors']}
 
     db_gen = load()
     db = next(db_gen)
