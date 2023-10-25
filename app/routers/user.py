@@ -56,8 +56,7 @@ async def create_user(request: userSchema.User, req: Request, db: Session = Depe
         token_url =  f"{req.url.scheme}://{req.client.host}:{req.url.port}/user/verifyemail/{token}"
         await Email(request.name, token_url, [email]).sendVerificationCode()
 
-    except Exception as error:
-        print(error)
+    except Exception:
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                             detail=[{'msg':'There was an error sending email, please check your email address!'}])
     del request.password1
@@ -284,7 +283,7 @@ async def auth_google_login(request: Request,
 @router.post('/login', status_code=status.HTTP_200_OK)
 async def login(response: Response, request: userSchema.UserLogin = Depends(),
           Authorize: AuthJWT = Depends(), db: Session = Depends(load)):
-    duration = 0.1 # current timeout duration is 3 minutes
+    duration = 3 # current timeout duration is 3 minutes
     tryalls = 3 # current maximum retry is 3 times
     email = request.email
     password = request.password._secret_value
@@ -298,14 +297,12 @@ async def login(response: Response, request: userSchema.UserLogin = Depends(),
     
     # check if user is currently suspended 
     # current timeout value: 3 minutes
-
-
     
     if check.is_suspended and not utime.compare_time(check.suspended_at, duration):
         # get the remaining time left
         minute, secs = utime.getRemain_time(check.suspended_at, duration)
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
-                            detail=[{"msg":f"Maximum login limit reached try again in {remain_time} minutes"}])
+                            detail=[{"msg":f"Maximum login limit reached, try again in {minute} min {secs} secs"}])
 
     # check if user is currently suspended 
     # And compare the duration of suspension
@@ -351,9 +348,11 @@ async def login(response: Response, request: userSchema.UserLogin = Depends(),
     refresh_token = auth.refresh_token(data)
 
     # save tokens in the cookies
-    auth.set_access_cookies(access_token, response)
-    auth.set_refresh_cookies(refresh_token, response)
-    logger.info(f" {check.name} logged in !!")
+    # auth.set_access_cookies(access_token, response)
+    # auth.set_refresh_cookies(refresh_token, response)
+    # logger.info(f" {check.name} logged in !!")
+
+    # return "Login successfull !!"
     
     
     return JSONResponse({
