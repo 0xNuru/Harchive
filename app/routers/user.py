@@ -67,8 +67,7 @@ async def create_user(request: userSchema.User, http_request: Request, db: Sessi
     db.save()
 
 
-    return {"name": request.name, "email": email, "role": new_user.role, "message": "Verification\
-            email sent successfully"}
+    return {"name": request.name, "email": email, "role": new_user.role, "message": "Verification email sent successfully"}
 
 
 
@@ -88,4 +87,3 @@ def show(email, db: Session = Depends(load)):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail=[{"msg":f"user with the email {email} not found"}])
     return users
-
