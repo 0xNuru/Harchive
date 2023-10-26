@@ -71,8 +71,7 @@ async def create_user(request: userSchema.User, req: Request, db: Session = Depe
     db.save()
 
 
-    return {"name": request.name, "email": email, "role": new_user.role, "message": "Verification\
-            email sent successfully"}
+    return {"name": request.name, "email": email, "role": new_user.role, "message": "Verification email sent successfully"}
 
 @router.get('/verifyemail/{token}')
 def verify_token(token: str, db: Session = Depends(load)):
@@ -195,7 +194,7 @@ def show(email, db: Session = Depends(load)):
     return users
 
 # login with google endpoint
-@router.get('/login_with_google')
+@router.route('/user/login_with_google')
 async def login(request: Request):
     """_summary_: 
                  Endpoint used to login a user using google account credentials
