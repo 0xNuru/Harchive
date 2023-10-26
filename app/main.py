@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-from routers import user, insurance, hospital, patient
+from routers import user, insurance, hospital, patient, auth
 from config.config import settings
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi import FastAPI
@@ -24,6 +24,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+app.include_router(auth.router)
 app.include_router(user.router)
 app.include_router(insurance.router)
 app.include_router(hospital.router)
