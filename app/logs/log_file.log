@@ -129,3 +129,4 @@
 2023 Oct 25  11:54:28.39 | user.py took 0:00:17.405830 to execute | INFO | user with the email hamzasaidu34@gmail.com  queried all users
 2023 Oct 26  14:49:22.24 | user.py took 0:02:30.359666 to execute | INFO | user with the name string has been created
 2023 Oct 26  15:06:44.81 | user.py took 0:00:05.244480 to execute | INFO |  hamza logged in !!
+2023 Oct 26  15:28:47.52 | user.py took 0:01:15.332514 to execute | INFO |  hamza logged in !!
