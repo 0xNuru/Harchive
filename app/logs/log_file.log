@@ -127,6 +127,16 @@
 2023 Oct 25  11:12:46.61 | user.py took 0:00:04.783553 to execute | INFO |  hamza logged in !!
 2023 Oct 25  11:54:19.00 | user.py took 0:00:08.014947 to execute | INFO |  hamza logged in !!
 2023 Oct 25  11:54:28.39 | user.py took 0:00:17.405830 to execute | INFO | user with the email hamzasaidu34@gmail.com  queried all users
-2023 Oct 26  14:49:22.24 | user.py took 0:02:30.359666 to execute | INFO | user with the name string has been created
-2023 Oct 26  15:06:44.81 | user.py took 0:00:05.244480 to execute | INFO |  hamza logged in !!
-2023 Oct 26  15:28:47.52 | user.py took 0:01:15.332514 to execute | INFO |  hamza logged in !!
+2023 Oct 25  17:54:51.38 | user.py took 0:13:17.267065 to execute | INFO | user with the email nurudeenmyself@yahoo.com  queried all users
+2023 Oct 25  17:56:18.21 | user.py took 0:14:44.089507 to execute | INFO |  nurudeen logged in !!
+2023 Oct 25  17:56:32.70 | user.py took 0:14:58.585529 to execute | INFO | user with the email nurudeenmyself@gmail.com  queried all users
+2023 Oct 25  18:00:10.72 | user.py took 0:18:36.604721 to execute | INFO | user with the email nurudeenmyself@gmail.com  queried all users
+2023 Oct 25  18:00:26.17 | user.py took 0:18:52.048634 to execute | INFO | user with the email nurudeenmyself@gmail.com  queried all users
+2023 Oct 25  18:57:19.65 | user.py took 0:01:15.141521 to execute | INFO | user with the name Ahmed has been created
+2023 Oct 25  19:11:58.40 | user.py took 0:00:17.339891 to execute | INFO | user with the name string has been created
+2023 Oct 25  19:22:59.65 | user.py took 0:00:14.583631 to execute | INFO | user with the name string has been created
+2023 Oct 25  20:04:35.13 | auth.py took 0:00:53.524035 to execute | INFO |  nurudeen logged in !!
+2023 Oct 25  20:04:46.18 | user.py took 0:01:04.571738 to execute | INFO | user with the email nurudeenmyself@gmail.com  queried all users
+2023 Oct 25  20:08:01.08 | user.py took 0:00:51.704972 to execute | INFO | user with the email nurudeenmyself@gmail.com  queried all users
+2023 Oct 25  20:19:41.63 | auth.py took 0:02:19.869353 to execute | INFO |  nurudeen logged in !!
+2023 Oct 25  20:20:06.66 | auth.py took 0:00:05.805886 to execute | INFO |  nurudeen logged in !!

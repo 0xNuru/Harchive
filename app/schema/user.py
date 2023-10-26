@@ -37,6 +37,7 @@ class ShowUser(BaseModel):
     role: str
     message: str
 
+
     class Config():
         orm_mode = True
 

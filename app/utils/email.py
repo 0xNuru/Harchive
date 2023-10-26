@@ -3,6 +3,8 @@
 #  written by Hamza <-cyberguru->
 #  Team Harchive
 
+from fastapi import HTTPException
+from starlette import status
 from config.config import settings
 from fastapi_mail import FastMail, MessageSchema, ConnectionConfig
 from itsdangerous import URLSafeTimedSerializer, BadTimeSignature, SignatureExpired
@@ -110,3 +112,14 @@ def verifyToken(token: str):
         return None
 
     return {'email':email, 'verified': True}
+
+async def verifyEmail(email, http_request, request):
+    try:
+        token = generateToken(email)
+        token_url =  f"{http_request.url.scheme}://{http_request.client.host}:{http_request.url.port}/user/verifyemail/{token}"
+        await Email(request.name, token_url, [email]).sendVerificationCode()
+
+    except Exception as e:
+        print(e)
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                            detail=[{'msg':'There was an error sending email, please check your email address!'}])
