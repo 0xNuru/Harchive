@@ -44,6 +44,7 @@ class ShowPatient(BaseModel):
     name: str
     email: str
     nin: str
+    message: str
 
     class Config():
         orm_mode = True

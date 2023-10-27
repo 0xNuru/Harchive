@@ -4,24 +4,20 @@
 
 
 from utils.logger import logger
-from utils.oauth1 import AuthJWT
 from utils import auth
 from typing import List
 from starlette import status
 from sqlalchemy.orm import Session
 from schema import user as userSchema
 from models import user as userModel
-from models import patient as patientModel
-from fastapi.responses import JSONResponse, RedirectResponse, HTMLResponse
-from fastapi import APIRouter, Depends, HTTPException, Response, Request
+from fastapi import APIRouter, Depends, HTTPException, Request
 from engine.loadb import load
 from dependencies.depends import get_current_user
+from utils.acl import check_role
 import sys
-from utils.email import Email, generateToken, verifyToken
-from jinja2 import Environment, select_autoescape, PackageLoader
-from utils.auth import oauth, OAuthError
-from utils import acl, utime
 from utils.email import verifyEmail
+from jinja2 import Environment, select_autoescape, PackageLoader
+
 
 sys.path.insert(0, '..')
 
@@ -40,7 +36,7 @@ env = Environment(
              status_code=status.HTTP_201_CREATED)
 async def create_user(request: userSchema.User, http_request: Request, db: Session = Depends(load)):
     phone = request.phone
-    email = request.email
+    email = request.email.lower()
 
     checkPhone = db.query_eng(userModel.Users).filter(
         userModel.Users.phone == phone).first()
@@ -60,30 +56,51 @@ async def create_user(request: userSchema.User, http_request: Request, db: Sessi
 
 
     new_user = userModel.Users(name=request.name, phone=request.phone,
-                               email=request.email, address=request.address,
+                               email=email, address=request.address,
                                password_hash=passwd_hash, role="superuser", is_verified=False)
     logger.info(f"user with the name {request.name} has been created")
     db.new(new_user)
     db.save()
 
-
-    return {"name": request.name, "email": email, "role": new_user.role, "message": "Verification email sent successfully"}
+    return {
+        "name": request.name,
+        "email": email,
+        "role": new_user.role,
+        "message": "Verification email sent successfully"}
 
 
 
 # protected route that requires login, uses the get_current_user func
-@router.get("/all", response_model=List[userSchema.ShowUser], status_code=status.HTTP_200_OK)
+@router.get("/all", status_code=status.HTTP_200_OK)
 def all(db: Session = Depends(load), user_data: get_current_user = Depends()):
+    roles = ["superuser"]
+    check_role(roles, user_data['user_id'])
     users = db.query_eng(userModel.Users).all()
     logger.info(f"user with the email {user_data['email']}  queried all users")
     return users
 
 
-@router.get("/email/{email}", response_model=userSchema.ShowUser, status_code=status.HTTP_200_OK)
-def show(email, db: Session = Depends(load)):
+@router.get("/email/{email}",
+            status_code=status.HTTP_200_OK)
+def show(email, db: Session = Depends(load), user_data=Depends(get_current_user)):
+    roles = ["superuser"]
+    check_role(roles, user_data['user_id'])
     users = db.query_eng(userModel.Users).filter(
-        userModel.Users.email == email).first()
+        userModel.Users.email == email.lower()).first()
     if not users:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail=[{"msg":f"user with the email {email} not found"}])
     return users
+
+@router.delete("/email/{email}", status_code=status.HTTP_204_NO_CONTENT)
+def delete_hospital_admin(email, db: Session = Depends(load), user_data=Depends(get_current_user)):
+    roles = ["superuser"]
+    check_role(roles, user_data['user_id'])
+    user = db.query_eng(userModel.Users).filter(
+        userModel.Users.email == email.lower()).first()
+    if not user:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail=[{"msg":f"User with email {email} not found"}])
+    db.delete(user)
+    db.save()
+    return {"msg": "Deleted!"}

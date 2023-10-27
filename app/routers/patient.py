@@ -11,12 +11,13 @@ from models import user as userModel
 from engine.loadb import load
 from schema import patient as patientSchema
 from schema.patient import ShowPatient
-from fastapi import APIRouter, Depends, status, HTTPException
+from fastapi import APIRouter, Depends, status, HTTPException, Request
 from dependencies.depends import get_current_user
 from utils.acl import check_role
 from loguru import logger
 import sys
 from pydantic import EmailStr
+from utils.email import verifyEmail
 
 sys.path.insert(0, '..')
 
@@ -29,9 +30,9 @@ router = APIRouter(
 
 @router.post("/register", response_model=patientSchema.ShowPatient,
              status_code=status.HTTP_201_CREATED)
-def create_patient(request: patientSchema.Patient, db: Session = Depends(load)):
+async def create_patient(request: patientSchema.Patient, http_request: Request, db: Session = Depends(load)):
     phone = request.phone
-    email = request.email
+    email = request.email.lower()
 
     checkPhone = db.query_eng(userModel.Users).filter(
         userModel.Users.phone == phone).first()
@@ -43,15 +44,21 @@ def create_patient(request: patientSchema.Patient, db: Session = Depends(load)):
     if checkEmail:
         raise HTTPException(status_code=status.HTTP_409_CONFLICT,
                             detail=[{"msg":f"user with email: {email} exists"}])
+    await verifyEmail(email, http_request, request)
 
     passwd_hash = auth.get_password_hash(request.password2.get_secret_value())
 
     new_patient = patientModel.Patient(name=request.name, phone=request.phone,
-                                       email=request.email, address=request.address, password_hash=passwd_hash,
+                                       email=email, address=request.address, password_hash=passwd_hash,
                                        insuranceID=request.insuranceID, dob=request.dob, gender=request.gender, nin=request.nin, role="patient")
     db.new(new_patient)
     db.save()
-    return new_patient
+
+    return {
+        "name": request.name,
+        "email": email,
+        "role": new_patient.role,
+        "message": "Verification email sent successfully"}
 
 
 @router.get("/all", response_model=List[ShowPatient], status_code=status.HTTP_200_OK)
@@ -67,7 +74,7 @@ def show(email: EmailStr, db: Session = Depends(load), user_data: get_current_us
     roles = ["hospital_admin", "doctor", "superuser"]
     check_role(roles, user_data['user_id'])
     patient = db.query_eng(patientModel.Patient).filter(
-        patientModel.Patient.email == email).first()
+        patientModel.Patient.email == email.lower()).first()
     if not patient:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail=[{"msg":f"patient with the email {email} not found"}])
@@ -165,9 +172,15 @@ def create_patient_medication(nin: int, request: patientSchema.Medication, user_
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail=[{"msg":f"patient with the nin {nin} not found"}])
 
-    new_medication = patientModel.Medication(medication_name=request.medication_name, patient=patient.id, hospitalID=doctor.hospitalID, dosage=request.dosage,
-                                             doctor_id=id, start_date=request.start_date, due_date=request.due_date,
-                                             reason=request.reason, doctor_name=user_data["username"])
+    new_medication = patientModel.Medication(medication_name=request.medication_name,
+                                             patient=patient.id,
+                                             hospitalID=doctor.hospitalID,
+                                             dosage=request.dosage,
+                                             doctor_id=id,
+                                             start_date=request.start_date,
+                                             due_date=request.due_date,
+                                             reason=request.reason,
+                                             doctor_name=user_data["username"])
     db.new(new_medication)
     db.save()
     return new_medication
@@ -187,8 +200,14 @@ def create_patient_allergy(nin: int, request: patientSchema.Allergy, user_data: 
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail=[{"msg":f"patient with the nin {nin} not found"}])
 
-    new_allergy = patientModel.Allergy(allergy_name=request.allergy_name, patient=patient.id, hospitalID=doctor.hospitalID, reactions=request.reactions,
-                                       doctor_id=id, more_info=request.more_info, type=request.type, doctor_name=user_data["username"])
+    new_allergy = patientModel.Allergy(allergy_name=request.allergy_name,
+                                       patient=patient.id,
+                                       hospitalID=doctor.hospitalID,
+                                       reactions=request.reactions,
+                                       doctor_id=id,
+                                       more_info=request.more_info,
+                                       type=request.type,
+                                       doctor_name=user_data["username"])
     db.new(new_allergy)
     db.save()
     return new_allergy
@@ -196,7 +215,10 @@ def create_patient_allergy(nin: int, request: patientSchema.Allergy, user_data: 
 
 @router.post("/immunization/add/{nin}", response_model=patientSchema.ShowImmunization,
              status_code=status.HTTP_201_CREATED)
-def create_patient_immunization(nin: int, request: patientSchema.Immunization, user_data: get_current_user = Depends(), db: Session = Depends(load)):
+def create_patient_immunization(nin: int,
+                                request: patientSchema.Immunization,
+                                user_data: get_current_user = Depends(),
+                                db: Session = Depends(load)):
     roles = ["patient", "doctor", "superuser"]
     check_role(roles, user_data['user_id'])
     id = user_data["user_id"]
@@ -208,8 +230,16 @@ def create_patient_immunization(nin: int, request: patientSchema.Immunization, u
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail=[{"msg":f"patient with the nin {nin} not found"}])
 
-    new_immunization = patientModel.Immunization(patient=patient.id, name=request.name, hospitalID=doctor.hospitalID, immunization_date=request.immunization_date,
-                                                 doctor_id=id, more_info=request.more_info, expiry_date=request.expiry_date, lot_number=request.lot_number, immunization_location=request.immunization_location, doctor_name=user_data["username"])
+    new_immunization = patientModel.Immunization(patient=patient.id,
+                                                 name=request.name,
+                                                 hospitalID=doctor.hospitalID,
+                                                 immunization_date=request.immunization_date,
+                                                 doctor_id=id,
+                                                 more_info=request.more_info,
+                                                 expiry_date=request.expiry_date,
+                                                 lot_number=request.lot_number,
+                                                 immunization_location=request.immunization_location,
+                                                 doctor_name=user_data["username"])
     db.new(new_immunization)
     db.save()
     return new_immunization
@@ -217,7 +247,10 @@ def create_patient_immunization(nin: int, request: patientSchema.Immunization, u
 
 @router.post("/transaction/add/{nin}", response_model=patientSchema.Transaction,
              status_code=status.HTTP_201_CREATED)
-def create_patient_transaction(nin: int, request: patientSchema.Transaction, user_data: get_current_user = Depends(), db: Session = Depends(load)):
+def create_patient_transaction(nin: int,
+                               request: patientSchema.Transaction,
+                               user_data: get_current_user = Depends(),
+                               db: Session = Depends(load)):
     roles = ["doctor", "superuser"]
     check_role(roles, user_data['user_id'])
     id = user_data["user_id"]
@@ -229,8 +262,12 @@ def create_patient_transaction(nin: int, request: patientSchema.Transaction, use
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail=[{"msg":f"patient with the nin {nin} not found"}])
 
-    new_transaction = patientModel.Transactions(patient=patient.id, hospitalID=doctor.hospitalID, doctor_id=id,
-                                                doctor_name=user_data["username"], description=request.description, quantity=request.quantity)
+    new_transaction = patientModel.Transactions(patient=patient.id,
+                                                hospitalID=doctor.hospitalID,
+                                                doctor_id=id,
+                                                doctor_name=user_data["username"],
+                                                description=request.description,
+                                                quantity=request.quantity)
     db.new(new_transaction)
     db.save()
     return new_transaction
