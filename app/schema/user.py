@@ -30,13 +30,22 @@ class User(BaseModel):
         return values
 
 
-class ShowUser(BaseModel):
+class ShowUserReg(BaseModel):
 
     name: str
     email: str
     role: str
     message: str
 
+
+    class Config():
+        orm_mode = True
+
+class ShowUser(BaseModel):
+
+    name: str
+    email: str
+    role: str
 
     class Config():
         orm_mode = True

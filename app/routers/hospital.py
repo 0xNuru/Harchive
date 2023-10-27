@@ -25,7 +25,7 @@ router = APIRouter(
 )
 
 
-@router.post("/admin/register", response_model=hospitalSchema.ShowHospital, status_code=status.HTTP_201_CREATED)
+@router.post("/admin/register", response_model=hospitalSchema.ShowHospitalReg, status_code=status.HTTP_201_CREATED)
 async def create_hospital_admin(request: hospitalSchema.HospitalAdmin, http_request: Request,
                           db: Session = Depends(load), user_data=Depends(get_current_user)):
     roles = ["superuser"]
@@ -51,7 +51,7 @@ async def create_hospital_admin(request: hospitalSchema.HospitalAdmin, http_requ
         raise HTTPException(status_code=status.HTTP_409_CONFLICT,
                             detail=[{"msg":f"hospital with hospital ID: {hospitalID} exists"}])
         
-    await verifyEmail(email, http_request, request)
+    message = await verifyEmail(email, http_request, request)
     passwd_hash = auth.get_password_hash(request.password2.get_secret_value())
 
     new_hospital_admin = hospitalModel.Admin(
@@ -68,7 +68,7 @@ async def create_hospital_admin(request: hospitalSchema.HospitalAdmin, http_requ
         "name": request.name,
         "email": email,
         "role": new_hospital_admin.role,
-        "message": "Verification email sent successfully"}
+        "message": message}
 
 
 @router.get("/admin/all", response_model=List[hospitalSchema.ShowHospital], status_code=status.HTTP_200_OK)
@@ -159,11 +159,10 @@ def show(hospitalID, db: Session = Depends(load), user_data=Depends(get_current_
     return hospital
 
 
-@router.post("/doctor/register", response_model=hospitalSchema.ShowDoctor,
+@router.post("/doctor/register", response_model=hospitalSchema.ShowDoctorReg,
              status_code=status.HTTP_201_CREATED)
-def create_doctor(request: hospitalSchema.Doctor,
-                  db: Session = Depends(load), 
-                  user_data=Depends(get_current_user)):
+async def create_doctor(request: hospitalSchema.Doctor, http_request: Request, db: Session = Depends(load), 
+                        user_data=Depends(get_current_user)):
     roles = ["hospital_admin", "superuser"]
     check_role(roles, user_data['user_id'])
     phone = request.phone
@@ -181,6 +180,8 @@ def create_doctor(request: hospitalSchema.Doctor,
         raise HTTPException(status_code=status.HTTP_409_CONFLICT,
                             detail=[{"msg":f"user with email: {email} exists"}])
 
+    message = await verifyEmail(email, http_request, request)
+
     passwd_hash = auth.get_password_hash(request.password2.get_secret_value())
 
     new_doctor = hospitalModel.Doctors(name=request.name,
@@ -194,7 +195,11 @@ def create_doctor(request: hospitalSchema.Doctor,
                                        role="doctor")
     db.new(new_doctor)
     db.save()
-    return new_doctor
+    return {
+        "name": new_doctor.name,
+        "email": new_doctor.email,
+        "role": new_doctor.role,
+        "message": message}
 
 
 @router.get("/doctor/all", response_model=List[hospitalSchema.ShowDoctor], status_code=status.HTTP_200_OK)

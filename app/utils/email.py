@@ -116,10 +116,12 @@ def verifyToken(token: str):
 async def verifyEmail(email, http_request, request):
     try:
         token = generateToken(email)
-        token_url =  f"{http_request.url.scheme}://{http_request.client.host}:{http_request.url.port}/user/verifyemail/{token}"
+        token_url =  f"{http_request.url.scheme}://{http_request.client.host}:{http_request.url.port}/auth/verifyemail/{token}"
         await Email(request.name, token_url, [email]).sendVerificationCode()
 
     except Exception as e:
         print(e)
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                             detail=[{'msg':'There was an error sending email, please check your email address!'}])
+    
+    return "Verification email sent successfully"

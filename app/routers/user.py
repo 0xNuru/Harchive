@@ -71,7 +71,7 @@ async def create_user(request: userSchema.User, http_request: Request, db: Sessi
 
 
 # protected route that requires login, uses the get_current_user func
-@router.get("/all", status_code=status.HTTP_200_OK)
+@router.get("/all", response_model=List[userSchema.ShowUser], status_code=status.HTTP_200_OK)
 def all(db: Session = Depends(load), user_data: get_current_user = Depends()):
     roles = ["superuser"]
     check_role(roles, user_data['user_id'])
