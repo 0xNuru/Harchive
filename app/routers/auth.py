@@ -349,10 +349,12 @@ async def refresh(request: Request,
     auth.set_access_cookies(access_token, response)
 
     return JSONResponse({
-        "status": "success",
-        "message": "refreshed successfully"
-        })  
-
+            "status": "success",
+            "message": "refreshed successfully!!",
+            "tokens": {
+                "access_token": access_token,
+                }
+            })
 
 @router.get('/logout', status_code=status.HTTP_200_OK)
 def logout(response: Response, Authorize: AuthJWT = Depends()):

@@ -48,9 +48,16 @@ async def create_patient(request: patientSchema.Patient, http_request: Request, 
 
     passwd_hash = auth.get_password_hash(request.password2.get_secret_value())
 
-    new_patient = patientModel.Patient(name=request.name, phone=request.phone,
-                                       email=email, address=request.address, password_hash=passwd_hash,
-                                       insuranceID=request.insuranceID, dob=request.dob, gender=request.gender, nin=request.nin, role="patient")
+    new_patient = patientModel.Patient(name=request.name,
+                                       phone=request.phone,
+                                       email=email, 
+                                       address=request.address,
+                                       password_hash=passwd_hash,
+                                       insuranceID=request.insuranceID,
+                                       dob=request.dob,
+                                       gender=request.gender,
+                                       nin=request.nin,
+                                       role="patient")
     db.new(new_patient)
     db.save()
 

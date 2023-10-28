@@ -91,7 +91,7 @@ def is_postgresql_up(db_url):
         connection.close()
         return True
 
-    except OperationalError:
+    except Exception:
         return False
         
 
@@ -121,7 +121,6 @@ class DBStorage:
             self.engine = create_engine(connection_str, pool_pre_ping=True)
         else:
             print("PostgreSQL is not running or the connection failed.")
-            exit()
 
         # SQLALCHEMY_DATABASE_URL = "postgresql+pg8000://"
 

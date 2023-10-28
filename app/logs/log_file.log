@@ -164,3 +164,9 @@
 2023 Oct 27  18:34:55.80 | user.py took 0:00:03.223380 to execute | INFO | user with the email nurudeenmyself@yahoo.com  queried all users
 2023 Oct 27  18:35:35.04 | user.py took 0:00:04.341057 to execute | INFO | user with the email nurudeenmyself@yahoo.com  queried all users
 2023 Oct 27  18:36:33.15 | user.py took 0:00:02.087652 to execute | INFO | user with the email nurudeenmyself@yahoo.com  queried all users
+2023 Oct 28  01:00:03.52 | auth.py took 0:01:58.001049 to execute | INFO |  hamza logged in !!
+2023 Oct 28  01:00:22.43 | user.py took 0:02:16.909208 to execute | INFO | user with the email hamzasaidu34@gmail.com  queried all users
+2023 Oct 28  01:08:18.09 | user.py took 0:10:12.569028 to execute | INFO | user with the name User_Hamza has been created
+2023 Oct 28  01:09:50.24 | auth.py took 0:11:44.720569 to execute | INFO |  User_Hamza logged in !!
+2023 Oct 28  01:09:57.25 | user.py took 0:11:51.725962 to execute | INFO | user with the email hamzasaidu34@gmail.com  queried all users
+2023 Oct 28  01:11:10.89 | user.py took 0:13:05.361631 to execute | INFO | user with the email hamzasaidu34@gmail.com  queried all users
