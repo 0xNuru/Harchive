@@ -28,7 +28,7 @@ router = APIRouter(
 )
 
 
-@router.post("/register", response_model=patientSchema.ShowPatient,
+@router.post("/register", response_model=patientSchema.ShowPatientReg,
              status_code=status.HTTP_201_CREATED)
 async def create_patient(request: patientSchema.Patient, http_request: Request, db: Session = Depends(load)):
     phone = request.phone
@@ -44,7 +44,7 @@ async def create_patient(request: patientSchema.Patient, http_request: Request, 
     if checkEmail:
         raise HTTPException(status_code=status.HTTP_409_CONFLICT,
                             detail=[{"msg":f"user with email: {email} exists"}])
-    await verifyEmail(email, http_request, request)
+    message = await verifyEmail(email, http_request, request)
 
     passwd_hash = auth.get_password_hash(request.password2.get_secret_value())
 
@@ -58,7 +58,7 @@ async def create_patient(request: patientSchema.Patient, http_request: Request, 
         "name": request.name,
         "email": email,
         "role": new_patient.role,
-        "message": "Verification email sent successfully"}
+        "message": message}
 
 
 @router.get("/all", response_model=List[ShowPatient], status_code=status.HTTP_200_OK)

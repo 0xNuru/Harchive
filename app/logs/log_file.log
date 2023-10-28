@@ -152,3 +152,15 @@
 2023 Oct 26  23:22:16.42 | user.py took 0:00:01.883887 to execute | INFO | user with the email hamzasaidu34@gmail.com  queried all users
 2023 Oct 26  23:23:08.86 | user.py took 0:00:54.324911 to execute | INFO | user with the email hamzasaidu34@gmail.com  queried all users
 2023 Oct 26  23:39:29.37 | user.py took 0:01:18.708474 to execute | INFO | user with the email hamzasaidu34@gmail.com  queried all users
+2023 Oct 27  16:41:25.75 | user.py took 0:03:31.843351 to execute | INFO | user with the name Superuser has been created
+2023 Oct 27  16:44:26.52 | user.py took 0:01:55.999593 to execute | INFO | user with the name Superuser has been created
+2023 Oct 27  16:52:07.35 | user.py took 0:02:50.753555 to execute | INFO | user with the name Superuser has been created
+2023 Oct 27  17:02:05.39 | user.py took 0:12:48.791843 to execute | INFO | user with the name Superuser has been created
+2023 Oct 27  17:03:36.80 | auth.py took 0:14:20.199515 to execute | INFO |  Superuser logged in !!
+2023 Oct 27  17:10:02.38 | auth.py took 0:00:51.492137 to execute | INFO |  Superuser logged in !!
+2023 Oct 27  18:18:34.84 | auth.py took 0:01:46.553118 to execute | INFO |  Patient logged in !!
+2023 Oct 27  18:31:11.18 | user.py took 0:00:18.090841 to execute | INFO | user with the email nurudeenmyself@yahoo.com  queried all users
+2023 Oct 27  18:33:02.26 | user.py took 0:00:05.550140 to execute | INFO | user with the email nurudeenmyself@yahoo.com  queried all users
+2023 Oct 27  18:34:55.80 | user.py took 0:00:03.223380 to execute | INFO | user with the email nurudeenmyself@yahoo.com  queried all users
+2023 Oct 27  18:35:35.04 | user.py took 0:00:04.341057 to execute | INFO | user with the email nurudeenmyself@yahoo.com  queried all users
+2023 Oct 27  18:36:33.15 | user.py took 0:00:02.087652 to execute | INFO | user with the email nurudeenmyself@yahoo.com  queried all users

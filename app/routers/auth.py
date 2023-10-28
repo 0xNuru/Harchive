@@ -224,7 +224,7 @@ async def login(response: Response, request: userSchema.UserLogin = Depends(),
           Authorize: AuthJWT = Depends(), db: Session = Depends(load)):
     duration = 3 # current timeout duration is 3 minutes
     tryalls = 3 # current maximum retry is 3 times
-    email = request.email
+    email = request.email.lower()
     password = request.password._secret_value
 
     check = db.query_eng(userModel.Users).filter(
