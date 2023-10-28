@@ -68,6 +68,7 @@ async def create_hospital_admin(request: hospitalSchema.HospitalAdmin, http_requ
         "name": request.name,
         "email": email,
         "role": new_hospital_admin.role,
+        "hospitalID": hospitalID,
         "message": message}
 
 
@@ -114,7 +115,10 @@ def create_hospital(request: hospitalSchema.Hospital,
     roles = ["hospital_admin", "superuser"]
     check_role(roles, user_data['user_id'])
     phone = request.phone
-    hospitalID = request.hospitalID.lower()
+    admin_id = user_data["user_id"]
+    admin = db.query_eng(hospitalModel.Admin).filter(
+        hospitalModel.Admin.id == admin_id).first()
+    hospitalID = admin.hospitalID
 
     checkPhone = db.query_eng(hospitalModel.Hospital).filter(
         hospitalModel.Hospital.phone == phone).first()
@@ -257,6 +261,11 @@ def check_in(request: hospitalSchema.CheckIn, db: Session = Depends(load), user_
     if checkPatient and checkHID:
         raise HTTPException(status_code=status.HTTP_409_CONFLICT,
                             detail=[{"msg":f"This patient is already checked into this hospital"}])
+    hospital = db.query_eng(hospitalModel.Hospital).filter(hospitalModel.Hospital.hospitalID == admin.hospitalID).first()
+    print(hospital)
+    if not hospital:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail=[{"msg":f"hospital with the hospital ID {admin.hospitalID} not found"}])
 
     new_check_in = hospitalModel.CheckIn(
         patient=patient.id, hospitalID=admin.hospitalID)
