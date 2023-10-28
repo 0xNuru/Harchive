@@ -30,18 +30,6 @@ from google.cloud.sql.connector import Connector, IPTypes
 import sys
 sys.path.insert(0, '..')
 
-from google.cloud.sql.connector import Connector, IPTypes
-from config.config import settings
-from models.base_model import Base, BaseModel
-from sqlalchemy.orm import sessionmaker, scoped_session
-from sqlalchemy import create_engine
-from sqlalchemy.exc import OperationalError
-from pydantic import env_settings
-from dotenv import load_dotenv
-import psycopg2
-import os
-from os import getenv
-
 load_dotenv()
 
 connector = Connector()
@@ -103,7 +91,7 @@ def is_postgresql_up(db_url):
         connection.close()
         return True
 
-    except OperationalError:
+    except Exception:
         return False
         
 
@@ -133,7 +121,6 @@ class DBStorage:
             self.engine = create_engine(connection_str, pool_pre_ping=True)
         else:
             print("PostgreSQL is not running or the connection failed.")
-            exit()
 
         # SQLALCHEMY_DATABASE_URL = "postgresql+pg8000://"
 

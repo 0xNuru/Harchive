@@ -52,6 +52,16 @@ class ShowHospital(BaseModel):
     class Config():
         orm_mode = True
 
+class ShowHospitalReg(BaseModel):
+
+    name: str
+    hospitalID: str
+    role: str   
+    message: str
+
+    class Config():
+        orm_mode = True
+
 
 class Doctor(BaseModel):
     name: constr(min_length=5)
@@ -82,6 +92,15 @@ class Doctor(BaseModel):
 class ShowDoctor(BaseModel):
     name: str
     email: str
+
+    class Config():
+        orm_mode = True
+
+class ShowDoctorReg(BaseModel):
+    name: str
+    email: str
+    role: str
+    message: str
 
     class Config():
         orm_mode = True

@@ -13,6 +13,7 @@ from dependencies.depends import get_current_user
 from engine.loadb import load
 from schema import hospital as hospitalSchema
 from loguru import logger
+from utils.email import verifyEmail
 from fastapi import APIRouter, Depends, Request, Response, status, HTTPException
 import sys
 sys.path.insert(0, '..')
@@ -24,13 +25,14 @@ router = APIRouter(
 )
 
 
-@router.post("/admin/register", response_model=hospitalSchema.ShowHospital, status_code=status.HTTP_201_CREATED)
-def create_hospital_admin(request: hospitalSchema.HospitalAdmin, db: Session = Depends(load), user_data=Depends(get_current_user)):
+@router.post("/admin/register", response_model=hospitalSchema.ShowHospitalReg, status_code=status.HTTP_201_CREATED)
+async def create_hospital_admin(request: hospitalSchema.HospitalAdmin, http_request: Request,
+                          db: Session = Depends(load), user_data=Depends(get_current_user)):
     roles = ["superuser"]
     check_role(roles, user_data['user_id'])
     phone = request.phone
-    hospitalID = request.hospitalID
-    email = request.email
+    hospitalID = request.hospitalID.lower()
+    email = request.email.lower()
 
     checkPhone = db.query_eng(userModel.Users).filter(
         userModel.Users.phone == phone).first()
@@ -48,14 +50,25 @@ def create_hospital_admin(request: hospitalSchema.HospitalAdmin, db: Session = D
     if checkhospitalID:
         raise HTTPException(status_code=status.HTTP_409_CONFLICT,
                             detail=[{"msg":f"hospital with hospital ID: {hospitalID} exists"}])
-
+        
+    message = await verifyEmail(email, http_request, request)
     passwd_hash = auth.get_password_hash(request.password2.get_secret_value())
 
     new_hospital_admin = hospitalModel.Admin(
-        name=request.name, phone=request.phone, email=request.email, password_hash=passwd_hash, hospitalID=request.hospitalID, role="hospital_admin")
+        name=request.name, phone=request.phone,
+        email=email,
+        password_hash=passwd_hash,
+        hospitalID=hospitalID,
+        role="hospital_admin")
+
     db.new(new_hospital_admin)
     db.save()
-    return new_hospital_admin
+    
+    return {
+        "name": request.name,
+        "email": email,
+        "role": new_hospital_admin.role,
+        "message": message}
 
 
 @router.get("/admin/all", response_model=List[hospitalSchema.ShowHospital], status_code=status.HTTP_200_OK)
@@ -73,7 +86,7 @@ def show_admin(hospitalID, db: Session = Depends(load),
     roles = ["hospital_admin", "superuser"]
     check_role(roles, user_data['user_id'])
     admin = db.query_eng(hospitalModel.Admin).filter(
-        hospitalModel.Admin.hospitalID == hospitalID).first()
+        hospitalModel.Admin.hospitalID == hospitalID.lower()).first()
     if not admin:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail=[{"msg":f"admin with the hospital ID: {hospitalID} not found"}])
@@ -85,7 +98,7 @@ def delete_hospital_admin(hospitalID, db: Session = Depends(load), user_data=Dep
     roles = ["hospital_admin", "superuser"]
     check_role(roles, user_data['user_id'])
     admin = db.query_eng(hospitalModel.Admin).filter(
-        hospitalModel.Admin.hospitalID == hospitalID).first()
+        hospitalModel.Admin.hospitalID == hospitalID.lower()).first()
     if not admin:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail=[{"msg":f"Admin with id {hospitalID} not found"}])
@@ -101,7 +114,7 @@ def create_hospital(request: hospitalSchema.Hospital,
     roles = ["hospital_admin", "superuser"]
     check_role(roles, user_data['user_id'])
     phone = request.phone
-    hospitalID = request.hospitalID
+    hospitalID = request.hospitalID.lower()
 
     checkPhone = db.query_eng(hospitalModel.Hospital).filter(
         hospitalModel.Hospital.phone == phone).first()
@@ -116,8 +129,11 @@ def create_hospital(request: hospitalSchema.Hospital,
                             detail=[{"msg":f"hospital with hospital ID: {hospitalID} exists"}])
 
     new_hospital = hospitalModel.Hospital(
-        name=request.name, phone=request.phone,
-        hospitalID=request.hospitalID, address=request.address)
+        name=request.name,
+        phone=request.phone,
+        hospitalID=hospitalID,
+        address=request.address)
+
     db.new(new_hospital)
     db.save()
     return new_hospital
@@ -143,13 +159,15 @@ def show(hospitalID, db: Session = Depends(load), user_data=Depends(get_current_
     return hospital
 
 
-@router.post("/doctor/register", response_model=hospitalSchema.ShowDoctor,
+@router.post("/doctor/register", response_model=hospitalSchema.ShowDoctorReg,
              status_code=status.HTTP_201_CREATED)
-def create_doctor(request: hospitalSchema.Doctor, db: Session = Depends(load), user_data=Depends(get_current_user)):
+async def create_doctor(request: hospitalSchema.Doctor, http_request: Request, db: Session = Depends(load), 
+                        user_data=Depends(get_current_user)):
     roles = ["hospital_admin", "superuser"]
     check_role(roles, user_data['user_id'])
     phone = request.phone
-    email = request.email
+    email = request.email.lower()
+    hospitalID = request.hospitalID.lower()
 
     checkPhone = db.query_eng(userModel.Users).filter(
         userModel.Users.phone == phone).first()
@@ -162,14 +180,26 @@ def create_doctor(request: hospitalSchema.Doctor, db: Session = Depends(load), u
         raise HTTPException(status_code=status.HTTP_409_CONFLICT,
                             detail=[{"msg":f"user with email: {email} exists"}])
 
+    message = await verifyEmail(email, http_request, request)
+
     passwd_hash = auth.get_password_hash(request.password2.get_secret_value())
 
-    new_doctor = hospitalModel.Doctors(name=request.name, phone=request.phone,
-                                       email=request.email, password_hash=passwd_hash,
-                                       hospitalID=request.hospitalID, dob=request.dob, gender=request.gender, speciality=request.speciality, role="doctor")
+    new_doctor = hospitalModel.Doctors(name=request.name,
+                                       phone=request.phone,
+                                       email=email,
+                                       password_hash=passwd_hash,
+                                       hospitalID=hospitalID,
+                                       dob=request.dob,
+                                       gender=request.gender,
+                                       speciality=request.speciality,
+                                       role="doctor")
     db.new(new_doctor)
     db.save()
-    return new_doctor
+    return {
+        "name": new_doctor.name,
+        "email": new_doctor.email,
+        "role": new_doctor.role,
+        "message": message}
 
 
 @router.get("/doctor/all", response_model=List[hospitalSchema.ShowDoctor], status_code=status.HTTP_200_OK)
@@ -186,7 +216,7 @@ def show(email: EmailStr, db: Session = Depends(load), user_data=Depends(get_cur
     roles = ["hospital_admin", "superuser"]
     check_role(roles, user_data['user_id'])
     doctor = db.query_eng(hospitalModel.Doctors).filter(
-        hospitalModel.Doctors.email == email).first()
+        hospitalModel.Doctors.email == email.lower()).first()
     if not doctor:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail=[{"msg":f"doctor with the email {email} not found"}])
@@ -198,7 +228,7 @@ def delete_doctor(email: EmailStr, db: Session = Depends(load),   user_data=Depe
     roles = ["hospital_admin", "superuser"]
     check_role(roles, user_data['user_id'])
     doctor = db.query_eng(hospitalModel.Doctors).filter(
-        hospitalModel.Doctors.email == email).first()
+        hospitalModel.Doctors.email == email.lower()).first()
     if not doctor:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail=[{"msg":f"doctor with email: {email} not found"}])

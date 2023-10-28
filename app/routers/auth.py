@@ -83,7 +83,7 @@ async def forgot_password(request: userSchema.forgotPassword,
         token_url =  f"{req.url.scheme}://{req.client.host}:{req.url.port}/user/reset_password/{token}"
         await Email(user_check.name, token_url, [email]).sendResetPassword()
 
-    except Exception as error:
+    except Exception:
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                             detail=[{'msg':'There was an error sending email, please check your email address!'}])
     return {
@@ -137,7 +137,7 @@ def reset_password(request: userSchema.resetPassword, token: str, db: Session = 
     }
 
 # login with google endpoint
-@router.get('/login_with_google')
+@router.route('/auth/login_with_google')
 async def login(request: Request):
     """_summary_: 
                  Endpoint used to login a user using google account credentials
@@ -208,8 +208,6 @@ async def auth_google_login(request: Request,
     # save tokens in the cookies
     logger.info(f" {check.name} logged in !!")
 
-
-
     return JSONResponse({
         "status": "success",
         "message": "user logged in successfully",
@@ -226,7 +224,7 @@ async def login(response: Response, request: userSchema.UserLogin = Depends(),
           Authorize: AuthJWT = Depends(), db: Session = Depends(load)):
     duration = 3 # current timeout duration is 3 minutes
     tryalls = 3 # current maximum retry is 3 times
-    email = request.email
+    email = request.email.lower()
     password = request.password._secret_value
 
     check = db.query_eng(userModel.Users).filter(
@@ -250,15 +248,12 @@ async def login(response: Response, request: userSchema.UserLogin = Depends(),
 
     if check.is_suspended and utime.compare_time(check.suspended_at, duration):
         acl.reset_user_state(email) # reset user state if timeout is reached
-                            
 
     patient = db.query_eng(patientModel.Patient).filter(
         patientModel.Patient.id == check.id).first()
 
     if not auth.verify_password(password, check.password_hash):
-
         # initiate jail login 
-
         acl.update_max_trys(email, tryalls)
         remain_tryalls = tryalls - check.failed_login_attempts
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
@@ -354,13 +349,15 @@ async def refresh(request: Request,
     auth.set_access_cookies(access_token, response)
 
     return JSONResponse({
-        "status": "success",
-        "message": "refreshed successfully"
-        })  
-
+            "status": "success",
+            "message": "refreshed successfully!!",
+            "tokens": {
+                "access_token": access_token,
+                }
+            })
 
 @router.get('/logout', status_code=status.HTTP_200_OK)
 def logout(response: Response, Authorize: AuthJWT = Depends()):
     Authorize.unset_jwt_cookies()
     response.set_cookie("logged_in", '', -1)
-    return RedirectResponse(url = '/user/login')  #  remember to use frontend url for login in here (error otherwise)
+    return RedirectResponse(url = '/auth/login')  #  remember to use frontend url for login in here (error otherwise)
