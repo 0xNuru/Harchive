@@ -30,18 +30,6 @@ from google.cloud.sql.connector import Connector, IPTypes
 import sys
 sys.path.insert(0, '..')
 
-from google.cloud.sql.connector import Connector, IPTypes
-from config.config import settings
-from models.base_model import Base, BaseModel
-from sqlalchemy.orm import sessionmaker, scoped_session
-from sqlalchemy import create_engine
-from sqlalchemy.exc import OperationalError
-from pydantic import env_settings
-from dotenv import load_dotenv
-import psycopg2
-import os
-from os import getenv
-
 load_dotenv()
 
 connector = Connector()
