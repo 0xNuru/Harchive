@@ -288,17 +288,17 @@ async def login(response: Response, request: userSchema.UserLogin = Depends(),
     auth.set_refresh_cookies(refresh_token, response)
     logger.info(f" {check.name} logged in !!")
 
-    return "Login successfull !!"
+    # return "Login successfull !!"
     
     
-    # return JSONResponse({
-    #     "status": "success",
-    #     "message": "user logged in successfully",
-    #     "tokens": {
-    #         "access_token": access_token,
-    #         "refresh_token": refresh_token
-    #         }
-    #     })
+    return JSONResponse({
+        "status": "success",
+        "message": "user logged in successfully",
+        "tokens": {
+            "access_token": access_token,
+            "refresh_token": refresh_token
+            }
+        })
 
 @router.get('/refresh')
 async def refresh(request: Request,
