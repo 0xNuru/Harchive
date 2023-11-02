@@ -172,3 +172,8 @@
 2023 Oct 28  01:11:10.89 | user.py took 0:13:05.361631 to execute | INFO | user with the email hamzasaidu34@gmail.com  queried all users
 2023 Oct 28  19:12:38.46 | auth.py took 0:00:23.260261 to execute | INFO |  Superuser logged in !!
 2023 Oct 28  20:29:26.93 | auth.py took 0:00:30.988895 to execute | INFO |  Hadmin logged in !!
+2023 Nov 1  20:12:19.17 | auth.py took 0:02:08.261781 to execute | INFO |  Hadmin logged in !!
+2023 Nov 1  20:14:13.43 | auth.py took 0:04:02.520475 to execute | INFO |  Superuser logged in !!
+2023 Nov 1  20:17:34.92 | auth.py took 0:07:24.013900 to execute | INFO |  Hadmin2 logged in !!
+2023 Nov 1  20:33:56.28 | auth.py took 0:00:09.302178 to execute | INFO |  Superuser logged in !!
+2023 Nov 2  10:53:48.01 | auth.py took 14:20:01.036178 to execute | INFO |  Hadmin logged in !!

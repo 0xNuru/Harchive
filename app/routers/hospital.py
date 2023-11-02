@@ -243,7 +243,7 @@ def delete_doctor(email: EmailStr, db: Session = Depends(load),   user_data=Depe
 
 @router.post("/checkIn", status_code=status.HTTP_201_CREATED)
 def check_in(request: hospitalSchema.CheckIn, db: Session = Depends(load), user_data=Depends(get_current_user)):
-    roles = ["hospital_admin", "superuser"]
+    roles = ["hospital_admin"]
     check_role(roles, user_data['user_id'])
     admin_id = user_data["user_id"]
     patient = db.query_eng(patientModel.Patient).filter(
@@ -276,15 +276,22 @@ def check_in(request: hospitalSchema.CheckIn, db: Session = Depends(load), user_
 
 @router.delete("/checkout", status_code=status.HTTP_204_NO_CONTENT)
 def check_out(request: hospitalSchema.CheckIn, db: Session = Depends(load), user_data=Depends(get_current_user)):
-    roles = ["hospital_admin", "superuser"]
+    roles = ["hospital_admin"]
     check_role(roles, user_data['user_id'])
+    admin_id = user_data["user_id"]
+    admin = db.query_eng(hospitalModel.Admin).filter(
+        hospitalModel.Admin.id == admin_id).first()
     patient = db.query_eng(patientModel.Patient).filter(
         patientModel.Patient.nin == request.nin).first()
     if not patient:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail=[{"msg":f"patient with the nin {request.nin} not found"}])
     check_in = db.query_eng(hospitalModel.CheckIn).filter(
-        hospitalModel.CheckIn.patient == patient.id).first()
+        hospitalModel.CheckIn.patient == patient.id, hospitalModel.CheckIn.hospitalID == admin.hospitalID ).first()
+    
+    if not check_in:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail=[{"msg":f"patient with the nin {request.nin} is not checked-in"}])
 
     db.delete(check_in)
     db.save()
