@@ -133,7 +133,6 @@ class DBStorage:
             self.engine = create_engine(connection_str, pool_pre_ping=True)
         else:
             print("PostgreSQL is not running or the connection failed.")
-            exit()
 
         # SQLALCHEMY_DATABASE_URL = "postgresql+pg8000://"
 
@@ -179,8 +178,20 @@ class DBStorage:
             Desc:
                 adds a new object in the table
         """
-        print(self.__session)
         self.__session.add(obj)
+
+    def update(self, obj):
+        """
+        Desc:
+            Update an existing object in the database.
+        Args:
+            obj: The object to update.
+        """
+        try:
+            self.__session.merge(obj)
+        except Exception as e:
+            print("Error updating object:", str(e))
+            self.__session.rollback()
 
     def save(self):
         """

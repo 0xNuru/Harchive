@@ -33,12 +33,21 @@ class HospitalAdmin(BaseModel):
                 "Password length must atleast be 8 and contains alphabets ,number with a spectial character")
         return values
 
+class ShowHospitalAdminReg(BaseModel):
+
+    name: str
+    email: str
+    role: str
+    message: str
+    HospitalID: str
+
+    class Config():
+        orm_mode = True
 
 class Hospital(BaseModel):
     name: constr(min_length=5)
     address: constr(min_length=10)
     phone: constr(min_length=11, max_length=14)
-    hospitalID: str
 
     class Config():
         orm_mode = True
@@ -48,6 +57,16 @@ class ShowHospital(BaseModel):
 
     name: str
     hospitalID: str
+
+    class Config():
+        orm_mode = True
+
+class ShowHospitalReg(BaseModel):
+
+    name: str
+    hospitalID: str
+    role: str   
+    message: str
 
     class Config():
         orm_mode = True
@@ -62,6 +81,7 @@ class Doctor(BaseModel):
     dob: date
     phone: constr(min_length=11, max_length=14)
     speciality: str
+    hospitalID: str
 
     class Config():
         orm_mode = True
@@ -81,6 +101,15 @@ class Doctor(BaseModel):
 class ShowDoctor(BaseModel):
     name: str
     email: str
+
+    class Config():
+        orm_mode = True
+
+class ShowDoctorReg(BaseModel):
+    name: str
+    email: str
+    role: str
+    message: str
 
     class Config():
         orm_mode = True

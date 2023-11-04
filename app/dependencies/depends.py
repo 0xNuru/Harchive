@@ -35,15 +35,15 @@ def get_current_user(Authorize: AuthJWT = Depends(), db=Depends(load)):
         error = e.__class__.__name__
         if error == 'MissingTokenError':
             raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED, detail='You are not logged in')
+                status_code=status.HTTP_401_UNAUTHORIZED, detail=[{'msg':'You are not logged in'}])
         if error == 'UserNotFound':
             raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED, detail='User no longer exist')
+                status_code=status.HTTP_401_UNAUTHORIZED, detail=[{'msg':'User no longer exist'}])
         if error == 'NotVerified':
             raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED, detail='Please verify your account')
+                status_code=status.HTTP_401_UNAUTHORIZED, detail=[{'msg':'Please verify your account'}])
         raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED, detail='Token is invalid or has expired')
+            status_code=status.HTTP_401_UNAUTHORIZED, detail=[{'msg':'Token is invalid or has expired'}])
 
     return data
 
