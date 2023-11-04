@@ -26,7 +26,7 @@ class User(BaseModel):
             raise ValueError("The two passwords did not match.")
         if not re.match(password_regex, confirm_password):
             raise ValueError(
-                "Password length must atleast be 8 and contains alphabets ,number with a spectial character")
+                "Password length must atleast be 8 and contains alphabets, number with a spectial character")
         return values
 
 
