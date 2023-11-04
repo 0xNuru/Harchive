@@ -80,12 +80,100 @@
 2023 Jul 29  00:05:13.64 | user.py took 0:04:42.704009 to execute | INFO |  patient logged in !!
 2023 Jul 29  00:06:34.71 | user.py took 0:00:37.023880 to execute | INFO |  patient logged in !!
 2023 Jul 29  00:07:53.97 | user.py took 0:01:56.277732 to execute | INFO |  Hadmin logged in !!
-2023 Aug 20  19:09:03.28 | user.py took 0:00:41.297503 to execute | INFO |  patient1 logged in !!
-2023 Aug 20  19:36:56.49 | user.py took 0:00:51.603405 to execute | INFO |  patient logged in !!
-2023 Aug 20  19:42:31.67 | user.py took 0:01:46.886673 to execute | INFO |  patient logged in !!
-2023 Sep 9  15:06:16.58 | user.py took 0:00:42.892537 to execute | INFO |  patient logged in !!
-2023 Sep 10  15:22:05.34 | user.py took 0:05:40.849233 to execute | INFO |  hadmin logged in !!
-2023 Sep 10  16:29:31.26 | user.py took 0:01:54.967388 to execute | INFO | user with the name superuser has been created
-2023 Sep 10  16:44:02.35 | user.py took 0:02:15.207930 to execute | INFO |  patient logged in !!
-2023 Sep 10  17:37:47.75 | user.py took 0:05:10.660233 to execute | INFO | superuser with the name superuser has been created
-2023 Sep 10  17:41:05.00 | user.py took 0:08:27.908556 to execute | INFO |  superuser logged in !!
+2023 Oct 3  02:20:04.36 | user.py took 0:00:07.413532 to execute | INFO | user with the name hamza has been created
+2023 Oct 3  02:42:29.83 | user.py took 0:00:21.167839 to execute | INFO | user with the name hamza has been created
+2023 Oct 3  02:56:48.67 | user.py took 0:00:09.251603 to execute | INFO | user with the name hamza has been created
+2023 Oct 3  02:58:27.08 | user.py took 0:00:08.727031 to execute | INFO | user with the name hamza has been created
+2023 Oct 3  02:59:22.97 | user.py took 0:01:04.619048 to execute | INFO | user with the name hamza has been created
+2023 Oct 3  03:00:09.77 | user.py took 0:00:14.708480 to execute | INFO | user with the name hamza has been created
+2023 Oct 3  04:04:02.37 | user.py took 0:00:10.887772 to execute | INFO | user with the name hamza has been created
+2023 Oct 3  04:04:49.72 | user.py took 0:00:07.094951 to execute | INFO | user with the name hamza has been created
+2023 Oct 3  04:18:07.00 | user.py took 0:00:15.512317 to execute | INFO | user with the name hamza has been created
+2023 Oct 3  04:31:06.36 | user.py took 0:01:42.042385 to execute | INFO | user with the name hamza has been created
+2023 Oct 3  04:42:44.98 | user.py took 0:00:12.152913 to execute | INFO | user with the name hamza has been created
+2023 Oct 3  04:43:50.00 | user.py took 0:00:07.433186 to execute | INFO | user with the name hamza has been created
+2023 Oct 3  04:51:53.98 | user.py took 0:01:23.791264 to execute | INFO | user with the name hamza has been created
+2023 Oct 4  06:58:52.27 | user.py took 0:00:30.566683 to execute | INFO |  hamza logged in !!
+2023 Oct 4  07:12:56.71 | user.py took 0:04:32.915834 to execute | INFO |  hamza logged in !!
+2023 Oct 4  11:23:59.56 | user.py took 0:00:02.044204 to execute | INFO |  hamza logged in !!
+2023 Oct 23  19:01:08.19 | user.py took 0:36:04.688678 to execute | INFO | user with the name nurudeen has been created
+2023 Oct 23  19:02:02.69 | user.py took 0:36:59.193303 to execute | INFO |  nurudeen logged in !!
+2023 Oct 23  20:25:36.48 | user.py took 0:03:02.984246 to execute | INFO | user with the name string has been created
+2023 Oct 23  21:05:08.59 | user.py took 0:03:46.881755 to execute | INFO |  nurudeen logged in !!
+2023 Oct 23  21:05:58.96 | user.py took 0:04:37.249035 to execute | INFO |  nurudeen logged in !!
+2023 Oct 23  21:08:22.69 | user.py took 0:07:00.984061 to execute | INFO |  nurudeen logged in !!
+2023 Oct 23  21:39:08.98 | user.py took 0:37:47.273759 to execute | INFO | user with the name saeed has been created
+2023 Oct 23  21:43:25.04 | user.py took 0:42:03.333687 to execute | INFO |  saeed logged in !!
+2023 Oct 23  21:48:14.17 | user.py took 0:46:52.463289 to execute | INFO |  saeed logged in !!
+2023 Oct 24  11:08:59.42 | user.py took 0:05:42.409357 to execute | INFO | user with the name nurudeen has been created
+2023 Oct 24  11:10:03.63 | user.py took 0:06:46.626409 to execute | INFO |  nurudeen logged in !!
+2023 Oct 24  11:16:52.04 | user.py took 0:13:35.030633 to execute | INFO |  nurudeen logged in !!
+2023 Oct 24  11:22:13.18 | user.py took 0:18:56.168728 to execute | INFO | user with the email nurudeenmyself@gmail.com  queried all users
+2023 Oct 24  11:22:32.83 | user.py took 0:19:15.823325 to execute | INFO | user with the email nurudeenmyself@gmail.com  queried all users
+2023 Oct 24  11:29:05.89 | user.py took 0:00:03.720243 to execute | INFO | user with the email nurudeenmyself@gmail.com  queried all users
+2023 Oct 24  11:29:11.11 | user.py took 0:00:08.943578 to execute | INFO | user with the email nurudeenmyself@gmail.com  queried all users
+2023 Oct 24  22:15:26.07 | user.py took 0:00:33.359638 to execute | INFO |  nurudeen logged in !!
+2023 Oct 24  22:20:08.43 | user.py took 0:05:15.724291 to execute | INFO |  saeed logged in !!
+2023 Oct 24  22:26:38.87 | user.py took 0:01:40.271061 to execute | INFO | user with the email nurudeenmyself@yahoo.com  queried all users2023 Oct 25  10:21:48.06 | user.py took 0:00:04.119238 to execute | INFO |  hamza logged in !!
+2023 Oct 25  10:22:31.74 | user.py took 0:00:47.800344 to execute | INFO |  hamza logged in !!
+2023 Oct 25  10:22:57.96 | user.py took 0:00:08.133830 to execute | INFO |  hamza logged in !!
+2023 Oct 25  11:01:41.20 | user.py took 0:38:21.794581 to execute | INFO |  hamza logged in !!
+2023 Oct 25  11:03:56.45 | user.py took 0:40:37.046111 to execute | INFO |  hamza logged in !!
+2023 Oct 25  11:04:04.88 | user.py took 0:40:45.471406 to execute | INFO | user with the email hamzasaidu34@gmail.com  queried all users
+2023 Oct 25  11:05:05.03 | user.py took 0:00:10.079645 to execute | INFO | user with the email hamzasaidu34@gmail.com  queried all users
+2023 Oct 25  11:05:10.54 | user.py took 0:00:15.588544 to execute | INFO | user with the email hamzasaidu34@gmail.com  queried all users
+2023 Oct 25  11:06:45.89 | user.py took 0:00:04.275362 to execute | INFO | user with the email hamzasaidu34@gmail.com  queried all users
+2023 Oct 25  11:08:40.56 | user.py took 0:00:03.664479 to execute | INFO | user with the email hamzasaidu34@gmail.com  queried all users
+2023 Oct 25  11:12:46.61 | user.py took 0:00:04.783553 to execute | INFO |  hamza logged in !!
+2023 Oct 25  11:54:19.00 | user.py took 0:00:08.014947 to execute | INFO |  hamza logged in !!
+2023 Oct 25  11:54:28.39 | user.py took 0:00:17.405830 to execute | INFO | user with the email hamzasaidu34@gmail.com  queried all users
+2023 Oct 25  17:54:51.38 | user.py took 0:13:17.267065 to execute | INFO | user with the email nurudeenmyself@yahoo.com  queried all users
+2023 Oct 25  17:56:18.21 | user.py took 0:14:44.089507 to execute | INFO |  nurudeen logged in !!
+2023 Oct 25  17:56:32.70 | user.py took 0:14:58.585529 to execute | INFO | user with the email nurudeenmyself@gmail.com  queried all users
+2023 Oct 25  18:00:10.72 | user.py took 0:18:36.604721 to execute | INFO | user with the email nurudeenmyself@gmail.com  queried all users
+2023 Oct 25  18:00:26.17 | user.py took 0:18:52.048634 to execute | INFO | user with the email nurudeenmyself@gmail.com  queried all users
+2023 Oct 25  18:57:19.65 | user.py took 0:01:15.141521 to execute | INFO | user with the name Ahmed has been created
+2023 Oct 25  19:11:58.40 | user.py took 0:00:17.339891 to execute | INFO | user with the name string has been created
+2023 Oct 25  19:22:59.65 | user.py took 0:00:14.583631 to execute | INFO | user with the name string has been created
+2023 Oct 25  20:04:35.13 | auth.py took 0:00:53.524035 to execute | INFO |  nurudeen logged in !!
+2023 Oct 25  20:04:46.18 | user.py took 0:01:04.571738 to execute | INFO | user with the email nurudeenmyself@gmail.com  queried all users
+2023 Oct 25  20:08:01.08 | user.py took 0:00:51.704972 to execute | INFO | user with the email nurudeenmyself@gmail.com  queried all users
+2023 Oct 25  20:19:41.63 | auth.py took 0:02:19.869353 to execute | INFO |  nurudeen logged in !!
+2023 Oct 25  20:20:06.66 | auth.py took 0:00:05.805886 to execute | INFO |  nurudeen logged in !!
+2023 Oct 26  22:36:44.18 | auth.py took 0:00:43.978673 to execute | INFO |  hamza logged in !!
+2023 Oct 26  23:11:19.07 | auth.py took 0:01:27.572197 to execute | INFO |  hamza logged in !!
+2023 Oct 26  23:11:32.22 | user.py took 0:01:40.718998 to execute | INFO | user with the email hamzasaidu34@gmail.com  queried all users
+2023 Oct 26  23:14:27.73 | user.py took 0:04:36.224322 to execute | INFO | user with the name Hamza_test has been created
+2023 Oct 26  23:17:50.65 | user.py took 0:00:36.905959 to execute | INFO | user with the email hamzasaidu34@gmail.com  queried all users
+2023 Oct 26  23:18:12.20 | user.py took 0:00:01.648324 to execute | INFO | user with the email hamzasaidu34@gmail.com  queried all users
+2023 Oct 26  23:21:26.24 | user.py took 0:00:07.905267 to execute | INFO | user with the email hamzasaidu34@gmail.com  queried all users
+2023 Oct 26  23:21:52.72 | user.py took 0:00:02.869148 to execute | INFO | user with the email hamzasaidu34@gmail.com  queried all users
+2023 Oct 26  23:22:05.71 | user.py took 0:00:01.647882 to execute | INFO | user with the email hamzasaidu34@gmail.com  queried all users
+2023 Oct 26  23:22:16.42 | user.py took 0:00:01.883887 to execute | INFO | user with the email hamzasaidu34@gmail.com  queried all users
+2023 Oct 26  23:23:08.86 | user.py took 0:00:54.324911 to execute | INFO | user with the email hamzasaidu34@gmail.com  queried all users
+2023 Oct 26  23:39:29.37 | user.py took 0:01:18.708474 to execute | INFO | user with the email hamzasaidu34@gmail.com  queried all users
+2023 Oct 27  16:41:25.75 | user.py took 0:03:31.843351 to execute | INFO | user with the name Superuser has been created
+2023 Oct 27  16:44:26.52 | user.py took 0:01:55.999593 to execute | INFO | user with the name Superuser has been created
+2023 Oct 27  16:52:07.35 | user.py took 0:02:50.753555 to execute | INFO | user with the name Superuser has been created
+2023 Oct 27  17:02:05.39 | user.py took 0:12:48.791843 to execute | INFO | user with the name Superuser has been created
+2023 Oct 27  17:03:36.80 | auth.py took 0:14:20.199515 to execute | INFO |  Superuser logged in !!
+2023 Oct 27  17:10:02.38 | auth.py took 0:00:51.492137 to execute | INFO |  Superuser logged in !!
+2023 Oct 27  18:18:34.84 | auth.py took 0:01:46.553118 to execute | INFO |  Patient logged in !!
+2023 Oct 27  18:31:11.18 | user.py took 0:00:18.090841 to execute | INFO | user with the email nurudeenmyself@yahoo.com  queried all users
+2023 Oct 27  18:33:02.26 | user.py took 0:00:05.550140 to execute | INFO | user with the email nurudeenmyself@yahoo.com  queried all users
+2023 Oct 27  18:34:55.80 | user.py took 0:00:03.223380 to execute | INFO | user with the email nurudeenmyself@yahoo.com  queried all users
+2023 Oct 27  18:35:35.04 | user.py took 0:00:04.341057 to execute | INFO | user with the email nurudeenmyself@yahoo.com  queried all users
+2023 Oct 27  18:36:33.15 | user.py took 0:00:02.087652 to execute | INFO | user with the email nurudeenmyself@yahoo.com  queried all users
+2023 Oct 28  01:00:03.52 | auth.py took 0:01:58.001049 to execute | INFO |  hamza logged in !!
+2023 Oct 28  01:00:22.43 | user.py took 0:02:16.909208 to execute | INFO | user with the email hamzasaidu34@gmail.com  queried all users
+2023 Oct 28  01:08:18.09 | user.py took 0:10:12.569028 to execute | INFO | user with the name User_Hamza has been created
+2023 Oct 28  01:09:50.24 | auth.py took 0:11:44.720569 to execute | INFO |  User_Hamza logged in !!
+2023 Oct 28  01:09:57.25 | user.py took 0:11:51.725962 to execute | INFO | user with the email hamzasaidu34@gmail.com  queried all users
+2023 Oct 28  01:11:10.89 | user.py took 0:13:05.361631 to execute | INFO | user with the email hamzasaidu34@gmail.com  queried all users
+2023 Oct 28  19:12:38.46 | auth.py took 0:00:23.260261 to execute | INFO |  Superuser logged in !!
+2023 Oct 28  20:29:26.93 | auth.py took 0:00:30.988895 to execute | INFO |  Hadmin logged in !!
+2023 Nov 1  20:12:19.17 | auth.py took 0:02:08.261781 to execute | INFO |  Hadmin logged in !!
+2023 Nov 1  20:14:13.43 | auth.py took 0:04:02.520475 to execute | INFO |  Superuser logged in !!
+2023 Nov 1  20:17:34.92 | auth.py took 0:07:24.013900 to execute | INFO |  Hadmin2 logged in !!
+2023 Nov 1  20:33:56.28 | auth.py took 0:00:09.302178 to execute | INFO |  Superuser logged in !!
+2023 Nov 2  10:53:48.01 | auth.py took 14:20:01.036178 to execute | INFO |  Hadmin logged in !!

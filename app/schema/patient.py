@@ -43,7 +43,14 @@ class Patient(BaseModel):
 class ShowPatient(BaseModel):
     name: str
     email: str
-    nin: str
+
+    class Config():
+        orm_mode = True
+
+class ShowPatientReg(BaseModel):
+    name: str
+    email: str
+    message: str
 
     class Config():
         orm_mode = True

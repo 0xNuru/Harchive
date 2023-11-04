@@ -13,18 +13,19 @@ aiofiles==23.1.0
 #for database
 sqlalchemy==1.4.46
 setuptools
-psycopg2==2.9.5
+psycopg2-binary
 
 #for loading environment variables  
 python-dotenv
 
-#gunicorn
-# uvloop
 uvicorn
 gunicorn
 
-#jwt Authentication modules
+# email
+fastapi-mail
+itsdangerous
 
+#jwt Authentication modules
 python-jose[cryptography]
 
 passlib[bcrypt] 
@@ -41,13 +42,14 @@ sympy
 
 # alembic
 alembic
-
 pipenv
 
 # cloud authenticator
 cloud-sql-python-connector[pg8000]
-
-
 gunicorn
-
 google
+
+# google auth
+authlib
+
+httpx

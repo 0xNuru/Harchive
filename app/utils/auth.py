@@ -4,9 +4,30 @@
 from datetime import datetime, timedelta, timezone
 from typing import Any
 from utils.oauth1 import AuthJWT
-from fastapi import Response
+from fastapi import Response, Depends
+from engine.loadb import load
 from passlib.context import CryptContext
 from config.config import settings
+from starlette.config import Config
+from authlib.integrations.starlette_client import OAuth, OAuthError
+import sys
+sys.path.insert(0, '..')
+
+
+# OAuth settings
+config_data = {'GOOGLE_CLIENT_ID': settings.GOOGLE_CLIENT_ID,
+                'GOOGLE_CLIENT_SECRET': settings.GOOGLE_CLIENT_SECRET}
+
+starlette_config = Config(environ=config_data)
+
+oauth = OAuth(starlette_config)
+
+oauth.register(
+    name='google',
+    server_metadata_url='https://accounts.google.com/.well-known/openid-configuration',
+    client_kwargs={'scope': 'openid email profile'},
+)
+
 
 
 # Password hash context

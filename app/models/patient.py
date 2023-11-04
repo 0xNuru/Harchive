@@ -36,4 +36,3 @@ class Patient(Users):
     patient_immunization = relationship(Immunization, cascade_backrefs='patient')
     patient_transaction = relationship(Transactions, cascade_backrefs='patient')
     patient_checkIn = relationship(CheckIn, cascade_backrefs='patient')
-    
