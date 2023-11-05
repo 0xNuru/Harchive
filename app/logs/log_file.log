@@ -170,3 +170,5 @@
 2023 Oct 28  01:09:50.24 | auth.py took 0:11:44.720569 to execute | INFO |  User_Hamza logged in !!
 2023 Oct 28  01:09:57.25 | user.py took 0:11:51.725962 to execute | INFO | user with the email hamzasaidu34@gmail.com  queried all users
 2023 Oct 28  01:11:10.89 | user.py took 0:13:05.361631 to execute | INFO | user with the email hamzasaidu34@gmail.com  queried all users
+2023 Oct 29  02:14:06.88 | auth.py took 0:01:32.778654 to execute | INFO |  User_Hamza logged in !!
+2023 Oct 29  02:14:16.74 | user.py took 0:01:42.637551 to execute | INFO | user with the email hamzasaidu34@gmail.com  queried all users
