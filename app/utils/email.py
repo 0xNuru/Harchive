@@ -51,7 +51,7 @@ class Email:
             MAIL_PORT=settings.EMAIL_PORT,
             MAIL_SERVER=settings.EMAIL_HOST,
             MAIL_STARTTLS=False,
-            MAIL_SSL_TLS=False,
+            MAIL_SSL_TLS=True,
             USE_CREDENTIALS=True,
             VALIDATE_CERTS=True
         )
