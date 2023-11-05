@@ -284,9 +284,9 @@ async def login(response: Response, request: userSchema.UserLogin = Depends(),
     refresh_token = auth.refresh_token(data)
 
     # # save tokens in the cookies
-    auth.set_access_cookies(access_token, response)
-    auth.set_refresh_cookies(refresh_token, response)
-    logger.info(f" {check.name} logged in !!")
+    # auth.set_access_cookies(access_token, response)
+    # auth.set_refresh_cookies(refresh_token, response)
+    # logger.info(f" {check.name} logged in !!")
 
     # return "Login successfull !!"
     
