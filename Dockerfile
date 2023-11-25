@@ -4,6 +4,8 @@ ENV tech_mavericks /app
 
 Env PORT=8000
 
+EXPOSE 587
+
 WORKDIR $tech_mavericks
 
 ENV PYTHONPATH "${PYTHONPATH}:/app/app"
