@@ -50,10 +50,11 @@ class Email:
             MAIL_FROM=settings.EMAIL_FROM,
             MAIL_PORT=settings.EMAIL_PORT,
             MAIL_SERVER=settings.EMAIL_HOST,
+            MAIL_STARTTLS=False,
+            MAIL_SSL_TLS=False,
             USE_CREDENTIALS=True,
             VALIDATE_CERTS=True
         )
-
         #  Generate the HTML template
 
         template = env.get_template(f'{template}.html')
