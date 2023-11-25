@@ -1,0 +1,5 @@
+2023 Nov 5  03:52:28.95 | user.py took 0:21:06.608244 to execute | INFO | user with the name SHamza has been created
+2023 Nov 25  07:02:42.76 | auth.py took 0:00:42.775977 to execute | INFO |  User_Hamza logged in !!
+2023 Nov 25  07:03:10.62 | auth.py took 0:01:10.643079 to execute | INFO |  User_Hamza logged in !!
+2023 Nov 25  07:03:43.33 | auth.py took 0:00:02.814641 to execute | INFO |  User_Hamza logged in !!
+2023 Nov 25  07:06:45.09 | user.py took 0:00:13.977565 to execute | INFO | user with the name TestUser has been created

@@ -32,7 +32,7 @@ env = Environment(
     autoescape=select_autoescape(['html', 'xml'])
 )
 
-@router.post("/register", response_model=userSchema.ShowUser,
+@router.post("/register", response_model=userSchema.ShowUserReg,
              status_code=status.HTTP_201_CREATED)
 async def create_user(request: userSchema.User, http_request: Request, db: Session = Depends(load)):
     phone = request.phone
