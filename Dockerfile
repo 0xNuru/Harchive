@@ -4,7 +4,7 @@ ENV tech_mavericks /app
 
 Env PORT=8000
 
-EXPOSE 587/tcp
+EXPOSE 587
 
 WORKDIR $tech_mavericks
 
