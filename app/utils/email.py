@@ -50,7 +50,7 @@ class Email:
             MAIL_FROM=settings.EMAIL_FROM,
             MAIL_PORT=settings.EMAIL_PORT,
             MAIL_SERVER=settings.EMAIL_HOST,
-            MAIL_TLS=True,
+            MAIL_TLS=False,
             USE_CREDENTIALS=True,
             VALIDATE_CERTS=True
         )
@@ -120,6 +120,9 @@ async def verifyEmail(email, http_request, request):
 
     except Exception as e:
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-                            detail=[{'msg':'There was an error sending email, please check your email address!', "error": f"{e}"}])
+                            detail=[{
+                                'msg':'There was an error sending email, please check your email address!',
+                                "error": f"{e}"
+                                }])
     
     return "Verification email sent successfully"
