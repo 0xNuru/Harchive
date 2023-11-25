@@ -49,7 +49,7 @@ async def create_user(request: userSchema.User, http_request: Request, db: Sessi
         raise HTTPException(status_code=status.HTTP_409_CONFLICT,
                             detail=[{"msg":f"user with email: {email} exists"}])
     
-    message = await verifyEmail(email, http_request, request)
+    # message = await verifyEmail(email, http_request, request)
     
     del request.password1
     passwd_hash = auth.get_password_hash(request.password2.get_secret_value())
@@ -57,7 +57,7 @@ async def create_user(request: userSchema.User, http_request: Request, db: Sessi
 
     new_user = userModel.Users(name=request.name, phone=request.phone,
                                email=email, address=request.address,
-                               password_hash=passwd_hash, role="superuser", is_verified=False)
+                               password_hash=passwd_hash, role="superuser", is_verified=True)
     logger.info(f"user with the name {request.name} has been created")
     db.new(new_user)
     db.save()
@@ -66,7 +66,7 @@ async def create_user(request: userSchema.User, http_request: Request, db: Sessi
         "name": request.name,
         "email": email,
         "role": new_user.role,
-        "message": message}
+        "message": "user registered successfully"}
 
 
 
