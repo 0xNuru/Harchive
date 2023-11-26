@@ -33,17 +33,26 @@ router = APIRouter(
 async def create_patient(request: patientSchema.Patient, http_request: Request, db: Session = Depends(load)):
     phone = request.phone
     email = request.email.lower()
+    nin = request.nin
 
     checkPhone = db.query_eng(userModel.Users).filter(
         userModel.Users.phone == phone).first()
     checkEmail = db.query_eng(userModel.Users).filter(
         userModel.Users.email == email).first()
+    checkNin = db.query_eng(patientModel.Patient).filter(
+        patientModel.Patient.nin == nin).first()
+
     if checkPhone:
         raise HTTPException(status_code=status.HTTP_409_CONFLICT,
                             detail=[{"msg":f"user with phone: {phone} exists"}])
     if checkEmail:
         raise HTTPException(status_code=status.HTTP_409_CONFLICT,
                             detail=[{"msg":f"user with email: {email} exists"}])
+    
+    if checkNin:
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT,
+                            detail=[{"msg":f"user with NIN: {nin} exists"}])
+    
     message = await verifyEmail(email, http_request, request)
 
     passwd_hash = auth.get_password_hash(request.password2.get_secret_value())
@@ -57,15 +66,16 @@ async def create_patient(request: patientSchema.Patient, http_request: Request, 
                                        dob=request.dob,
                                        gender=request.gender,
                                        nin=request.nin,
-                                       role="patient")
+                                       role="patient",
+                                       is_verified=False)
     db.new(new_patient)
     db.save()
 
     return {
         "name": request.name,
         "email": email,
-        "role": new_patient.role,
-        "message": message}
+        "message": message
+        }
 
 
 @router.get("/all", response_model=List[ShowPatient], status_code=status.HTTP_200_OK)

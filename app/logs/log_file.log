@@ -3,3 +3,15 @@
 2023 Nov 25  07:03:10.62 | auth.py took 0:01:10.643079 to execute | INFO |  User_Hamza logged in !!
 2023 Nov 25  07:03:43.33 | auth.py took 0:00:02.814641 to execute | INFO |  User_Hamza logged in !!
 2023 Nov 25  07:06:45.09 | user.py took 0:00:13.977565 to execute | INFO | user with the name TestUser has been created
+2023 Nov 25  07:45:43.07 | user.py took 0:02:53.826221 to execute | INFO | user with the name TestUser has been created
+2023 Nov 25  07:57:13.24 | user.py took 0:00:08.389317 to execute | INFO | user with the name TestUser has been created
+2023 Nov 25  10:04:37.72 | user.py took 0:00:10.278793 to execute | INFO | user with the name TestUser has been created
+2023 Nov 25  10:06:32.14 | user.py took 0:02:04.701625 to execute | INFO | user with the name TestUser has been created
+2023 Nov 25  11:17:57.40 | user.py took 0:00:09.388463 to execute | INFO | user with the name TestUser has been created
+2023 Nov 25  11:19:03.94 | user.py took 0:00:08.420595 to execute | INFO | user with the name TestUser has been created
+2023 Nov 25  11:19:19.09 | user.py took 0:00:23.573539 to execute | INFO | user with the name TestUser has been created
+2023 Nov 25  11:20:06.13 | user.py took 0:00:23.150632 to execute | INFO | user with the name TestUser has been created
+2023 Nov 25  13:17:57.76 | user.py took 0:01:20.279700 to execute | INFO | user with the name TestUser has been created
+2023 Nov 25  13:19:39.97 | user.py took 0:03:02.494924 to execute | INFO | user with the name TestUser has been created
+2023 Nov 25  13:22:10.61 | user.py took 0:00:09.555037 to execute | INFO | user with the name TestUser has been created
+2023 Nov 26  01:26:19.14 | auth.py took 0:01:19.783046 to execute | INFO |  TestPatient logged in !!
