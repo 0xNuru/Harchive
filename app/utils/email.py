@@ -120,9 +120,6 @@ async def verifyEmail(email, http_request, request):
 
     except Exception as e:
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-                            detail=[{
-                                'msg':'There was an error sending email, please check your email address!',
-                                "error": f"{e}"
-                                }])
+                            detail=[{'msg':'There was an error sending email, please check your email address!'}])
     
     return "Verification email sent successfully"

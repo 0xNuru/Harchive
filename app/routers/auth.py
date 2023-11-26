@@ -51,11 +51,16 @@ def verify_token(token: str, db: Session = Depends(load)):
 
     if not result:
         raise HTTPException(status_code=status.HTTP_406_NOT_ACCEPTABLE,
-                            detail=[{"msg":"Token for Email Verification has expired."}])
+                            detail=[{"message":"Token for Email Verification has expired."}])
     else:
         email = result['email']
         user_model = db.query_eng(userModel.Users).filter(
             userModel.Users.email == email).first()
+        if user_model is None:
+            return {
+                "status": "Failed",
+                "message": "Error in Verifying Account!"
+            }
         user_model.is_verified = True
         db.update(user_model)
         db.save()
