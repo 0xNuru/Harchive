@@ -15,3 +15,7 @@
 2023 Nov 25  13:19:39.97 | user.py took 0:03:02.494924 to execute | INFO | user with the name TestUser has been created
 2023 Nov 25  13:22:10.61 | user.py took 0:00:09.555037 to execute | INFO | user with the name TestUser has been created
 2023 Nov 26  01:26:19.14 | auth.py took 0:01:19.783046 to execute | INFO |  TestPatient logged in !!
+2024 Jan 13  08:14:28.16 | auth.py took 0:01:13.826738 to execute | INFO |  TestUser logged in !!
+2024 Jan 13  08:15:08.72 | auth.py took 0:00:10.257578 to execute | INFO |  TestUser logged in !!
+2024 Jan 13  08:15:17.87 | user.py took 0:00:19.410251 to execute | INFO | user with the email hamzasaidu34@gmail.com  queried all users
+2024 Jan 13  08:27:30.36 | user.py took 0:12:31.904793 to execute | INFO | user with the email hamzasaidu34@gmail.com  queried all users

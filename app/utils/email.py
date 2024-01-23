@@ -53,9 +53,8 @@ class Email:
             MAIL_STARTTLS=True,
             MAIL_SSL_TLS=False,
             USE_CREDENTIALS=True,
-            VALIDATE_CERTS=True
+            VALIDATE_CERTS=False
         )
-
         #  Generate the HTML template
 
         template = env.get_template(f'{template}.html')
@@ -117,7 +116,6 @@ async def verifyEmail(email, http_request, request):
     try:
         token = generateToken(email)
         token_url =  f"{http_request.url.scheme}://{http_request.client.host}:{http_request.url.port}/auth/verifyemail/{token}"
-        print(token)
         await Email(request.name, token_url, [email]).sendVerificationCode()
 
     except Exception as e:
