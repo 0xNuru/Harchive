@@ -32,7 +32,7 @@ env = Environment(
     autoescape=select_autoescape(['html', 'xml'])
 )
 
-@router.post("/register", response_model=userSchema.ShowUser,
+@router.post("/register", response_model=userSchema.ShowUserReg,
              status_code=status.HTTP_201_CREATED)
 async def create_user(request: userSchema.User, http_request: Request, db: Session = Depends(load)):
     phone = request.phone
@@ -65,10 +65,8 @@ async def create_user(request: userSchema.User, http_request: Request, db: Sessi
     return {
         "name": request.name,
         "email": email,
-        "role": new_user.role,
-        "message": message}
-
-
+        "message": message
+    }
 
 # protected route that requires login, uses the get_current_user func
 @router.get("/all", response_model=List[userSchema.ShowUser], status_code=status.HTTP_200_OK)

@@ -34,7 +34,6 @@ class ShowUserReg(BaseModel):
 
     name: str
     email: str
-    role: str
     message: str
 
 

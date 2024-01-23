@@ -11,6 +11,9 @@ from itsdangerous import URLSafeTimedSerializer, BadTimeSignature, SignatureExpi
 from jinja2 import Environment, select_autoescape, PackageLoader
 from pydantic import EmailStr, BaseModel
 from typing import List
+from .cache import json_cache
+
+
 
 
 env = Environment(
@@ -50,12 +53,11 @@ class Email:
             MAIL_FROM=settings.EMAIL_FROM,
             MAIL_PORT=settings.EMAIL_PORT,
             MAIL_SERVER=settings.EMAIL_HOST,
-            MAIL_STARTTLS=False,
+            MAIL_STARTTLS=True,
             MAIL_SSL_TLS=False,
             USE_CREDENTIALS=True,
-            VALIDATE_CERTS=True
+            VALIDATE_CERTS=False
         )
-
         #  Generate the HTML template
 
         template = env.get_template(f'{template}.html')
@@ -81,7 +83,7 @@ class Email:
         await fm.send_message(message)
 
     async def sendVerificationCode(self):
-        await self.sendMail("Your Verification code (Valid for 10min)", 'verification')
+        await self.sendMail("Your Verification link (Valid for 10min)", 'verification')
 
     async def sendResetPassword(self):
         await self.sendMail("Your Password Reset Link (Valid for 10min)", 'reset_password')
@@ -116,11 +118,14 @@ def verifyToken(token: str):
 async def verifyEmail(email, http_request, request):
     try:
         token = generateToken(email)
+
+        # save generated token with email in a cache
+        json_cache.set(token, email)
+
         token_url =  f"{http_request.url.scheme}://{http_request.client.host}:{http_request.url.port}/auth/verifyemail/{token}"
         await Email(request.name, token_url, [email]).sendVerificationCode()
 
     except Exception as e:
-        print(e)
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                             detail=[{'msg':'There was an error sending email, please check your email address!'}])
     
