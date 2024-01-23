@@ -19,3 +19,12 @@
 2024 Jan 13  08:15:08.72 | auth.py took 0:00:10.257578 to execute | INFO |  TestUser logged in !!
 2024 Jan 13  08:15:17.87 | user.py took 0:00:19.410251 to execute | INFO | user with the email hamzasaidu34@gmail.com  queried all users
 2024 Jan 13  08:27:30.36 | user.py took 0:12:31.904793 to execute | INFO | user with the email hamzasaidu34@gmail.com  queried all users
+2024 Jan 23  11:22:34.06 | user.py took 0:03:18.709576 to execute | INFO | user with the name testadmin has been created
+2024 Jan 23  11:31:48.42 | user.py took 0:01:51.414646 to execute | INFO | user with the email hamzasaidu34@gmail.com  queried all users
+2024 Jan 23  11:33:58.60 | user.py took 0:00:26.894277 to execute | INFO | user with the name testadmin has been created
+2024 Jan 23  12:03:50.16 | user.py took 0:00:42.269304 to execute | INFO | user with the name testadmin has been created
+2024 Jan 23  12:05:00.54 | user.py took 0:01:52.657947 to execute | INFO | user with the name testadmin has been created
+2024 Jan 23  12:05:49.50 | user.py took 0:02:41.616663 to execute | INFO | user with the name testadmin has been created
+2024 Jan 23  12:09:14.38 | user.py took 0:00:27.970445 to execute | INFO | user with the name testadmin has been created
+2024 Jan 23  12:13:15.44 | user.py took 0:00:26.633311 to execute | INFO | user with the name testadmin has been created
+2024 Jan 23  12:13:41.80 | user.py took 0:00:52.993906 to execute | INFO | user with the name testadmin has been created
