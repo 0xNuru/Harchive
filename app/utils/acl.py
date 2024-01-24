@@ -43,6 +43,8 @@ def check_role(roles: List[str], user_id: str) -> None:
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN,
                             detail=[{"status": "Failed","message":"Permission denied"}])
 
+    return None
+
 
 def create_perms(role: str):
     pass
