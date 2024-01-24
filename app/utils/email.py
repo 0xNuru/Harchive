@@ -11,6 +11,9 @@ from itsdangerous import URLSafeTimedSerializer, BadTimeSignature, SignatureExpi
 from jinja2 import Environment, select_autoescape, PackageLoader
 from pydantic import EmailStr, BaseModel
 from typing import List
+from .cache import json_cache
+
+
 
 
 env = Environment(
@@ -80,7 +83,7 @@ class Email:
         await fm.send_message(message)
 
     async def sendVerificationCode(self):
-        await self.sendMail("Your Verification code (Valid for 10min)", 'verification')
+        await self.sendMail("Your Verification link (Valid for 10min)", 'verification')
 
     async def sendResetPassword(self):
         await self.sendMail("Your Password Reset Link (Valid for 10min)", 'reset_password')
@@ -115,6 +118,10 @@ def verifyToken(token: str):
 async def verifyEmail(email, http_request, request):
     try:
         token = generateToken(email)
+
+        # save generated token with email in a cache
+        json_cache.set(token, email)
+
         token_url =  f"{http_request.url.scheme}://{http_request.client.host}:{http_request.url.port}/auth/verifyemail/{token}"
         await Email(request.name, token_url, [email]).sendVerificationCode()
 
