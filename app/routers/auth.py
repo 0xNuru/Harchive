@@ -60,11 +60,13 @@ def verify_token(token: str, db: Session = Depends(load)):
         if cached_data :
             user = db.query_eng(userModel.Users).filter(
                 userModel.Users.email == cached_data.lower()).first()
+            print(user)
             db.delete(user)
             db.save()
             
             # remove user cached details
             json_cache.delete(token)
+        print("CachedData: ", cached_data)
 
 
         raise HTTPException(status_code=status.HTTP_406_NOT_ACCEPTABLE,
