@@ -71,9 +71,6 @@ def verify_token(token: str, db: Session = Depends(load)):
         user_model.is_verified = True
         db.update(user_model)
         db.save()
-
-        # remove user cached details
-        json_cache.delete(token)
         
     return  {
         "status": "success",
