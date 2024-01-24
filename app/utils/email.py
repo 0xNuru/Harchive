@@ -11,7 +11,7 @@ from itsdangerous import URLSafeTimedSerializer, BadTimeSignature, SignatureExpi
 from jinja2 import Environment, select_autoescape, PackageLoader
 from pydantic import EmailStr, BaseModel
 from typing import List
-from .cache import json_cache
+# from .update import json_cache
 
 
 
@@ -105,7 +105,7 @@ def verifyToken(token: str):
         token (str): token to be verified
     """
     try:
-        email = token_algo.loads(token, max_age=600)
+        email = token_algo.loads(token, max_age=300)
 
     except BadTimeSignature:
         return None
@@ -120,9 +120,10 @@ async def verifyEmail(email, http_request, request):
         token = generateToken(email)
 
         # save generated token with email in a cache
-        json_cache.set(token, email)
+        # json_cache.set(token, email)
 
         token_url =  f"https://tech-maverics.onrender.com/auth/verifyemail/{token}"
+        # token_url =  f"{http_request.url.scheme}://{http_request.client.host}:{http_request.url.port}/auth/verifyemail/{token}"
         await Email(request.name, token_url, [email]).sendVerificationCode()
 
     except Exception as e:

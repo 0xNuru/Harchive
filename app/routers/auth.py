@@ -20,7 +20,7 @@ from jinja2 import Environment, select_autoescape, PackageLoader
 from utils.auth import oauth, OAuthError
 from utils import acl, utime
 from utils.email import verifyEmail
-from utils.cache import json_cache
+from app.utils.update import clean_db
 
 sys.path.insert(0, '..')
 
@@ -54,20 +54,8 @@ def verify_token(token: str, db: Session = Depends(load)):
     if not result:
 
         # to do remove user details if existing
-
-        cached_data = json_cache.get(token)
-
-        if cached_data :
-            user = db.query_eng(userModel.Users).filter(
-                userModel.Users.email == cached_data.lower()).first()
-            print(user)
-            db.delete(user)
-            db.save()
-            
-            # remove user cached details
-            json_cache.delete(token)
-        print("CachedData: ", cached_data)
-
+        # call the function that cleans in async way
+        clean_db()
 
         raise HTTPException(status_code=status.HTTP_406_NOT_ACCEPTABLE,
                             detail=[{"message":"Token for Email Verification has expired."}])
