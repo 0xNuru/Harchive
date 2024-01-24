@@ -123,7 +123,6 @@ async def verifyEmail(email, http_request, request):
         # json_cache.set(token, email)
 
         token_url =  f"{http_request.url.scheme}://{http_request.client.host}:{http_request.url.port}/auth/verifyemail/{token}"
-        print(token_url)
         await Email(request.name, token_url, [email]).sendVerificationCode()
 
     except Exception as e:
