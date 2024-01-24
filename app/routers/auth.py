@@ -58,7 +58,7 @@ def verify_token(token: str, db: Session = Depends(load)):
         clean_db()
 
         raise HTTPException(status_code=status.HTTP_406_NOT_ACCEPTABLE,
-                            detail=[{"message":"Token for Email Verification has expired."}])
+                            detail=[{"status": "Failed","message":"Token for Email Verification has expired."}])
     else:
         email = result['email']
         user_model = db.query_eng(userModel.Users).filter(
@@ -71,9 +71,6 @@ def verify_token(token: str, db: Session = Depends(load)):
         user_model.is_verified = True
         db.update(user_model)
         db.save()
-
-        # remove user cached details
-        json_cache.delete(token)
         
     return  {
         "status": "success",
