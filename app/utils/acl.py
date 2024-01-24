@@ -35,16 +35,15 @@ def check_role(roles: List[str], user_id: str) -> None:
         search = db.query_eng(user).filter(
             user.id == user_id).first()
 
-        if search:
-            return None
-
     if not search:
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN,
-                            detail=f"Permission denied")
+                            detail=[{"status": "Failed","message":"Permission denied"}])
 
     if search.role != role:
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN,
-                            detail='Permission denied')
+                            detail=[{"status": "Failed","message":"Permission denied"}])
+
+    return None
 
 
 def create_perms(role: str):

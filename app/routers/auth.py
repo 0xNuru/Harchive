@@ -20,7 +20,7 @@ from jinja2 import Environment, select_autoescape, PackageLoader
 from utils.auth import oauth, OAuthError
 from utils import acl, utime
 from utils.email import verifyEmail
-from utils.cache import json_cache
+from app.utils.update import clean_db
 
 sys.path.insert(0, '..')
 
@@ -54,18 +54,8 @@ def verify_token(token: str, db: Session = Depends(load)):
     if not result:
 
         # to do remove user details if existing
-
-        cached_data = json_cache.get(token)
-
-        if cached_data :
-            user = db.query_eng(userModel.Users).filter(
-                userModel.Users.email == cached_data.lower()).first()
-            db.delete(user)
-            db.save()
-            
-            # remove user cached details
-            json_cache.delete(token)
-
+        # call the function that cleans in async way
+        clean_db()
 
         raise HTTPException(status_code=status.HTTP_406_NOT_ACCEPTABLE,
                             detail=[{"message":"Token for Email Verification has expired."}])
@@ -81,9 +71,6 @@ def verify_token(token: str, db: Session = Depends(load)):
         user_model.is_verified = True
         db.update(user_model)
         db.save()
-
-        # remove user cached details
-        json_cache.delete(token)
         
     return  {
         "status": "success",
@@ -105,7 +92,7 @@ async def forgot_password(request: userSchema.forgotPassword,
                             detail=[{"msg":f"user with email: {email} does not exists"}])
     try:
         token = generateToken(email)
-        token_url =  f"{req.url.scheme}://{req.client.host}:{req.url.port}/user/reset_password/{token}"
+        token_url =  f"https://tech-maverics.onrender.com/auth/reset_password/{token}"
         await Email(user_check.name, token_url, [email]).sendResetPassword()
 
     except Exception:
@@ -128,7 +115,7 @@ def reset_password(token: str, req: Request, db: Session = Depends(load)):
 
     template = env.get_template(f'reset_password_markup.html')
 
-    token_url =  f"{req.url.scheme}://{req.client.host}:{req.url.port}/user/reset_password/{token}"
+    token_url =  f"https://tech-maverics.onrender.com/auth/reset_password/{token}"
     
     html = template.render(
         token_link=token_url
