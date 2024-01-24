@@ -107,7 +107,7 @@ async def forgot_password(request: userSchema.forgotPassword,
                             detail=[{"msg":f"user with email: {email} does not exists"}])
     try:
         token = generateToken(email)
-        token_url =  f"{req.url.scheme}://{req.client.host}:{req.url.port}/user/reset_password/{token}"
+        token_url =  f"https://tech-maverics.onrender.com/auth/reset_password/{token}"
         await Email(user_check.name, token_url, [email]).sendResetPassword()
 
     except Exception:
@@ -130,7 +130,7 @@ def reset_password(token: str, req: Request, db: Session = Depends(load)):
 
     template = env.get_template(f'reset_password_markup.html')
 
-    token_url =  f"{req.url.scheme}://{req.client.host}:{req.url.port}/user/reset_password/{token}"
+    token_url =  f"https://tech-maverics.onrender.com/auth/reset_password/{token}"
     
     html = template.render(
         token_link=token_url

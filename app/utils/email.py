@@ -122,7 +122,7 @@ async def verifyEmail(email, http_request, request):
         # save generated token with email in a cache
         json_cache.set(token, email)
 
-        token_url =  f"{http_request.url.scheme}://{http_request.client.host}:{http_request.url.port}/auth/verifyemail/{token}"
+        token_url =  f"https://tech-maverics.onrender.com/auth/verifyemail/{token}"
         await Email(request.name, token_url, [email]).sendVerificationCode()
 
     except Exception as e:
